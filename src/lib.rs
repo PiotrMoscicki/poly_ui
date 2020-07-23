@@ -1,17 +1,23 @@
 pub mod poly_ui {
     use nalgebra::Vector3;
-    use std::{collections::HashMap, fmt::Debug, rc::Rc};
+    use uuid::Uuid;
+    use std::{collections::HashMap, fmt::Debug, rc::{Rc, Weak}};
 
     // traits
     //********************************************************************************************
     //********************************************************************************************
     //********************************************************************************************
     pub trait Layout: Debug {
+        fn set_owner(&mut self, owner: Owner);
+        fn owner(&self) -> &Owner;
+
         fn add(&mut self, child: Rc<dyn Widget>, pos: Vector3<i32>);
     }
 
     //********************************************************************************************
     pub trait Widget: Debug {
+        fn id(&self) -> &Uuid;
+
         fn pos(&self) -> &Vector3<i32>;
 
         fn hierarchy(&self) -> &Hierarchy;
@@ -21,6 +27,19 @@ pub mod poly_ui {
         fn layout(&self) -> &dyn Layout;
         fn layout_mut(&mut self) -> &mut dyn Layout;
     }
+
+    impl std::hash::Hash for dyn Widget {
+        fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+            self.id().hash(state);
+        }
+    }
+
+    impl std::cmp::PartialEq for dyn Widget {
+        fn eq(&self, other: &Self) -> bool {
+            return self.id() == other.id();
+        }
+    }
+    impl std::cmp::Eq for dyn Widget {}
 
     // structs
     //********************************************************************************************
@@ -64,24 +83,37 @@ pub mod poly_ui {
 
     //********************************************************************************************
     #[derive(Debug)]
+    pub struct Owner {
+        owner: Weak<dyn Widget>,
+    }
+
+    //********************************************************************************************
+    #[derive(Debug)]
     pub struct CanvasLayout {
-        children: HashMap<Box<Rc<dyn Widget>>, Vector3<i32>>,
+        owner: Owner,
+        children: HashMap<Rc<dyn Widget>, Vector3<i32>>,
     }
 
     impl CanvasLayout {
         pub fn new() -> Self {
             return Self {
+                owner: Owner{ owner: Weak::<dyn Widget>::new() },
                 children: HashMap::new(),
             };
         }
     }
 
     impl Layout for CanvasLayout {
+        fn set_owner(&mut self, owner: Owner) {
+            self.owner = owner;
+        }
+
+        fn owner(&self) -> &Owner {
+            return &self.owner;
+        }
+
         fn add(&mut self, child: Rc<dyn Widget>, pos: Vector3<i32>) {
-            //match self.children.get(&child) {
-            //    Some(&mut childPos) => childPos = pos,
-            //    None => self.children.insert(child, pos),
-            //}
+            self.children.insert(child, pos);
         }
     }
 
@@ -99,6 +131,7 @@ pub mod poly_ui {
         //****************************************************************************************
         #[derive(Debug)]
         struct TestWidget {
+            id: Uuid,
             pos: Vector3<i32>,
             hierarchy: Hierarchy,
             layout: Box<dyn Layout>,
@@ -108,6 +141,7 @@ pub mod poly_ui {
         impl TestWidget {
             fn new() -> Self {
                 return Self {
+                    id: Uuid::new_v4(),
                     pos: Vector3::<i32>::new(0, 0, 0),
                     hierarchy: Hierarchy::new(),
                     layout: Box::new(CanvasLayout::new()),
@@ -117,6 +151,10 @@ pub mod poly_ui {
 
         //****************************************************************************************
         impl Widget for TestWidget {
+            fn id(&self) -> &Uuid {
+                return &self.id;
+            }
+
             fn pos(&self) -> &Vector3<i32> {
                 return &self.pos;
             }
@@ -152,13 +190,7 @@ pub mod poly_ui {
 
             parent_widget.hierarchy_mut().add(child_widget.clone());
 
-            assert_eq!(
-                std::ptr::eq(
-                    parent_widget.hierarchy().children()[0].as_ref(),
-                    child_widget.as_ref()
-                ),
-                true
-            );
+            assert_eq!(parent_widget.hierarchy().children()[0].id(), child_widget.id());
         }
 
         //****************************************************************************************
@@ -174,13 +206,7 @@ pub mod poly_ui {
                 .hierarchy_mut()
                 .remove(child_widget_1.as_ref());
 
-            assert_eq!(
-                std::ptr::eq(
-                    parent_widget.hierarchy().children()[0].as_ref(),
-                    child_widget_2.as_ref()
-                ),
-                true
-            );
+            assert_eq!(parent_widget.hierarchy().children()[0].id(), child_widget_2.id());
         }
 
         //****************************************************************************************
@@ -190,9 +216,9 @@ pub mod poly_ui {
             parent_widget.set_layout(Box::new(CanvasLayout::new()));
             let child_widget = Rc::new(TestWidget::new());
 
-            parent_widget.layout_mut().add(child_widget, Vector3::<i32>::new(1, 2, 0));
+            parent_widget.layout_mut().add(child_widget.clone(), Vector3::<i32>::new(1, 2, 0));
             
-            //assert_eq!(parent_widget.layout()
+            assert_eq!(parent_widget.hierarchy().children()[0].id(), child_widget.id());
         }
     }
 }

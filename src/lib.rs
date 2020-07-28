@@ -1,159 +1,7 @@
 pub mod poly_ui {
-    use nalgebra::Vector3;
-    use uuid::Uuid;
-    use std::{collections::HashMap, fmt::Debug, rc::Rc, cell::{RefCell, Ref, RefMut}};
-
-    // traits
-    //********************************************************************************************
-    //********************************************************************************************
-    //********************************************************************************************
-    pub trait Layout: Debug {
-        fn set_owner_widget_hierarchy(&mut self, hierarchy: Rc<RefCell<Hierarchy>>);
-
-        fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector3<i32>);
-    }
-
-    //********************************************************************************************
-    pub trait Widget: Debug {
-        fn id(&self) -> &Uuid;
-
-        fn pos(&self) -> &Vector3<i32>;
-
-        fn hierarchy(&self) -> Ref<Hierarchy>;
-        fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;
-
-        fn set_layout(&mut self, layout: Box<dyn Layout>);
-        fn layout(&self) -> &dyn Layout;
-        fn layout_mut(&mut self) -> &mut dyn Layout;
-    }
-
-    impl std::hash::Hash for dyn Widget {
-        fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-            self.id().hash(state);
-        }
-    }
-
-    impl std::cmp::PartialEq for dyn Widget {
-        fn eq(&self, other: &Self) -> bool {
-            return self.id() == other.id();
-        }
-    }
-    impl std::cmp::Eq for dyn Widget {}
-
-    // structs
-    //********************************************************************************************
-    //********************************************************************************************
-    //********************************************************************************************
-    
-    //********************************************************************************************
-    #[derive(Debug)]
-    pub struct BaseWidget {
-        id: Uuid,
-        pos: Vector3<i32>,
-        hierarchy: Rc<RefCell<Hierarchy>>,
-        layout: Box<dyn Layout>,
-    }
-    
-    impl BaseWidget {
-        pub fn new() -> Self {
-            return Self {
-                id: Uuid::new_v4(),
-                pos: Vector3::<i32>::new(0, 0, 0),
-                hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
-                layout: Box::new(CanvasLayout::new()),
-            };
-        }
-    }
-    
-    impl Widget for BaseWidget {
-        fn id(&self) -> &Uuid {
-            return &self.id;
-        }
-        fn pos(&self) -> &Vector3<i32> {
-            return &self.pos;
-        }
-        fn hierarchy(&self) -> Ref<Hierarchy> {
-            return self.hierarchy.borrow();
-        }
-        fn hierarchy_mut(&mut self) -> RefMut<Hierarchy> {
-            return self.hierarchy.borrow_mut();
-        }
-        fn set_layout(&mut self, layout: Box<dyn Layout>) {
-            self.layout = layout;
-            self.layout.set_owner_widget_hierarchy(self.hierarchy.clone());
-        }
-        fn layout(&self) -> &dyn Layout {
-            return self.layout.as_ref();
-        }
-        fn layout_mut(&mut self) -> &mut dyn Layout {
-            return self.layout.as_mut();
-        }
-    }
-
-    //********************************************************************************************
-    #[derive(Debug)]
-    pub struct Transform {
-        pos: Vector3<i32>,
-        size: Vector3<i32>,
-    }
-
-    //********************************************************************************************
-    #[derive(Debug)]
-    pub struct Hierarchy {
-        children: Vec<Rc<RefCell<dyn Widget>>>,
-    }
-
-    impl Hierarchy {
-        pub fn new() -> Self {
-            return Self {
-                children: Vec::new(),
-            };
-        }
-
-        pub fn add(&mut self, child: Rc<RefCell<dyn Widget>>) {
-            self.children.push(child);
-        }
-
-        pub fn remove(&mut self, child: &Rc<RefCell<dyn Widget>>) {
-            self.children.remove(
-                self.children
-                    .iter()
-                    .position(|elem| elem.borrow().id() == child.borrow().id())
-                    .unwrap(),
-            );
-        }
-
-        pub fn children(&self) -> &Vec<Rc<RefCell<dyn Widget>>> {
-            return &self.children;
-        }
-    }
-
-    //********************************************************************************************
-    #[derive(Debug)]
-    pub struct CanvasLayout {
-        children: HashMap<Uuid, Vector3<i32>>,
-        hierarchy: Rc<RefCell<Hierarchy>>,
-    }
-
-    impl CanvasLayout {
-        pub fn new() -> Self {
-            return Self {
-                children: HashMap::new(),
-                hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
-            };
-        }
-    }
-
-    impl Layout for CanvasLayout {
-        fn set_owner_widget_hierarchy(&mut self, hierarchy: Rc<RefCell<Hierarchy>>) {
-            self.hierarchy = hierarchy;
-        }
-
-        fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector3<i32>) {
-            self.children.insert(*child.borrow().id(), pos);
-            self.hierarchy.borrow_mut().add(child);
-        }
-    }
+    pub mod widgets;
+    pub mod layouts;
+    pub mod components;
 
     // tests
     //********************************************************************************************
@@ -161,7 +9,11 @@ pub mod poly_ui {
     //********************************************************************************************
     #[cfg(test)]
     mod tests {
-        use super::*;
+        use nalgebra::Vector3;
+        use std::{rc::Rc, cell::RefCell};
+        
+        use super::widgets::{Widget, BaseWidget};
+        use super::layouts::CanvasLayout;
 
         // test cases
         //****************************************************************************************

@@ -1,17 +1,17 @@
 use nalgebra::Vector3;
+use std::{cell::RefCell, collections::HashMap, fmt::Debug, rc::Rc};
 use uuid::Uuid;
-use std::{collections::HashMap, fmt::Debug, rc::Rc, cell::RefCell};
 
-use crate::poly_ui::widgets::Widget;
 use crate::poly_ui::components::Hierarchy;
+use crate::poly_ui::widgets::Widget;
 
 // traits
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 pub trait Layout: Debug {
-    fn set_owner_widget_hierarchy(&mut self, hierarchy: Rc<RefCell<Hierarchy>>);    
-    
+    fn set_owner_widget_hierarchy(&mut self, hierarchy: Rc<RefCell<Hierarchy>>);
+
     fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector3<i32>);
 }
 
@@ -52,19 +52,24 @@ impl Layout for CanvasLayout {
 #[cfg(test)]
 mod tests {
     use nalgebra::Vector3;
-    use std::{rc::Rc, cell::RefCell};
+    use std::{cell::RefCell, rc::Rc};
 
-    use crate::poly_ui::widgets::{Widget, BaseWidget};
     use crate::poly_ui::layouts::CanvasLayout;
-    
+    use crate::poly_ui::widgets::{BaseWidget, Widget};
+
     //****************************************************************************************
     #[test]
     fn canvas_layout_add_child() {
         let mut parent_widget = BaseWidget::new();
         parent_widget.set_layout(Box::new(CanvasLayout::new()));
         let child_widget = Rc::new(RefCell::new(BaseWidget::new()));
-        parent_widget.layout_mut().add(child_widget.clone(), Vector3::<i32>::new(1, 2, 0));
-        
-        assert_eq!(parent_widget.hierarchy().children()[0].borrow().id(), child_widget.borrow().id());
+        parent_widget
+            .layout_mut()
+            .add(child_widget.clone(), Vector3::<i32>::new(1, 2, 0));
+
+        assert_eq!(
+            parent_widget.hierarchy().children()[0].borrow().id(),
+            child_widget.borrow().id()
+        );
     }
 }

@@ -1,5 +1,5 @@
 use nalgebra::Vector3;
-use std::{fmt::Debug, rc::Rc, cell::RefCell};
+use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
 use crate::poly_ui::widgets::Widget;
 

@@ -1,9 +1,13 @@
 use nalgebra::Vector3;
+use std::{
+    cell::{Ref, RefCell, RefMut},
+    fmt::Debug,
+    rc::Rc,
+};
 use uuid::Uuid;
-use std::{fmt::Debug, rc::Rc, cell::{RefCell, Ref, RefMut}};
 
-use crate::poly_ui::layouts::{Layout, CanvasLayout};
 use crate::poly_ui::components::Hierarchy;
+use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
 // traits
 //************************************************************************************************
@@ -75,7 +79,8 @@ impl Widget for BaseWidget {
 
     fn set_layout(&mut self, layout: Box<dyn Layout>) {
         self.layout = layout;
-        self.layout.set_owner_widget_hierarchy(self.hierarchy.clone());
+        self.layout
+            .set_owner_widget_hierarchy(self.hierarchy.clone());
     }
 
     fn layout(&self) -> &dyn Layout {
@@ -93,9 +98,9 @@ impl Widget for BaseWidget {
 //********************************************************************************************
 #[cfg(test)]
 mod tests {
-    use std::{rc::Rc, cell::RefCell};
-    
-    use crate::poly_ui::widgets::{Widget, BaseWidget};
+    use std::{cell::RefCell, rc::Rc};
+
+    use crate::poly_ui::widgets::{BaseWidget, Widget};
 
     //****************************************************************************************
     #[test]
@@ -103,7 +108,10 @@ mod tests {
         let mut parent_widget = BaseWidget::new();
         let child_widget = Rc::new(RefCell::new(BaseWidget::new()));
         parent_widget.hierarchy_mut().add(child_widget.clone());
-        assert_eq!(parent_widget.hierarchy().children()[0].borrow().id(), child_widget.borrow().id());
+        assert_eq!(
+            parent_widget.hierarchy().children()[0].borrow().id(),
+            child_widget.borrow().id()
+        );
     }
 
     //****************************************************************************************
@@ -115,6 +123,9 @@ mod tests {
         parent_widget.hierarchy_mut().add(child_widget_1.clone());
         parent_widget.hierarchy_mut().add(child_widget_2.clone());
         parent_widget.hierarchy_mut().remove(&child_widget_1);
-        assert_eq!(parent_widget.hierarchy().children()[0].borrow().id(), child_widget_2.borrow().id());
+        assert_eq!(
+            parent_widget.hierarchy().children()[0].borrow().id(),
+            child_widget_2.borrow().id()
+        );
     }
 }

@@ -1,7 +1,7 @@
 use nalgebra::Vector3;
 use std::{fmt::Debug, rc::Rc, cell::RefCell};
 
-use super::widgets::Widget;
+use crate::poly_ui::widgets::Widget;
 
 // structs
 //************************************************************************************************

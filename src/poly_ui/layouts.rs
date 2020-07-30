@@ -2,8 +2,8 @@ use nalgebra::Vector3;
 use uuid::Uuid;
 use std::{collections::HashMap, fmt::Debug, rc::Rc, cell::RefCell};
 
-use super::widgets::Widget;
-use super::components::Hierarchy;
+use crate::poly_ui::widgets::Widget;
+use crate::poly_ui::components::Hierarchy;
 
 // traits
 //************************************************************************************************
@@ -42,5 +42,29 @@ impl Layout for CanvasLayout {
     fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector3<i32>) {
         self.children.insert(*child.borrow().id(), pos);
         self.hierarchy.borrow_mut().add(child);
+    }
+}
+
+// tests
+//********************************************************************************************
+//********************************************************************************************
+//********************************************************************************************
+#[cfg(test)]
+mod tests {
+    use nalgebra::Vector3;
+    use std::{rc::Rc, cell::RefCell};
+
+    use crate::poly_ui::widgets::{Widget, BaseWidget};
+    use crate::poly_ui::layouts::CanvasLayout;
+    
+    //****************************************************************************************
+    #[test]
+    fn canvas_layout_add_child() {
+        let mut parent_widget = BaseWidget::new();
+        parent_widget.set_layout(Box::new(CanvasLayout::new()));
+        let child_widget = Rc::new(RefCell::new(BaseWidget::new()));
+        parent_widget.layout_mut().add(child_widget.clone(), Vector3::<i32>::new(1, 2, 0));
+        
+        assert_eq!(parent_widget.hierarchy().children()[0].borrow().id(), child_widget.borrow().id());
     }
 }

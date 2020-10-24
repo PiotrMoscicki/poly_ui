@@ -1,9 +1,8 @@
-use std::borrow::BorrowMut;
 use super::WindowsManagerTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 pub trait AppTrait {
-    fn get_windows_manager() -> dyn BorrowMut<dyn WindowsManagerTrait>;
+    fn get_windows_manager(&mut self) -> &mut dyn WindowsManagerTrait;
 }

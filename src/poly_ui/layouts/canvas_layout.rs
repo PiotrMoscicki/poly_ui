@@ -2,7 +2,7 @@ use nalgebra::Vector2;
 use std::{cell::RefCell, collections::HashMap, fmt::Debug, rc::Rc};
 use uuid::Uuid;
 
-use super::layout::Layout;
+use super::Layout;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::widgets::WidgetTrait;
 

@@ -8,9 +8,9 @@ use uuid::Uuid;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::Layout;
 
-use super::widget_trait::WidgetTrait;
-use super::window_trait::WindowTrait;
-use super::widget::Widget;
+use super::WidgetTrait;
+use super::WindowTrait;
+use super::Widget;
 
 //************************************************************************************************
 //************************************************************************************************

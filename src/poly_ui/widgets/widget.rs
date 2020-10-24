@@ -6,7 +6,7 @@ use std::{
 };
 use uuid::Uuid;
 
-use super::widget_trait::WidgetTrait;
+use super::WidgetTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 

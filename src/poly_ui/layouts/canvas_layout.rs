@@ -46,14 +46,14 @@ mod tests {
     use std::{cell::RefCell, rc::Rc};
 
     use crate::poly_ui::layouts::CanvasLayout;
-    use crate::poly_ui::widgets::{BaseWidget, Widget};
+    use crate::poly_ui::widgets::{Base, Widget};
 
     //********************************************************************************************
     #[test]
     fn canvas_layout_add_child() {
-        let mut parent_widget = BaseWidget::new();
+        let mut parent_widget = Base::new();
         parent_widget.set_layout(Box::new(CanvasLayout::new()));
-        let child_widget = Rc::new(RefCell::new(BaseWidget::new()));
+        let child_widget = Rc::new(RefCell::new(Base::new()));
         parent_widget
             .layout_mut()
             .add(child_widget.clone(), Vector3::<i32>::new(1, 2, 0));

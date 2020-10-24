@@ -14,7 +14,7 @@ use crate::poly_ui::layouts::{CanvasLayout, Layout};
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct BaseWidget {
+pub struct Base {
     id: Uuid,
     pos: Vector3<i32>,
     hierarchy: Rc<RefCell<Hierarchy>>,
@@ -22,7 +22,7 @@ pub struct BaseWidget {
 }
 
 //************************************************************************************************
-impl BaseWidget {
+impl Base {
     pub fn new() -> Self {
         return Self {
             id: Uuid::new_v4(),
@@ -34,7 +34,7 @@ impl BaseWidget {
 }
 
 //************************************************************************************************
-impl Widget for BaseWidget {
+impl Widget for Base {
     fn id(&self) -> &Uuid {
         return &self.id;
     }

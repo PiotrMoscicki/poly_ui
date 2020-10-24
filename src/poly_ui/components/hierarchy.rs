@@ -43,13 +43,13 @@ impl Hierarchy {
 mod tests {
     use std::{cell::RefCell, rc::Rc};
 
-    use crate::poly_ui::widgets::{BaseWidget, Widget};
+    use crate::poly_ui::widgets::{Base, Widget};
 
     //********************************************************************************************
     #[test]
     fn hierarchy_add_child() {
-        let mut parent_widget = BaseWidget::new();
-        let child_widget = Rc::new(RefCell::new(BaseWidget::new()));
+        let mut parent_widget = Base::new();
+        let child_widget = Rc::new(RefCell::new(Base::new()));
         parent_widget.hierarchy_mut().add(child_widget.clone());
         assert_eq!(
             parent_widget.hierarchy().children()[0].borrow().id(),
@@ -60,9 +60,9 @@ mod tests {
     //********************************************************************************************
     #[test]
     fn hierarchy_remove_child() {
-        let mut parent_widget = BaseWidget::new();
-        let child_widget_1 = Rc::new(RefCell::new(BaseWidget::new())) as Rc<RefCell<dyn Widget>>;
-        let child_widget_2 = Rc::new(RefCell::new(BaseWidget::new())) as Rc<RefCell<dyn Widget>>;
+        let mut parent_widget = Base::new();
+        let child_widget_1 = Rc::new(RefCell::new(Base::new())) as Rc<RefCell<dyn Widget>>;
+        let child_widget_2 = Rc::new(RefCell::new(Base::new())) as Rc<RefCell<dyn Widget>>;
         parent_widget.hierarchy_mut().add(child_widget_1.clone());
         parent_widget.hierarchy_mut().add(child_widget_2.clone());
         parent_widget.hierarchy_mut().remove(&child_widget_1);

@@ -6,7 +6,7 @@ use std::{
 };
 use uuid::Uuid;
 
-use super::widget::Widget;
+use super::widget_trait::WidgetTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
@@ -34,7 +34,7 @@ impl Base {
 }
 
 //************************************************************************************************
-impl Widget for Base {
+impl WidgetTrait for Base {
     fn id(&self) -> &Uuid {
         return &self.id;
     }

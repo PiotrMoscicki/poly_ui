@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use super::layout::Layout;
 use crate::poly_ui::components::Hierarchy;
-use crate::poly_ui::widgets::Widget;
+use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -31,7 +31,7 @@ impl Layout for CanvasLayout {
         self.hierarchy = hierarchy;
     }
 
-    fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector2<i32>) {
+    fn add(&mut self, child: Rc<RefCell<dyn WidgetTrait>>, pos: Vector2<i32>) {
         self.children.insert(*child.borrow().id(), pos);
         self.hierarchy.borrow_mut().add(child);
     }
@@ -46,7 +46,7 @@ mod tests {
     use std::{cell::RefCell, rc::Rc};
 
     use crate::poly_ui::layouts::CanvasLayout;
-    use crate::poly_ui::widgets::{Base, Widget};
+    use crate::poly_ui::widgets::{Base, WidgetTrait};
 
     //********************************************************************************************
     #[test]

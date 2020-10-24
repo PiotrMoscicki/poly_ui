@@ -1,13 +1,13 @@
 use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
-use crate::poly_ui::widgets::Widget;
+use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Hierarchy {
-    children: Vec<Rc<RefCell<dyn Widget>>>,
+    children: Vec<Rc<RefCell<dyn WidgetTrait>>>,
 }
 
 //************************************************************************************************
@@ -18,11 +18,11 @@ impl Hierarchy {
         };
     }
 
-    pub fn add(&mut self, child: Rc<RefCell<dyn Widget>>) {
+    pub fn add(&mut self, child: Rc<RefCell<dyn WidgetTrait>>) {
         self.children.push(child);
     }
 
-    pub fn remove(&mut self, child: &Rc<RefCell<dyn Widget>>) {
+    pub fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) {
         self.children.remove(
             self.children
                 .iter()
@@ -31,7 +31,7 @@ impl Hierarchy {
         );
     }
 
-    pub fn children(&self) -> &Vec<Rc<RefCell<dyn Widget>>> {
+    pub fn children(&self) -> &Vec<Rc<RefCell<dyn WidgetTrait>>> {
         return &self.children;
     }
 }
@@ -43,7 +43,7 @@ impl Hierarchy {
 mod tests {
     use std::{cell::RefCell, rc::Rc};
 
-    use crate::poly_ui::widgets::{Base, Widget};
+    use crate::poly_ui::widgets::{Base, WidgetTrait};
 
     //********************************************************************************************
     #[test]
@@ -61,8 +61,8 @@ mod tests {
     #[test]
     fn hierarchy_remove_child() {
         let mut parent_widget = Base::new();
-        let child_widget_1 = Rc::new(RefCell::new(Base::new())) as Rc<RefCell<dyn Widget>>;
-        let child_widget_2 = Rc::new(RefCell::new(Base::new())) as Rc<RefCell<dyn Widget>>;
+        let child_widget_1 = Rc::new(RefCell::new(Base::new())) as Rc<RefCell<dyn WidgetTrait>>;
+        let child_widget_2 = Rc::new(RefCell::new(Base::new())) as Rc<RefCell<dyn WidgetTrait>>;
         parent_widget.hierarchy_mut().add(child_widget_1.clone());
         parent_widget.hierarchy_mut().add(child_widget_2.clone());
         parent_widget.hierarchy_mut().remove(&child_widget_1);

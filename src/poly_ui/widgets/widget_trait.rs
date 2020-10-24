@@ -11,7 +11,7 @@ use crate::poly_ui::layouts::Layout;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-pub trait Widget: Debug {
+pub trait WidgetTrait: Debug {
     fn id(&self) -> &Uuid;
 
     fn pos(&self) -> &Vector2<i32>;
@@ -25,18 +25,18 @@ pub trait Widget: Debug {
 }
 
 //************************************************************************************************
-impl std::hash::Hash for dyn Widget {
+impl std::hash::Hash for dyn WidgetTrait {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.id().hash(state);
     }
 }
 
 //************************************************************************************************
-impl std::cmp::PartialEq for dyn Widget {
+impl std::cmp::PartialEq for dyn WidgetTrait {
     fn eq(&self, other: &Self) -> bool {
         return self.id() == other.id();
     }
 }
 
 //************************************************************************************************
-impl std::cmp::Eq for dyn Widget {}
+impl std::cmp::Eq for dyn WidgetTrait {}

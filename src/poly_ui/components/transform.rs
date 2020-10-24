@@ -6,6 +6,6 @@ use std::fmt::Debug;
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Transform {
-    pos: Vector2<i32>,
-    size: Vector2<i32>,
+    pub pos: Vector2<i32>,
+    pub size: Vector2<i32>,
 }

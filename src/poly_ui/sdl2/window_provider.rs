@@ -1,9 +1,10 @@
 extern crate sdl2;
 
 use sdl2::video::WindowPos;
+use nalgebra::Vector2;
+use nalgebra::Point2;
 
 use crate::poly_ui::widgets::WindowProviderTrait;
-use crate::poly_ui::components::Transform;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -22,20 +23,23 @@ impl WindowProvider {
 }
 
 impl WindowProviderTrait for WindowProvider {
-    fn transform(&self) -> Transform {
-        let mut transform = Transform::new();
-        transform.pos.x = self.window.position().0;
-        transform.pos.y = self.window.position().1;
-        transform.size.x = self.window.size().0 as i32;
-        transform.size.y = self.window.size().1 as i32;
-        return transform;
+    fn pos(&self) -> Point2<i32> {
+        return Point2::<i32>::new(self.window.position().0, self.window.position().1);
     }
 
-    fn set_transform(&mut self, new: Transform) {
+    fn set_pos(&mut self, new: Point2<i32>) {
         self.window.set_position(
-            WindowPos::Positioned(new.pos.x), 
-            WindowPos::Positioned(new.pos.y)
+            WindowPos::Positioned(new.x), 
+            WindowPos::Positioned(new.y)
         );
+    }
+
+    fn size(&self) -> Vector2<u32> {
+        return Vector2::<u32>::new(self.window.size().0, self.window.size().1);
+    }
+
+    fn set_size(&mut self, new: Vector2<u32>) {
+        self.window.set_size(new.x, new.y).unwrap();
     }
 }
 

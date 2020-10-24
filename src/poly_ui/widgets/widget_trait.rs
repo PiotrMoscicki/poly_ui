@@ -1,3 +1,4 @@
+use nalgebra::Point2;
 use nalgebra::Vector2;
 use std::{
     cell::{Ref, RefMut},
@@ -14,7 +15,10 @@ use crate::poly_ui::layouts::Layout;
 pub trait WidgetTrait: Debug {
     fn id(&self) -> &Uuid;
 
-    fn pos(&self) -> &Vector2<i32>;
+    fn pos(&self) -> Point2<i32>;
+    fn set_pos(&mut self, new: Point2<i32>);
+    fn size(&self) -> Vector2<u32>;
+    fn set_size(&mut self, new: Vector2<u32>);
 
     fn hierarchy(&self) -> Ref<Hierarchy>;
     fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;

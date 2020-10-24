@@ -1,3 +1,5 @@
+use super::widget::Widget;
+
 use nalgebra::Vector3;
 use std::{
     cell::{Ref, RefCell, RefMut},
@@ -9,38 +11,6 @@ use uuid::Uuid;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
-// traits
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-pub trait Widget: Debug {
-    fn id(&self) -> &Uuid;
-
-    fn pos(&self) -> &Vector3<i32>;
-
-    fn hierarchy(&self) -> Ref<Hierarchy>;
-    fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;
-
-    fn set_layout(&mut self, layout: Box<dyn Layout>);
-    fn layout(&self) -> &dyn Layout;
-    fn layout_mut(&mut self) -> &mut dyn Layout;
-}
-
-impl std::hash::Hash for dyn Widget {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.id().hash(state);
-    }
-}
-
-impl std::cmp::PartialEq for dyn Widget {
-    fn eq(&self, other: &Self) -> bool {
-        return self.id() == other.id();
-    }
-}
-
-impl std::cmp::Eq for dyn Widget {}
-
-// impl
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
@@ -52,6 +22,7 @@ pub struct BaseWidget {
     layout: Box<dyn Layout>,
 }
 
+//************************************************************************************************
 impl BaseWidget {
     pub fn new() -> Self {
         return Self {
@@ -63,6 +34,7 @@ impl BaseWidget {
     }
 }
 
+//************************************************************************************************
 impl Widget for BaseWidget {
     fn id(&self) -> &Uuid {
         return &self.id;

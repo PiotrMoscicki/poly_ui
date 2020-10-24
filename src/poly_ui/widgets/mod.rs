@@ -1,5 +1,5 @@
 mod widget_trait;
-mod base;
+mod widget;
 
 pub use widget_trait::WidgetTrait;
-pub use base::Base;
+pub use widget::Widget;

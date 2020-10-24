@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::Vector2;
 use std::fmt::Debug;
 
 //************************************************************************************************
@@ -6,6 +6,6 @@ use std::fmt::Debug;
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Transform {
-    pos: Vector3<i32>,
-    size: Vector3<i32>,
+    pos: Vector2<i32>,
+    size: Vector2<i32>,
 }

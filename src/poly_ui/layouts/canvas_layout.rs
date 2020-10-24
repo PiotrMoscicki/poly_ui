@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::Vector2;
 use std::{cell::RefCell, collections::HashMap, fmt::Debug, rc::Rc};
 use uuid::Uuid;
 
@@ -11,7 +11,7 @@ use crate::poly_ui::widgets::Widget;
 //************************************************************************************************
 #[derive(Debug)]
 pub struct CanvasLayout {
-    children: HashMap<Uuid, Vector3<i32>>,
+    children: HashMap<Uuid, Vector2<i32>>,
     hierarchy: Rc<RefCell<Hierarchy>>,
 }
 
@@ -31,7 +31,7 @@ impl Layout for CanvasLayout {
         self.hierarchy = hierarchy;
     }
 
-    fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector3<i32>) {
+    fn add(&mut self, child: Rc<RefCell<dyn Widget>>, pos: Vector2<i32>) {
         self.children.insert(*child.borrow().id(), pos);
         self.hierarchy.borrow_mut().add(child);
     }
@@ -42,7 +42,7 @@ impl Layout for CanvasLayout {
 //************************************************************************************************
 #[cfg(test)]
 mod tests {
-    use nalgebra::Vector3;
+    use nalgebra::Vector2;
     use std::{cell::RefCell, rc::Rc};
 
     use crate::poly_ui::layouts::CanvasLayout;
@@ -56,7 +56,7 @@ mod tests {
         let child_widget = Rc::new(RefCell::new(Base::new()));
         parent_widget
             .layout_mut()
-            .add(child_widget.clone(), Vector3::<i32>::new(1, 2, 0));
+            .add(child_widget.clone(), Vector2::<i32>::new(1, 2));
 
         assert_eq!(
             parent_widget.hierarchy().children()[0].borrow().id(),

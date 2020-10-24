@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::Vector2;
 use std::{
     cell::{Ref, RefCell, RefMut},
     fmt::Debug,
@@ -16,7 +16,7 @@ use crate::poly_ui::layouts::{CanvasLayout, Layout};
 #[derive(Debug)]
 pub struct Base {
     id: Uuid,
-    pos: Vector3<i32>,
+    pos: Vector2<i32>,
     hierarchy: Rc<RefCell<Hierarchy>>,
     layout: Box<dyn Layout>,
 }
@@ -26,7 +26,7 @@ impl Base {
     pub fn new() -> Self {
         return Self {
             id: Uuid::new_v4(),
-            pos: Vector3::<i32>::new(0, 0, 0),
+            pos: Vector2::<i32>::new(0, 0),
             hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
             layout: Box::new(CanvasLayout::new()),
         };
@@ -39,7 +39,7 @@ impl Widget for Base {
         return &self.id;
     }
 
-    fn pos(&self) -> &Vector3<i32> {
+    fn pos(&self) -> &Vector2<i32> {
         return &self.pos;
     }
 

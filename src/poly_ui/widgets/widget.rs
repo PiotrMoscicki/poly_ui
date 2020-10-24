@@ -1,4 +1,4 @@
-use nalgebra::Vector3;
+use nalgebra::Vector2;
 use std::{
     cell::{Ref, RefMut},
     fmt::Debug,
@@ -14,7 +14,7 @@ use crate::poly_ui::layouts::Layout;
 pub trait Widget: Debug {
     fn id(&self) -> &Uuid;
 
-    fn pos(&self) -> &Vector3<i32>;
+    fn pos(&self) -> &Vector2<i32>;
 
     fn hierarchy(&self) -> Ref<Hierarchy>;
     fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;

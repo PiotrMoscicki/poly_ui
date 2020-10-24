@@ -1,5 +1,3 @@
-use super::widget::Widget;
-
 use nalgebra::Vector3;
 use std::{
     cell::{Ref, RefCell, RefMut},
@@ -8,6 +6,7 @@ use std::{
 };
 use uuid::Uuid;
 
+use super::widget::Widget;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 

@@ -2,6 +2,7 @@ use nalgebra::Vector2;
 use std::{
     cell::{Ref, RefMut},
     fmt::Debug,
+    boxed::Box,
 };
 use uuid::Uuid;
 
@@ -10,6 +11,7 @@ use crate::poly_ui::layouts::Layout;
 
 use super::WidgetTrait;
 use super::WindowTrait;
+use super::WindowProviderTrait;
 use super::Widget;
 
 //************************************************************************************************
@@ -18,13 +20,15 @@ use super::Widget;
 #[derive(Debug)]
 pub struct Window {
     base: Widget,
+    window_provider: Box<dyn WindowProviderTrait>,
 }
 
 //************************************************************************************************
 impl Window {
-    pub fn new() -> Self {
+    pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         return Self {
             base: Widget::new(),
+            window_provider: provider,
         };
     }
 }

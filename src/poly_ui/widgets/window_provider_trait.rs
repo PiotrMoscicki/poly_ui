@@ -11,15 +11,21 @@ pub trait WindowProviderTrait {
 }
 
 //************************************************************************************************
-pub fn set_window_pos(&mut dyn window_prvider: WindowProviderTrait, new: Vector2) {
-    let transform = window_prvider.transform();
-    transform.pos = new;
-    window_provider.set_transform(transform);
+pub fn set_window_pos(window_provider: &mut dyn WindowProviderTrait, new: Vector2<i32>) {
+    let old_transform = window_provider.transform();
+    let new_transform = Transform {
+        pos: new,
+        size: old_transform.size,
+    };
+    window_provider.set_transform(&new_transform);
 }
 
 //************************************************************************************************
-pub fn set_window_size(&mut dyn window_provider: WindowProviderTrait, new: Vector2) {
-    let transform = window_prvider.transform();
-    transform.size = new;
-    window_provider.set_transform(transform);
+pub fn set_window_size(window_provider: &mut dyn WindowProviderTrait, new: Vector2<i32>) {
+    let old_transform = window_provider.transform();
+    let new_transform = Transform {
+        pos: old_transform.pos,
+        size: new,
+    };
+    window_provider.set_transform(&new_transform);
 }

@@ -9,3 +9,12 @@ pub struct Transform {
     pub pos: Vector2<i32>,
     pub size: Vector2<i32>,
 }
+
+impl Transform {
+    pub fn new() -> Self {
+        return Transform{ 
+            pos: Vector2::<i32>::new(0, 0),
+            size: Vector2::<i32>::new(0, 0),
+        }
+    }
+}

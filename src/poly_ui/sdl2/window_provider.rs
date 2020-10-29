@@ -1,8 +1,8 @@
 extern crate sdl2;
 
-use sdl2::video::WindowPos;
-use nalgebra::Vector2;
 use nalgebra::Point2;
+use nalgebra::Vector2;
+use sdl2::video::WindowPos;
 
 use crate::poly_ui::widgets::WindowProviderTrait;
 
@@ -16,9 +16,7 @@ pub struct WindowProvider {
 //************************************************************************************************
 impl WindowProvider {
     pub fn new(wnd: sdl2::video::Window) -> Self {
-        return WindowProvider {
-            window: wnd, 
-        };
+        return WindowProvider { window: wnd };
     }
 }
 
@@ -28,10 +26,8 @@ impl WindowProviderTrait for WindowProvider {
     }
 
     fn set_pos(&mut self, new: Point2<i32>) {
-        self.window.set_position(
-            WindowPos::Positioned(new.x), 
-            WindowPos::Positioned(new.y)
-        );
+        self.window
+            .set_position(WindowPos::Positioned(new.x), WindowPos::Positioned(new.y));
     }
 
     fn size(&self) -> Vector2<u32> {
@@ -45,7 +41,6 @@ impl WindowProviderTrait for WindowProvider {
 
 impl std::fmt::Debug for WindowProvider {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("WindowProvider")
-         .finish()
+        f.debug_struct("WindowProvider").finish()
     }
 }

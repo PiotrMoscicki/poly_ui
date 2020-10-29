@@ -1,19 +1,22 @@
-use nalgebra::Vector2;
 use nalgebra::Point2;
+use nalgebra::Vector2;
 use std::{
+    boxed::Box,
     cell::{Ref, RefCell, RefMut},
     fmt::Debug,
     rc::Rc,
-    boxed::Box,
 };
 use uuid::Uuid;
 
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
+use super::paint_children;
+use super::update_children;
 use super::WidgetTrait;
-use super::WindowTrait;
 use super::WindowProviderTrait;
+use super::WindowTrait;
+use crate::poly_ui::app::CanvasTrait;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -83,9 +86,17 @@ impl WidgetTrait for Window {
     fn layout_mut(&mut self) -> &mut dyn Layout {
         return self.layout.as_mut();
     }
+
+    fn update(&mut self, dt: f32) {
+        update_children(&self.hierarchy(), dt);
+    }
+
+    fn paint(&self, canvas: &mut dyn CanvasTrait) {
+        paint_children(&self.hierarchy(), canvas);
+    }
 }
 
 //************************************************************************************************
 impl WindowTrait for Window {
-
+    fn paint(&self) {}
 }

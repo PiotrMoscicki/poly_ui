@@ -1,9 +1,6 @@
 extern crate sdl2;
 
-use std::{
-    cell::RefCell,
-    rc::Rc,
-};
+use std::{cell::RefCell, rc::Rc};
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -37,18 +34,20 @@ impl App {
 
 //************************************************************************************************
 impl AppTrait for App {
-    fn exec(&mut self) -> Result<(), String>
-    {
+    fn exec(&mut self) -> Result<(), String> {
         'mainloop: loop {
             for event in self.sdl_context.event_pump()?.poll_iter() {
                 match event {
-                    Event::KeyDown {keycode: Some(Keycode::Escape), ..} |
-                    Event::Quit {..} => break 'mainloop,
+                    Event::KeyDown {
+                        keycode: Some(Keycode::Escape),
+                        ..
+                    }
+                    | Event::Quit { .. } => break 'mainloop,
                     _ => {}
                 }
             }
         }
-    
+
         Ok(())
     }
 

@@ -1,9 +1,9 @@
 use nalgebra::Point2;
 use nalgebra::Vector2;
 use std::{
+    boxed::Box,
     cell::{Ref, RefMut},
     fmt::Debug,
-    boxed::Box,
 };
 use uuid::Uuid;
 

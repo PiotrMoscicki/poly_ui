@@ -98,5 +98,7 @@ impl WidgetTrait for Window {
 
 //************************************************************************************************
 impl WindowTrait for Window {
-    fn paint_window(&self) {}
+    fn paint_window(&mut self) {
+        self.paint(&mut *self.window_provider.canvas());
+    }
 }

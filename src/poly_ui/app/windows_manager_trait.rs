@@ -12,4 +12,7 @@ pub trait WindowsManagerTrait {
         width: u32,
         height: u32,
     ) -> Rc<RefCell<dyn WindowTrait>>;
+
+    fn update_windows(&mut self, dt: f32);
+    fn paint_windows(&self);
 }

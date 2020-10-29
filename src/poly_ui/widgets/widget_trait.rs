@@ -3,9 +3,11 @@ use nalgebra::Vector2;
 use std::{
     cell::{Ref, RefMut},
     fmt::Debug,
+    boxed::Box,
 };
 use uuid::Uuid;
 
+use crate::poly_ui::app::CanvasTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::Layout;
 
@@ -26,6 +28,9 @@ pub trait WidgetTrait: Debug {
     fn set_layout(&mut self, layout: Box<dyn Layout>);
     fn layout(&self) -> &dyn Layout;
     fn layout_mut(&mut self) -> &mut dyn Layout;
+
+    fn update(&mut self, dt: f32);
+    fn paint(&self, canvas: &mut dyn CanvasTrait);
 }
 
 //************************************************************************************************
@@ -44,3 +49,18 @@ impl std::cmp::PartialEq for dyn WidgetTrait {
 
 //************************************************************************************************
 impl std::cmp::Eq for dyn WidgetTrait {}
+
+//************************************************************************************************
+pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
+    for child in hierarchy.children() {
+        child.borrow_mut().update(dt);
+    }
+}
+
+pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn CanvasTrait) {
+    for child in hierarchy.children() {
+        let mut mut_child = child.borrow_mut();
+        let mut sub_canvas = parent_canvas.sub_canvas(mut_child.pos(), mut_child.size());
+        mut_child.paint(&mut *sub_canvas);
+    }
+}

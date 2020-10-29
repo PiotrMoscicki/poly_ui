@@ -8,6 +8,9 @@ use std::{
 use uuid::Uuid;
 
 use super::WidgetTrait;
+use super::update_children;
+use super::paint_children;
+use crate::poly_ui::app::CanvasTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
@@ -80,5 +83,13 @@ impl WidgetTrait for Widget {
 
     fn layout_mut(&mut self) -> &mut dyn Layout {
         return self.layout.as_mut();
+    }
+
+    fn update(&mut self, dt: f32) {
+        update_children(&self.hierarchy(), dt);
+    }
+    
+    fn paint(&self, canvas: &mut dyn CanvasTrait) {
+        paint_children(&self.hierarchy(), canvas);
     }
 }

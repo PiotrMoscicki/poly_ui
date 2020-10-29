@@ -1,4 +1,7 @@
-use std::vec::Vec;
+use std::{
+    vec::Vec,
+    boxed::Box,
+};
 use nalgebra::Point2;
 use nalgebra::Vector2;
 
@@ -10,14 +13,6 @@ pub struct Color {
     pub g: u8,
     pub b: u8,
     pub a: u8,
-}
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-pub struct Font {
-    name
-    size
 }
 
 //************************************************************************************************
@@ -40,7 +35,7 @@ pub struct Rect {
 //************************************************************************************************
 //************************************************************************************************
 pub trait CanvasTrait {
-    fn sub_canvas(&self, pos: Point2<u32>, size: Vector2<u32>) -> dyn CanvasTrait;
+    fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn CanvasTrait>;
 
     fn size(&self) -> Vector2<u32>;
     fn clear(&mut self);
@@ -57,6 +52,4 @@ pub trait CanvasTrait {
     fn draw_rects(&mut self, rect: &Vec<Rect>);
     fn fill_rect(&mut self, rect: Rect);
     fn fill_rects(&mut self, rect: &Vec<Rect>);
-
-    fn draw_text(&mut self, text: &str, font: Font, rect: Rect);
 }

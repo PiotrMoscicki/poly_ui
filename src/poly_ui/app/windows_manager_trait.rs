@@ -14,5 +14,5 @@ pub trait WindowsManagerTrait {
     ) -> Rc<RefCell<dyn WindowTrait>>;
 
     fn update_windows(&mut self, dt: f32);
-    fn paint_windows(&self);
+    fn paint_windows(&mut self);
 }

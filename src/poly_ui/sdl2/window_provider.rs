@@ -4,6 +4,8 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use sdl2::video::WindowPos;
 
+use super::Canvas;
+use crate::poly_ui::app::CanvasTrait;
 use crate::poly_ui::widgets::WindowProviderTrait;
 
 //************************************************************************************************
@@ -21,6 +23,10 @@ impl WindowProvider {
 }
 
 impl WindowProviderTrait for WindowProvider {
+    fn canvas(&mut self) -> Box<dyn CanvasTrait> {
+        return Box::new(Canvas::new(self.window.into_canvas().present_vsync().build().unwrap()));
+    }
+    
     fn pos(&self) -> Point2<i32> {
         return Point2::<i32>::new(self.window.position().0, self.window.position().1);
     }

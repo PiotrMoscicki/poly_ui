@@ -2,30 +2,22 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use std::{
     boxed::Box,
-    cell::{Ref, RefCell, RefMut},
     fmt::Debug,
-    rc::Rc,
 };
 use uuid::Uuid;
 
-use crate::poly_ui::components::Hierarchy;
-use crate::poly_ui::layouts::{CanvasLayout, Layout};
-
-use super::paint_children;
-use super::update_children;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
+use super::Widget;
 use super::WindowTrait;
-use crate::poly_ui::app::CanvasTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Window {
+    widget: Widget,
     id: Uuid,
-    hierarchy: Rc<RefCell<Hierarchy>>,
-    layout: Box<dyn Layout>,
     window_provider: Box<dyn WindowProviderTrait>,
 }
 
@@ -33,16 +25,23 @@ pub struct Window {
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         return Self {
+            widget: Widget::new(),
             id: Uuid::new_v4(),
-            hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
-            layout: Box::new(CanvasLayout::new()),
             window_provider: provider,
         };
     }
 }
 
 //************************************************************************************************
-impl WidgetTrait for Window {
+impl WindowTrait for Window {
+    fn widget(&self) -> &dyn WidgetTrait {
+        return &self.widget;
+    }
+
+    fn widget_mut(&mut self) -> &mut dyn WidgetTrait {
+        return &mut self.widget;
+    }
+    
     fn id(&self) -> &Uuid {
         return &self.id;
     }
@@ -65,40 +64,12 @@ impl WidgetTrait for Window {
         return ();
     }
 
-    fn hierarchy(&self) -> Ref<Hierarchy> {
-        return self.hierarchy.borrow();
-    }
-
-    fn hierarchy_mut(&mut self) -> RefMut<Hierarchy> {
-        return self.hierarchy.borrow_mut();
-    }
-
-    fn set_layout(&mut self, layout: Box<dyn Layout>) {
-        self.layout = layout;
-        self.layout
-            .set_owner_widget_hierarchy(self.hierarchy.clone());
-    }
-
-    fn layout(&self) -> &dyn Layout {
-        return self.layout.as_ref();
-    }
-
-    fn layout_mut(&mut self) -> &mut dyn Layout {
-        return self.layout.as_mut();
-    }
-
     fn update(&mut self, dt: f32) {
-        update_children(&self.hierarchy(), dt);
+        self.widget.update(dt);
     }
 
-    fn paint(&self, canvas: &mut dyn CanvasTrait) {
-        paint_children(&self.hierarchy(), canvas);
+    fn paint(&mut self) {
+        self.window_provider.paint_widget(&self.widget);
     }
-}
 
-//************************************************************************************************
-impl WindowTrait for Window {
-    fn paint_window(&mut self) {
-        self.paint(&mut *self.window_provider.canvas());
-    }
 }

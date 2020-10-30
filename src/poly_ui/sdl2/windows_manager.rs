@@ -54,7 +54,7 @@ impl WindowsManagerTrait for WindowsManager {
 
     fn paint_windows(&mut self) {
         for window in &mut self.windows {
-            window.borrow_mut().paint_window();
+            window.borrow_mut().paint();
         }
     }
 }

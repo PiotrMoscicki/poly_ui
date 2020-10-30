@@ -1,47 +1,78 @@
 extern crate sdl2;
 
+use std::{
+    cell::{RefCell},
+    rc::Rc,
+};
 use nalgebra::Point2;
 use nalgebra::Vector2;
 use sdl2::video::WindowPos;
 
 use super::Canvas;
-use crate::poly_ui::app::CanvasTrait;
 use crate::poly_ui::widgets::WindowProviderTrait;
+use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 pub struct WindowProvider {
-    window: sdl2::video::Window,
+    window: Option<sdl2::video::Window>,
 }
 
 //************************************************************************************************
 impl WindowProvider {
     pub fn new(wnd: sdl2::video::Window) -> Self {
-        return WindowProvider { window: wnd };
+        return WindowProvider { window:Some(wnd) };
     }
 }
 
 impl WindowProviderTrait for WindowProvider {
-    fn canvas(&mut self) -> Box<dyn CanvasTrait> {
-        return Box::new(Canvas::new(self.window.into_canvas().present_vsync().build().unwrap()));
+    fn paint_widget(&mut self, widget: &dyn WidgetTrait) {
+        let sdl_canvas = Rc::new(RefCell::new(Some(self.window.take().unwrap().into_canvas().present_vsync().build().unwrap())));
+        let mut canvas = Canvas::new(sdl_canvas.clone());
+        widget.paint(&mut canvas);
+
+        if Rc::strong_count(&sdl_canvas) != 1 {
+            panic!();
+        }
+
+        self.window = Some(sdl_canvas.borrow_mut().take().unwrap().into_window());
     }
     
     fn pos(&self) -> Point2<i32> {
-        return Point2::<i32>::new(self.window.position().0, self.window.position().1);
+        match &self.window {
+            Some(wnd) => {
+                return Point2::<i32>::new(wnd.position().0, wnd.position().1);
+            },
+            None => panic!()
+        }
     }
 
     fn set_pos(&mut self, new: Point2<i32>) {
-        self.window
-            .set_position(WindowPos::Positioned(new.x), WindowPos::Positioned(new.y));
+        match &mut self.window {
+            Some(wnd) => {
+                return wnd.set_position(WindowPos::Positioned(new.x), WindowPos::Positioned(new.y));
+            },
+            None => panic!()
+        }
     }
 
     fn size(&self) -> Vector2<u32> {
-        return Vector2::<u32>::new(self.window.size().0, self.window.size().1);
+        match &self.window {
+            Some(wnd) => {
+                return Vector2::<u32>::new(wnd.size().0, wnd.size().1);
+            },
+            None => panic!()
+        }
     }
 
     fn set_size(&mut self, new: Vector2<u32>) {
-        self.window.set_size(new.x, new.y).unwrap();
+        match &mut self.window {
+            Some(wnd) => {
+                return wnd.set_size(new.x, new.y).unwrap();
+            },
+            None => panic!()
+        }
     }
 }
 

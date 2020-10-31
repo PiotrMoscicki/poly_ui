@@ -49,7 +49,7 @@ impl Painter {
 
 //************************************************************************************************
 impl PainterTrait for Painter {
-    fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn PainterTrait> {
+    fn sub_painter(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn PainterTrait> {
         return Box::new(Painter {
             canvas: self.canvas.clone(),
             pos: Point2::<i32>::new(self.pos.x + pos.x, self.pos.y + pos.y),

@@ -52,7 +52,7 @@ impl PainterTrait for Painter {
     fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn PainterTrait> {
         return Box::new(Painter {
             canvas: self.canvas.clone(),
-            pos: pos,
+            pos: Point2::<i32>::new(self.pos.x + pos.x, self.pos.y + pos.y),
             size: size,
         });
     }

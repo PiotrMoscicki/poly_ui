@@ -6,7 +6,7 @@ use std::{
     vec::Vec,
 };
 
-use crate::poly_ui::app::CanvasTrait;
+use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::app::Color;
 use crate::poly_ui::app::Line;
 use crate::poly_ui::app::Rect;
@@ -14,21 +14,21 @@ use crate::poly_ui::app::Rect;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-pub struct Canvas {
+pub struct Painter {
     canvas : Rc<RefCell<Option<sdl2::render::Canvas<sdl2::video::Window>>>>,
     pos: Point2<i32>, 
     size: Vector2<u32>,
 }
 
 //************************************************************************************************
-impl Canvas {
+impl Painter {
     pub fn new(canvas: Rc<RefCell<Option<sdl2::render::Canvas<sdl2::video::Window>>>>) -> Self {
         let output_size = Vector2::<u32>::new(
             canvas.borrow().as_ref().unwrap().output_size().unwrap().0,
             canvas.borrow().as_ref().unwrap().output_size().unwrap().1
         );
 
-        return Canvas {
+        return Painter {
             canvas: canvas,
             pos: Point2::<i32>::new(0, 0),
             size: output_size,
@@ -37,9 +37,9 @@ impl Canvas {
 }
 
 //************************************************************************************************
-impl CanvasTrait for Canvas {
-    fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn CanvasTrait> {
-        return Box::new(Canvas {
+impl PainterTrait for Painter {
+    fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn PainterTrait> {
+        return Box::new(Painter {
             canvas: self.canvas.clone(),
             pos: pos,
             size: size,

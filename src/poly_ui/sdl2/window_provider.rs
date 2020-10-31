@@ -8,7 +8,7 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use sdl2::video::WindowPos;
 
-use super::Canvas;
+use super::Painter;
 use crate::poly_ui::widgets::WindowProviderTrait;
 use crate::poly_ui::widgets::WidgetTrait;
 
@@ -29,7 +29,7 @@ impl WindowProvider {
 impl WindowProviderTrait for WindowProvider {
     fn paint_widget(&mut self, widget: &dyn WidgetTrait) {
         let sdl_canvas = Rc::new(RefCell::new(Some(self.window.take().unwrap().into_canvas().present_vsync().build().unwrap())));
-        let mut canvas = Canvas::new(sdl_canvas.clone());
+        let mut canvas = Painter::new(sdl_canvas.clone());
         widget.paint(&mut canvas);
 
         if Rc::strong_count(&sdl_canvas) != 1 {

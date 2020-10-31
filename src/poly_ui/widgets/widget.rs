@@ -10,7 +10,7 @@ use uuid::Uuid;
 use super::paint_children;
 use super::update_children;
 use super::WidgetTrait;
-use crate::poly_ui::app::CanvasTrait;
+use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
@@ -89,7 +89,7 @@ impl WidgetTrait for Widget {
         update_children(&self.hierarchy(), dt);
     }
 
-    fn paint(&self, canvas: &mut dyn CanvasTrait) {
+    fn paint(&self, canvas: &mut dyn PainterTrait) {
         paint_children(&self.hierarchy(), canvas);
     }
 }

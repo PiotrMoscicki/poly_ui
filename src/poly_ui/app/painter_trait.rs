@@ -31,8 +31,8 @@ pub struct Rect {
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-pub trait CanvasTrait {
-    fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn CanvasTrait>;
+pub trait PainterTrait {
+    fn sub_canvas(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn PainterTrait>;
 
     fn size(&self) -> Vector2<u32>;
     fn clear(&mut self);

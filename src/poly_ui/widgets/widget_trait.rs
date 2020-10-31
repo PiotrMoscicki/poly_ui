@@ -7,7 +7,7 @@ use std::{
 };
 use uuid::Uuid;
 
-use crate::poly_ui::app::CanvasTrait;
+use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::Layout;
 
@@ -30,7 +30,7 @@ pub trait WidgetTrait: Debug {
     fn layout_mut(&mut self) -> &mut dyn Layout;
 
     fn update(&mut self, dt: f32);
-    fn paint(&self, canvas: &mut dyn CanvasTrait);
+    fn paint(&self, canvas: &mut dyn PainterTrait);
 }
 
 //************************************************************************************************
@@ -57,7 +57,7 @@ pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
     }
 }
 
-pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn CanvasTrait) {
+pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn PainterTrait) {
     for child in hierarchy.children() {
         let mut_child = child.borrow_mut();
         let mut sub_canvas = parent_canvas.sub_canvas(mut_child.pos(), mut_child.size());

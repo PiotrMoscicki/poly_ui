@@ -34,6 +34,17 @@ impl Painter {
             size: output_size,
         }
     }
+
+    fn ensure_correct_viewport(&mut self) {
+        let current_rect = self.canvas.borrow().as_ref().unwrap().viewport();
+        if current_rect.x() != self.pos.x || 
+            current_rect.y() != self.pos.y || 
+            current_rect.width() != self.size.x || 
+            current_rect.height() != self.size.y {
+                let new_rect = sdl2::rect::Rect::new(self.pos.x, self.pos.y, self.size.x,  self.size.y);
+                self.canvas.borrow_mut().as_mut().unwrap().set_viewport(new_rect);
+            }
+    }
 }
 
 //************************************************************************************************
@@ -51,10 +62,12 @@ impl PainterTrait for Painter {
     }
 
     fn clear(&mut self) {
+        self.ensure_correct_viewport();
         self.canvas.borrow_mut().as_mut().unwrap().clear();
     }
 
     fn present(&mut self) {
+        self.ensure_correct_viewport();
         self.canvas.borrow_mut().as_mut().unwrap().present();
     }
 
@@ -69,10 +82,12 @@ impl PainterTrait for Painter {
     }
 
     fn draw_point(&mut self, point: &Point2<i32>) {
+        self.ensure_correct_viewport();
         self.canvas.borrow_mut().as_mut().unwrap().draw_point(sdl2::rect::Point::new(point.x, point.y)).unwrap();
     }
 
     fn draw_points(&mut self, points: &Vec<Point2<i32>>) {
+        self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Point>::new();
 
         for point in points {
@@ -83,6 +98,7 @@ impl PainterTrait for Painter {
     }
 
     fn draw_line(&mut self, line: &Line) {
+        self.ensure_correct_viewport();
         self.canvas.borrow_mut().as_mut().unwrap().draw_line(
             sdl2::rect::Point::new(line.start.x, line.start.y),
             sdl2::rect::Point::new(line.end.x, line.end.y)
@@ -90,6 +106,7 @@ impl PainterTrait for Painter {
     }
 
     fn draw_lines(&mut self, lines: &Vec<Line>) {
+        self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Point>::new();
 
         for line in lines {
@@ -101,12 +118,14 @@ impl PainterTrait for Painter {
     }
 
     fn draw_rect(&mut self, rect: Rect) {
+        self.ensure_correct_viewport();
         self.canvas.borrow_mut().as_mut().unwrap().draw_rect(
             sdl2::rect::Rect::new(rect.pos.x, rect.pos.x, rect.size.x, rect.size.x)
         ).unwrap();
     }
 
     fn draw_rects(&mut self, rects: &Vec<Rect>) {
+        self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Rect>::new();
 
         for rect in rects {
@@ -117,12 +136,14 @@ impl PainterTrait for Painter {
     }
 
     fn fill_rect(&mut self, rect: Rect) {
+        self.ensure_correct_viewport();
         self.canvas.borrow_mut().as_mut().unwrap().fill_rect(
             sdl2::rect::Rect::new(rect.pos.x, rect.pos.x, rect.size.x, rect.size.x)
         ).unwrap();
     }
 
     fn fill_rects(&mut self, rects: &Vec<Rect>) {
+        self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Rect>::new();
 
         for rect in rects {

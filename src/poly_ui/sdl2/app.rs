@@ -46,6 +46,8 @@ impl AppTrait for App {
                     _ => {}
                 }
             }
+
+            self.windows_manager.update_windows(0)
         }
 
         Ok(())

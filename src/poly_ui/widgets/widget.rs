@@ -11,6 +11,8 @@ use super::paint_children;
 use super::update_children;
 use super::WidgetTrait;
 use crate::poly_ui::app::PainterTrait;
+use crate::poly_ui::app::Color;
+use crate::poly_ui::app::Rect;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::layouts::{CanvasLayout, Layout};
 
@@ -89,7 +91,12 @@ impl WidgetTrait for Widget {
         update_children(&self.hierarchy(), dt);
     }
 
-    fn paint(&self, canvas: &mut dyn PainterTrait) {
-        paint_children(&self.hierarchy(), canvas);
+    fn paint(&self, painter: &mut dyn PainterTrait) {
+        painter.set_draw_color(&Color{r: 255, g: 0, b: 255, a: 128});
+        painter.draw_rect(Rect{pos: Point2::<i32>::new(50, 50), size: Vector2::<u32>::new(50, 50) });
+
+        println!("paint");
+
+        paint_children(&self.hierarchy(), painter);
     }
 }

@@ -60,7 +60,7 @@ pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
 pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn PainterTrait) {
     for child in hierarchy.children() {
         let mut_child = child.borrow_mut();
-        let mut sub_canvas = parent_canvas.sub_canvas(mut_child.pos(), mut_child.size());
+        let mut sub_canvas = parent_canvas.sub_painter(mut_child.pos(), mut_child.size());
         mut_child.paint(&mut *sub_canvas);
     }
 }

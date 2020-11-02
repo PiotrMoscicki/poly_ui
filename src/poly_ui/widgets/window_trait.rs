@@ -8,8 +8,8 @@ use super::WidgetTrait;
 //************************************************************************************************
 //************************************************************************************************
 pub trait WindowTrait {
-    fn widget(&self) -> &dyn WidgetTrait; 
-    fn widget_mut(&mut self) -> &mut dyn WidgetTrait; 
+    fn widget(&self) -> &dyn WidgetTrait;
+    fn widget_mut(&mut self) -> &mut dyn WidgetTrait;
 
     fn id(&self) -> &Uuid;
 

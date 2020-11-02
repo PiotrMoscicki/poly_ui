@@ -1,14 +1,11 @@
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::{
-    boxed::Box,
-    fmt::Debug,
-};
+use std::{boxed::Box, fmt::Debug};
 use uuid::Uuid;
 
+use super::Widget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
-use super::Widget;
 use super::WindowTrait;
 
 //************************************************************************************************
@@ -41,7 +38,7 @@ impl WindowTrait for Window {
     fn widget_mut(&mut self) -> &mut dyn WidgetTrait {
         return &mut self.widget;
     }
-    
+
     fn id(&self) -> &Uuid {
         return &self.id;
     }
@@ -71,5 +68,4 @@ impl WindowTrait for Window {
     fn paint(&mut self) {
         self.window_provider.paint_widget(&self.widget);
     }
-
 }

@@ -18,7 +18,10 @@ pub struct WindowsManager {
 //************************************************************************************************
 impl WindowsManager {
     pub fn new(video: Rc<RefCell<sdl2::VideoSubsystem>>) -> Self {
-        return WindowsManager { sdl_video: video, windows: Vec::new() };
+        return WindowsManager {
+            sdl_video: video,
+            windows: Vec::new(),
+        };
     }
 }
 

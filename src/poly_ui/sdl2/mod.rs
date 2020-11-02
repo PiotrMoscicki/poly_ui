@@ -1,9 +1,9 @@
 mod app;
+mod painter;
 mod window_provider;
 mod windows_manager;
-mod painter;
 
 pub use app::App;
+pub use painter::Painter;
 pub use window_provider::WindowProvider;
 pub use windows_manager::WindowsManager;
-pub use painter::Painter;

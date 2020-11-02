@@ -47,7 +47,8 @@ impl AppTrait for App {
                 }
             }
 
-            self.windows_manager.update_windows(0)
+            self.windows_manager.update_windows(0.0);
+            self.windows_manager.paint_windows();
         }
 
         Ok(())

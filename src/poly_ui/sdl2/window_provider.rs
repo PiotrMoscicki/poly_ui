@@ -29,12 +29,17 @@ impl WindowProvider {
 impl WindowProviderTrait for WindowProvider {
     fn paint_widget(&mut self, widget: &dyn WidgetTrait) {
         let sdl_canvas = Rc::new(RefCell::new(Some(self.window.take().unwrap().into_canvas().present_vsync().build().unwrap())));
-        let mut painter = Painter::new(sdl_canvas.clone());
-        widget.paint(&mut painter);
+        
+        {
+            let mut painter = Painter::new(sdl_canvas.clone());
+            widget.paint(&mut painter);
+        }
 
         if Rc::strong_count(&sdl_canvas) != 1 {
             panic!();
         }
+
+        sdl_canvas.borrow_mut().as_mut().unwrap().present();
 
         self.window = Some(sdl_canvas.borrow_mut().take().unwrap().into_window());
     }

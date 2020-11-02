@@ -89,13 +89,14 @@ impl WidgetTrait for Widget {
 
     fn update(&mut self, dt: f32) {
         update_children(&self.hierarchy(), dt);
+        println!("update widget");
     }
 
     fn paint(&self, painter: &mut dyn PainterTrait) {
         painter.set_draw_color(&Color{r: 255, g: 0, b: 255, a: 128});
         painter.draw_rect(Rect{pos: Point2::<i32>::new(50, 50), size: Vector2::<u32>::new(50, 50) });
 
-        println!("paint");
+        println!("paint widget");
 
         paint_children(&self.hierarchy(), painter);
     }

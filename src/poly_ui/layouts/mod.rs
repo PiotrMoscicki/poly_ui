@@ -1,5 +1,5 @@
 mod canvas_layout;
-mod layout;
+mod layout_trait;
 
 pub use canvas_layout::CanvasLayout;
-pub use layout::Layout;
+pub use layout_trait::LayoutTrait;

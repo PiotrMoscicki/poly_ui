@@ -2,7 +2,7 @@ use nalgebra::Vector2;
 use std::{cell::RefCell, collections::HashMap, fmt::Debug, rc::Rc};
 use uuid::Uuid;
 
-use super::Layout;
+use super::LayoutTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::widgets::WidgetTrait;
 
@@ -26,7 +26,7 @@ impl CanvasLayout {
 }
 
 //************************************************************************************************
-impl Layout for CanvasLayout {
+impl LayoutTrait for CanvasLayout {
     fn set_owner_widget_hierarchy(&mut self, hierarchy: Rc<RefCell<Hierarchy>>) {
         self.hierarchy = hierarchy;
     }

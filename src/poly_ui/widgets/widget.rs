@@ -14,7 +14,7 @@ use crate::poly_ui::app::Color;
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::app::Rect;
 use crate::poly_ui::components::Hierarchy;
-use crate::poly_ui::layouts::{CanvasLayout, Layout};
+use crate::poly_ui::layouts::{CanvasLayout, LayoutTrait};
 
 //************************************************************************************************
 //************************************************************************************************
@@ -25,7 +25,7 @@ pub struct Widget {
     pos: Point2<i32>,
     size: Vector2<u32>,
     hierarchy: Rc<RefCell<Hierarchy>>,
-    layout: Box<dyn Layout>,
+    layout: Box<dyn LayoutTrait>,
 }
 
 //************************************************************************************************
@@ -73,17 +73,17 @@ impl WidgetTrait for Widget {
         return self.hierarchy.borrow_mut();
     }
 
-    fn set_layout(&mut self, layout: Box<dyn Layout>) {
+    fn set_layout(&mut self, layout: Box<dyn LayoutTrait>) {
         self.layout = layout;
         self.layout
             .set_owner_widget_hierarchy(self.hierarchy.clone());
     }
 
-    fn layout(&self) -> &dyn Layout {
+    fn layout(&self) -> &dyn LayoutTrait {
         return self.layout.as_ref();
     }
 
-    fn layout_mut(&mut self) -> &mut dyn Layout {
+    fn layout_mut(&mut self) -> &mut dyn LayoutTrait {
         return self.layout.as_mut();
     }
 

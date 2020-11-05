@@ -25,7 +25,7 @@ pub struct Widget {
     pos: Point2<i32>,
     size: Vector2<u32>,
     hierarchy: Rc<RefCell<Hierarchy>>,
-    layout: Box<dyn LayoutTrait>,
+    layout: Rc<RefCell<dyn LayoutTrait>>,
 }
 
 //************************************************************************************************
@@ -36,7 +36,7 @@ impl Widget {
             pos: Point2::<i32>::new(0, 0),
             size: Vector2::<u32>::new(0, 0),
             hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
-            layout: Box::new(CanvasLayout::new()),
+            layout: Rc::new(RefCell::new(CanvasLayout::new())),
         };
     }
 }
@@ -55,18 +55,19 @@ impl WidgetTrait for Widget {
         return self.hierarchy.borrow_mut();
     }
 
-    fn set_layout(&mut self, layout: Box<dyn LayoutTrait>) {
+    fn set_layout(&mut self, layout: Rc<RefCell<dyn LayoutTrait>>) {
         self.layout = layout;
         self.layout
+            .borrow_mut()
             .set_owner_widget_hierarchy(self.hierarchy.clone());
     }
 
-    fn layout(&self) -> &dyn LayoutTrait {
-        return self.layout.as_ref();
+    fn layout(&self) -> Ref<dyn LayoutTrait> {
+        return self.layout.borrow();
     }
 
-    fn layout_mut(&mut self) -> &mut dyn LayoutTrait {
-        return self.layout.as_mut();
+    fn layout_mut(&mut self) -> RefMut<dyn LayoutTrait> {
+        return self.layout.borrow_mut();
     }
 
     fn update(&mut self, dt: f32) {
@@ -88,6 +89,6 @@ impl WidgetTrait for Widget {
 
         println!("paint widget");
 
-        paint_children(&self.hierarchy(), self.layout(), painter);
+        paint_children(&self.hierarchy(), &*self.layout(), painter);
     }
 }

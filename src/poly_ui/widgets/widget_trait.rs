@@ -1,6 +1,6 @@
 use std::{
-    boxed::Box,
-    cell::{Ref, RefMut},
+    rc::Rc,
+    cell::{Ref, RefCell, RefMut},
     fmt::Debug,
 };
 use uuid::Uuid;
@@ -18,9 +18,9 @@ pub trait WidgetTrait: Debug {
     fn hierarchy(&self) -> Ref<Hierarchy>;
     fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;
 
-    fn set_layout(&mut self, layout: Box<dyn LayoutTrait>);
-    fn layout(&self) -> &dyn LayoutTrait;
-    fn layout_mut(&mut self) -> &mut dyn LayoutTrait;
+    fn set_layout(&mut self, layout: Rc<RefCell<dyn LayoutTrait>>);
+    fn layout(&self) -> Ref<dyn LayoutTrait>;
+    fn layout_mut(&mut self) -> RefMut<dyn LayoutTrait>;
 
     fn update(&mut self, dt: f32);
     fn paint(&self, canvas: &mut dyn PainterTrait);

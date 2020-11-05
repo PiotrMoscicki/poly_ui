@@ -6,14 +6,14 @@ use crate::poly_ui::app::Color;
 use crate::poly_ui::app::Line;
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::app::Rect;
+use crate::poly_ui::components::Transform;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 pub struct Painter {
     canvas: Rc<RefCell<Option<sdl2::render::Canvas<sdl2::video::Window>>>>,
-    pos: Point2<i32>,
-    size: Vector2<u32>,
+    transform: Transform,
 }
 
 //************************************************************************************************
@@ -26,19 +26,23 @@ impl Painter {
 
         return Painter {
             canvas: canvas,
-            pos: Point2::<i32>::new(0, 0),
-            size: output_size,
+            transform: Transform::new(&Point2::<i32>::new(0, 0), &output_size),
         };
     }
 
     fn ensure_correct_viewport(&mut self) {
         let current_rect = self.canvas.borrow().as_ref().unwrap().viewport();
-        if current_rect.x() != self.pos.x
-            || current_rect.y() != self.pos.y
-            || current_rect.width() != self.size.x
-            || current_rect.height() != self.size.y
+        if current_rect.x() != self.transform.pos.x
+            || current_rect.y() != self.transform.pos.y
+            || current_rect.width() != self.transform.size.x
+            || current_rect.height() != self.transform.size.y
         {
-            let new_rect = sdl2::rect::Rect::new(self.pos.x, self.pos.y, self.size.x, self.size.y);
+            let new_rect = sdl2::rect::Rect::new(
+                self.transform.pos.x,
+                self.transform.pos.y,
+                self.transform.size.x,
+                self.transform.size.y,
+            );
             self.canvas
                 .borrow_mut()
                 .as_mut()
@@ -50,16 +54,21 @@ impl Painter {
 
 //************************************************************************************************
 impl PainterTrait for Painter {
-    fn sub_painter(&self, pos: Point2<i32>, size: Vector2<u32>) -> Box<dyn PainterTrait> {
+    fn sub_painter(&self, transform: &Transform) -> Box<dyn PainterTrait> {
         return Box::new(Painter {
             canvas: self.canvas.clone(),
-            pos: Point2::<i32>::new(self.pos.x + pos.x, self.pos.y + pos.y),
-            size: size,
+            transform: Transform::new(
+                &Point2::<i32>::new(
+                    self.transform.pos.x + transform.pos.x,
+                    self.transform.pos.y + transform.pos.y,
+                ),
+                &transform.size,
+            ),
         });
     }
 
     fn size(&self) -> Vector2<u32> {
-        return self.size;
+        return self.transform.size;
     }
 
     fn clear(&mut self) {

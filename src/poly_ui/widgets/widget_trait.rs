@@ -1,5 +1,3 @@
-use nalgebra::Point2;
-use nalgebra::Vector2;
 use std::{
     boxed::Box,
     cell::{Ref, RefMut},
@@ -16,11 +14,6 @@ use crate::poly_ui::layouts::LayoutTrait;
 //************************************************************************************************
 pub trait WidgetTrait: Debug {
     fn id(&self) -> &Uuid;
-
-    fn pos(&self) -> Point2<i32>;
-    fn set_pos(&mut self, new: Point2<i32>);
-    fn size(&self) -> Vector2<u32>;
-    fn set_size(&mut self, new: Vector2<u32>);
 
     fn hierarchy(&self) -> Ref<Hierarchy>;
     fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;
@@ -57,10 +50,15 @@ pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
     }
 }
 
-pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn PainterTrait) {
+pub fn paint_children(
+    hierarchy: &Hierarchy,
+    layout: &dyn LayoutTrait,
+    parent_canvas: &mut dyn PainterTrait,
+) {
     for child in hierarchy.children() {
-        let mut_child = child.borrow_mut();
-        let mut sub_canvas = parent_canvas.sub_painter(mut_child.pos(), mut_child.size());
-        mut_child.paint(&mut *sub_canvas);
+        let borrowed_child = child.borrow();
+
+        let mut sub_canvas = parent_canvas.sub_painter(&layout.transform(borrowed_child.id()));
+        borrowed_child.paint(&mut *sub_canvas);
     }
 }

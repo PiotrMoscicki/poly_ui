@@ -47,24 +47,6 @@ impl WidgetTrait for Widget {
         return &self.id;
     }
 
-    fn pos(&self) -> Point2<i32> {
-        return self.pos;
-    }
-
-    fn set_pos(&mut self, new: Point2<i32>) {
-        self.pos = new;
-        return ();
-    }
-
-    fn size(&self) -> Vector2<u32> {
-        return self.size;
-    }
-
-    fn set_size(&mut self, new: Vector2<u32>) {
-        self.size = new;
-        return ();
-    }
-
     fn hierarchy(&self) -> Ref<Hierarchy> {
         return self.hierarchy.borrow();
     }
@@ -106,6 +88,6 @@ impl WidgetTrait for Widget {
 
         println!("paint widget");
 
-        paint_children(&self.hierarchy(), painter);
+        paint_children(&self.hierarchy(), self.layout(), painter);
     }
 }

@@ -58,7 +58,7 @@ pub fn paint_children(
     for child in hierarchy.children() {
         let borrowed_child = child.borrow();
 
-        let mut sub_canvas = parent_canvas.sub_painter(&layout.transform(borrowed_child.id()));
+        let mut sub_canvas = parent_canvas.sub_painter(&layout.transform(&parent_canvas.size(), borrowed_child.id()));
         borrowed_child.paint(&mut *sub_canvas);
     }
 }

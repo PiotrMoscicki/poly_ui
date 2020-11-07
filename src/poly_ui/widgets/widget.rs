@@ -30,14 +30,14 @@ pub struct Widget {
 
 //************************************************************************************************
 impl Widget {
-    pub fn new() -> Self {
-        return Self {
+    pub fn new() -> Rc<RefCell<Self>> {
+        return Rc::new(RefCell::new(Self {
             id: Uuid::new_v4(),
             pos: Point2::<i32>::new(0, 0),
             size: Vector2::<u32>::new(0, 0),
             hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
-            layout: Rc::new(RefCell::new(CanvasLayout::new())),
-        };
+            layout: CanvasLayout::new(),
+        }));
     }
 }
 

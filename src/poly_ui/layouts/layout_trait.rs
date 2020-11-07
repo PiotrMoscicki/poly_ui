@@ -1,3 +1,4 @@
+use nalgebra::Vector2;
 use std::{cell::RefCell, fmt::Debug, rc::Rc};
 use uuid::Uuid;
 
@@ -13,5 +14,5 @@ pub trait LayoutTrait: Debug {
 
     fn add(&mut self, child: Rc<RefCell<dyn WidgetTrait>>);
 
-    fn transform(&self, widget_id: &Uuid) -> Transform;
+    fn transform(&self, parent_size: &Vector2<u32>, widget_id: &Uuid) -> Transform;
 }

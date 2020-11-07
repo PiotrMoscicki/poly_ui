@@ -1,6 +1,6 @@
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::{boxed::Box, fmt::Debug};
+use std::{boxed::Box, cell::RefCell, fmt::Debug, rc::Rc};
 use uuid::Uuid;
 
 use super::Widget;
@@ -13,7 +13,7 @@ use super::WindowTrait;
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Window {
-    widget: Widget,
+    widget: Rc<RefCell<Widget>>,
     id: Uuid,
     window_provider: Box<dyn WindowProviderTrait>,
 }
@@ -32,11 +32,11 @@ impl Window {
 //************************************************************************************************
 impl WindowTrait for Window {
     fn widget(&self) -> &dyn WidgetTrait {
-        return &self.widget;
+        return &*self.widget.borrow();
     }
 
     fn widget_mut(&mut self) -> &mut dyn WidgetTrait {
-        return &mut self.widget;
+        return &mut* self.widget.borrow_mut();
     }
 
     fn id(&self) -> &Uuid {
@@ -62,10 +62,10 @@ impl WindowTrait for Window {
     }
 
     fn update(&mut self, dt: f32) {
-        self.widget.update(dt);
+        self.widget.borrow_mut().update(dt);
     }
 
     fn paint(&mut self) {
-        self.window_provider.paint_widget(&self.widget);
+        self.window_provider.paint_widget(&*self.widget.borrow());
     }
 }

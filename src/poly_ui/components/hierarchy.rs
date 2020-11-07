@@ -49,10 +49,10 @@ mod tests {
     #[test]
     fn hierarchy_add_child() {
         let mut parent_widget = Widget::new();
-        let child_widget = Rc::new(RefCell::new(Widget::new()));
-        parent_widget.hierarchy_mut().add(child_widget.clone());
+        let child_widget = Widget::new();
+        parent_widget.borrow_mut().hierarchy_mut().add(child_widget.clone());
         assert_eq!(
-            parent_widget.hierarchy().children()[0].borrow().id(),
+            parent_widget.borrow().hierarchy().children()[0].borrow().id(),
             child_widget.borrow().id()
         );
     }
@@ -61,13 +61,13 @@ mod tests {
     #[test]
     fn hierarchy_remove_child() {
         let mut parent_widget = Widget::new();
-        let child_widget_1 = Rc::new(RefCell::new(Widget::new())) as Rc<RefCell<dyn WidgetTrait>>;
-        let child_widget_2 = Rc::new(RefCell::new(Widget::new())) as Rc<RefCell<dyn WidgetTrait>>;
-        parent_widget.hierarchy_mut().add(child_widget_1.clone());
-        parent_widget.hierarchy_mut().add(child_widget_2.clone());
-        parent_widget.hierarchy_mut().remove(&child_widget_1);
+        let child_widget_1 = Widget::new() as Rc<RefCell<dyn WidgetTrait>>;
+        let child_widget_2 = Widget::new() as Rc<RefCell<dyn WidgetTrait>>;
+        parent_widget.borrow_mut().hierarchy_mut().add(child_widget_1.clone());
+        parent_widget.borrow_mut().hierarchy_mut().add(child_widget_2.clone());
+        parent_widget.borrow_mut().hierarchy_mut().remove(&child_widget_1);
         assert_eq!(
-            parent_widget.hierarchy().children()[0].borrow().id(),
+            parent_widget.borrow().hierarchy().children()[0].borrow().id(),
             child_widget_2.borrow().id()
         );
     }

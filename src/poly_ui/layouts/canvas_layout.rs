@@ -19,11 +19,11 @@ pub struct CanvasLayout {
 
 //************************************************************************************************
 impl CanvasLayout {
-    pub fn new() -> Self {
-        return Self {
+    pub fn new() ->  Rc<RefCell<Self>> {
+        return Rc::new(RefCell::new(Self {
             children: HashMap::new(),
             hierarchy: Rc::new(RefCell::new(Hierarchy::new())),
-        };
+        }));
     }
 
     pub fn set_pos(&mut self, widget_id: &Uuid, new: &Point2<i32>) {
@@ -49,7 +49,7 @@ impl LayoutTrait for CanvasLayout {
         self.hierarchy.borrow_mut().add(child);
     }
 
-    fn transform(&self, widget_id: &Uuid) -> Transform {
+    fn transform(&self, parent_size: &Vector2<u32>, widget_id: &Uuid) -> Transform {
         return *self.children.get(&widget_id).unwrap();
     }
 }
@@ -66,14 +66,14 @@ mod tests {
 
     //********************************************************************************************
     #[test]
-    fn canvas_layout_add_child() {
+    fn add_child() {
         let mut parent_widget = Widget::new();
-        parent_widget.set_layout(Box::new(CanvasLayout::new()));
-        let child_widget = Rc::new(RefCell::new(Widget::new()));
-        parent_widget.layout_mut().add(child_widget.clone());
+        parent_widget.borrow_mut().set_layout(CanvasLayout::new());
+        let child_widget = Widget::new();
+        parent_widget.borrow_mut().layout_mut().add(child_widget.clone());
 
         assert_eq!(
-            parent_widget.hierarchy().children()[0].borrow().id(),
+            parent_widget.borrow().hierarchy().children()[0].borrow().id(),
             child_widget.borrow().id()
         );
     }

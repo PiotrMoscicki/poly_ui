@@ -1,6 +1,11 @@
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::{boxed::Box, cell::RefCell, fmt::Debug, rc::Rc};
+use std::{
+    boxed::Box,
+    cell::{Ref, RefCell, RefMut},
+    fmt::Debug,
+    rc::Rc,
+};
 use uuid::Uuid;
 
 use super::Widget;
@@ -31,12 +36,12 @@ impl Window {
 
 //************************************************************************************************
 impl WindowTrait for Window {
-    fn widget(&self) -> &dyn WidgetTrait {
-        return &*self.widget.borrow();
+    fn widget(&self) -> Ref<dyn WidgetTrait> {
+        return self.widget.borrow();
     }
 
-    fn widget_mut(&mut self) -> &mut dyn WidgetTrait {
-        return &mut* self.widget.borrow_mut();
+    fn widget_mut(&mut self) -> RefMut<dyn WidgetTrait> {
+        return self.widget.borrow_mut();
     }
 
     fn id(&self) -> &Uuid {

@@ -5,6 +5,7 @@ use std::{
 };
 // crate
 use crate::poly_ui::components::Hierarchy;
+use crate::poly_ui::components::Transform;
 use crate::poly_ui::app::PainterTrait;
 // super
 use super::WidgetTrait;
@@ -29,11 +30,10 @@ pub fn paint_children(
     hierarchy: &Hierarchy,
     parent_canvas: &mut dyn PainterTrait,
 ) {
-    // for child in hierarchy.children() {
-    //     let borrowed_child = child.borrow();
-
-    //     let mut sub_canvas = parent_canvas
-    //         .sub_painter(&layout.transform(&parent_canvas.size(), borrowed_child.id()));
-    //     borrowed_child.paint(&mut *sub_canvas);
-    // }
+     for child in hierarchy.children() {
+         let borrowed_child = child.borrow();
+         let mut sub_canvas = parent_canvas
+             .sub_painter(&Transform::new(borrowed_child.pos(), borrowed_child.size()));
+         borrowed_child.paint(&mut *sub_canvas);
+     }
 }

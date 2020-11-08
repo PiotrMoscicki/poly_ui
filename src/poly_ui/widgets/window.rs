@@ -12,13 +12,15 @@ use super::Widget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
+use super::Ownerless;
+use super::Owned;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Window {
-    widget: Rc<RefCell<Widget>>,
+    widget: Owned<Widget>,
     id: Uuid,
     window_provider: Box<dyn WindowProviderTrait>,
 }
@@ -27,7 +29,7 @@ pub struct Window {
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         return Self {
-            widget: Widget::new(),
+            widget: Ownerless::new(Widget::new()).to_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         };
@@ -37,11 +39,11 @@ impl Window {
 //************************************************************************************************
 impl WindowTrait for Window {
     fn widget(&self) -> Ref<dyn WidgetTrait> {
-        return self.widget.borrow();
+        return self.widget.get_widget_rc().borrow();
     }
 
     fn widget_mut(&mut self) -> RefMut<dyn WidgetTrait> {
-        return self.widget.borrow_mut();
+        return self.widget.get_widget_rc().borrow_mut();
     }
 
     fn id(&self) -> &Uuid {
@@ -67,10 +69,10 @@ impl WindowTrait for Window {
     }
 
     fn update(&mut self, dt: f32) {
-        self.widget.borrow_mut().update(dt);
+        self.widget.get_widget_rc().borrow_mut().update(dt);
     }
 
     fn paint(&mut self) {
-        self.window_provider.paint_widget(&*self.widget.borrow());
+        //self.window_provider.paint_widget(&*self.widget.borrow());
     }
 }

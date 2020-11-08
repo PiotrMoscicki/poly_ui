@@ -1,13 +1,11 @@
-use std::{
-    cell::{Ref, RefCell, RefMut},
-    fmt::Debug,
-    rc::Rc,
-};
+// std
+use std::fmt::Debug;
+// dependencies
+use nalgebra::Point2;
+use nalgebra::Vector2;
 use uuid::Uuid;
-
+//crate
 use crate::poly_ui::app::PainterTrait;
-use crate::poly_ui::components::Hierarchy;
-use crate::poly_ui::layouts::LayoutTrait;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -15,12 +13,11 @@ use crate::poly_ui::layouts::LayoutTrait;
 pub trait WidgetTrait: Debug {
     fn id(&self) -> &Uuid;
 
-    fn hierarchy(&self) -> Ref<Hierarchy>;
-    fn hierarchy_mut(&mut self) -> RefMut<Hierarchy>;
-
-    fn set_layout(&mut self, layout: Rc<RefCell<dyn LayoutTrait>>);
-    fn layout(&self) -> Ref<dyn LayoutTrait>;
-    fn layout_mut(&mut self) -> RefMut<dyn LayoutTrait>;
+    // transform
+    fn pos(&self) -> &Point2<i32>;
+    fn set_pos(&mut self, value: &Point2<i32>);
+    fn size(&self) -> &Vector2<u32>;
+    fn set_size(&mut self, value: &Vector2<u32>);
 
     fn update(&mut self, dt: f32);
     fn paint(&self, canvas: &mut dyn PainterTrait);
@@ -42,24 +39,3 @@ impl std::cmp::PartialEq for dyn WidgetTrait {
 
 //************************************************************************************************
 impl std::cmp::Eq for dyn WidgetTrait {}
-
-//************************************************************************************************
-pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
-    for child in hierarchy.children() {
-        child.borrow_mut().update(dt);
-    }
-}
-
-pub fn paint_children(
-    hierarchy: &Hierarchy,
-    layout: &dyn LayoutTrait,
-    parent_canvas: &mut dyn PainterTrait,
-) {
-    for child in hierarchy.children() {
-        let borrowed_child = child.borrow();
-
-        let mut sub_canvas = parent_canvas
-            .sub_painter(&layout.transform(&parent_canvas.size(), borrowed_child.id()));
-        borrowed_child.paint(&mut *sub_canvas);
-    }
-}

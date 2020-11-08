@@ -53,31 +53,3 @@ impl LayoutTrait for CanvasLayout {
         return *self.children.get(&widget_id).unwrap();
     }
 }
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-#[cfg(test)]
-mod tests {
-    use crate::poly_ui::layouts::CanvasLayout;
-    use crate::poly_ui::widgets::{Widget, WidgetTrait};
-
-    //********************************************************************************************
-    #[test]
-    fn add_child() {
-        let mut parent_widget = Widget::new();
-        parent_widget.borrow_mut().set_layout(CanvasLayout::new());
-        let child_widget = Widget::new();
-        parent_widget
-            .borrow_mut()
-            .layout_mut()
-            .add(child_widget.clone());
-
-        assert_eq!(
-            parent_widget.borrow().hierarchy().children()[0]
-                .borrow()
-                .id(),
-            child_widget.borrow().id()
-        );
-    }
-}

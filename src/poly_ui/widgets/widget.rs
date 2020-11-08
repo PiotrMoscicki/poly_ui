@@ -47,31 +47,24 @@ impl WidgetTrait for Widget {
         return &self.id;
     }
 
-    fn hierarchy(&self) -> Ref<Hierarchy> {
-        return self.hierarchy.borrow();
+    fn pos(&self) -> &Point2<i32> {
+        return &self.pos;
     }
 
-    fn hierarchy_mut(&mut self) -> RefMut<Hierarchy> {
-        return self.hierarchy.borrow_mut();
+    fn set_pos(&mut self, value: &Point2<i32>) {
+        self.pos = *value;
     }
 
-    fn set_layout(&mut self, layout: Rc<RefCell<dyn LayoutTrait>>) {
-        self.layout = layout;
-        self.layout
-            .borrow_mut()
-            .set_owner_widget_hierarchy(self.hierarchy.clone());
+    fn size(&self) -> &Vector2<u32> {
+        return &self.size;
     }
 
-    fn layout(&self) -> Ref<dyn LayoutTrait> {
-        return self.layout.borrow();
-    }
-
-    fn layout_mut(&mut self) -> RefMut<dyn LayoutTrait> {
-        return self.layout.borrow_mut();
+    fn set_size(&mut self, value: &Vector2<u32>) {
+        self.size = *value;
     }
 
     fn update(&mut self, dt: f32) {
-        update_children(&self.hierarchy(), dt);
+        //update_children(&self.hierarchy(), dt);
         println!("update widget");
     }
 
@@ -89,6 +82,6 @@ impl WidgetTrait for Widget {
 
         println!("paint widget");
 
-        paint_children(&self.hierarchy(), &*self.layout(), painter);
+        //paint_children(&self.hierarchy(), &*self.layout(), painter);
     }
 }

@@ -7,11 +7,11 @@ use std::{
 };
 use uuid::Uuid;
 
+use super::Owned;
 use super::Widget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
-use super::Owned;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -71,6 +71,7 @@ impl WindowTrait for Window {
     }
 
     fn paint(&mut self) {
-        self.window_provider.paint_widget(&*self.widget.get_widget_rc().borrow());
+        self.window_provider
+            .paint_widget(&*self.widget.get_widget_rc().borrow());
     }
 }

@@ -1,8 +1,5 @@
 // std
-use std::{
-    cell::RefCell,
-    rc::Rc,
-};
+use std::{cell::RefCell, rc::Rc};
 // deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
@@ -14,9 +11,9 @@ use crate::poly_ui::app::Rect;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 // super
-use super::WidgetTrait;
-use super::Ownerless;
 use super::NewWidget;
+use super::Ownerless;
+use super::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -105,14 +102,11 @@ pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
 }
 
 //************************************************************************************************
-pub fn paint_children(
-    hierarchy: &Hierarchy,
-    parent_canvas: &mut dyn PainterTrait,
-) {
-     for child in hierarchy.children() {
-         let borrowed_child = child.get_widget_rc().borrow();
-         let mut sub_canvas = parent_canvas
-             .sub_painter(&Transform::new(borrowed_child.pos(), borrowed_child.size()));
-         borrowed_child.paint(&mut *sub_canvas);
-     }
+pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn PainterTrait) {
+    for child in hierarchy.children() {
+        let borrowed_child = child.get_widget_rc().borrow();
+        let mut sub_canvas =
+            parent_canvas.sub_painter(&Transform::new(borrowed_child.pos(), borrowed_child.size()));
+        borrowed_child.paint(&mut *sub_canvas);
+    }
 }

@@ -1,8 +1,5 @@
 // std
-use std::{
-    cell::RefCell,
-    rc::Rc,
-};
+use std::{cell::RefCell, rc::Rc};
 // super
 use super::WidgetTrait;
 
@@ -16,8 +13,8 @@ pub struct Ownerless {
 //************************************************************************************************
 impl Ownerless {
     pub fn to_owned(self) -> Owned {
-        return Owned{
-            widget: self.widget, 
+        return Owned {
+            widget: self.widget,
         };
     }
 }
@@ -33,8 +30,8 @@ pub struct Owned {
 //************************************************************************************************
 impl Owned {
     pub fn to_ownerless(self) -> Ownerless {
-        return Ownerless{
-            widget: self.widget, 
+        return Ownerless {
+            widget: self.widget,
         };
     }
 
@@ -60,8 +57,8 @@ impl<T: WidgetTrait + 'static> NewWidget<T> {
     }
 
     pub fn to_ownerless(self) -> Ownerless {
-        return Ownerless{
-            widget: self.widget, 
+        return Ownerless {
+            widget: self.widget,
         };
     }
 }

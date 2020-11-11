@@ -1,8 +1,5 @@
 // std
-use std::{
-    rc::Rc,
-    cell::RefCell,
-};
+use std::{cell::RefCell, rc::Rc};
 // deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
@@ -10,11 +7,14 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
 // super
-use super::WidgetTrait;
-use super::Widget;
-use super::Ownerless;
 use super::NewWidget;
+use super::Ownerless;
+use super::Widget;
+use super::WidgetTrait;
 
+//************************************************************************************************
+//************************************************************************************************
+//************************************************************************************************
 #[derive(Debug)]
 pub enum LinearLayoutWidgetDirection {
     LeftToRight,
@@ -91,15 +91,15 @@ impl WidgetTrait for LinearLayoutWidget {
     fn update(&mut self, dt: f32) {
         // ensure child widgets have correct transforms
         match &self.dir {
-            LinearLayoutWidgetDirection::LeftToRight => {},
-            LinearLayoutWidgetDirection::RightToLeft => {},
-            LinearLayoutWidgetDirection::TopToBottom => {},
-            LinearLayoutWidgetDirection::BotomToTop => {},
+            LinearLayoutWidgetDirection::LeftToRight => {}
+            LinearLayoutWidgetDirection::RightToLeft => {}
+            LinearLayoutWidgetDirection::TopToBottom => {}
+            LinearLayoutWidgetDirection::BotomToTop => {}
         }
 
         self.base.update(dt);
     }
-    
+
     fn paint(&self, painter: &mut dyn PainterTrait) {
         self.base.paint(painter);
     }
@@ -111,9 +111,9 @@ impl WidgetTrait for LinearLayoutWidget {
 #[cfg(test)]
 mod tests {
     // crate
+    use crate::poly_ui::widgets::NewWidget;
     use crate::poly_ui::widgets::Widget;
     use crate::poly_ui::widgets::WidgetTrait;
-    use crate::poly_ui::widgets::NewWidget;
     // super
     use super::LinearLayoutWidget;
 

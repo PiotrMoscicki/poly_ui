@@ -1,9 +1,10 @@
 // std
 use std::{cell::RefCell, fmt::Debug, rc::Rc};
+// deps
+use uuid::Uuid;
 // crate
 use crate::poly_ui::widgets::Owned;
 use crate::poly_ui::widgets::Ownerless;
-
 use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
@@ -26,16 +27,17 @@ impl Hierarchy {
         self.children.push(child.to_owned());
     }
 
-    pub fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless {
+    pub fn remove(&mut self, id: &Uuid) -> Ownerless {
         return self
             .children
-            .remove(
-                self.children
-                    .iter()
-                    .position(|elem| elem.get().borrow().id() == child.borrow().id())
-                    .unwrap(),
-            )
+            .remove(self.index(id).unwrap())
             .to_ownerless();
+    }
+
+    pub fn index(&self, id: &Uuid) -> Option<usize> {
+        return self.children
+            .iter()
+            .position(|elem| elem.get().borrow().id() == id);
     }
 
     pub fn children(&self) -> &Vec<Owned> {

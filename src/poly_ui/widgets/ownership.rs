@@ -17,6 +17,10 @@ impl Ownerless {
             widget: self.widget,
         };
     }
+
+    pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
+        return &self.widget;
+    }
 }
 
 //************************************************************************************************

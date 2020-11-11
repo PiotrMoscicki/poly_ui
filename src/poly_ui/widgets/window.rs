@@ -37,11 +37,11 @@ impl Window {
 //************************************************************************************************
 impl WindowTrait for Window {
     fn widget(&self) -> Ref<dyn WidgetTrait> {
-        return self.widget.get_widget_rc().borrow();
+        return self.widget.get().borrow();
     }
 
     fn widget_mut(&mut self) -> RefMut<dyn WidgetTrait> {
-        return self.widget.get_widget_rc().borrow_mut();
+        return self.widget.get().borrow_mut();
     }
 
     fn id(&self) -> &Uuid {
@@ -67,11 +67,11 @@ impl WindowTrait for Window {
     }
 
     fn update(&mut self, dt: f32) {
-        self.widget.get_widget_rc().borrow_mut().update(dt);
+        self.widget.get().borrow_mut().update(dt);
     }
 
     fn paint(&mut self) {
         self.window_provider
-            .paint_widget(&*self.widget.get_widget_rc().borrow());
+            .paint_widget(&*self.widget.get().borrow());
     }
 }

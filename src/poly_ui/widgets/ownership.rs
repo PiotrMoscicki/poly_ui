@@ -35,7 +35,7 @@ impl Owned {
         };
     }
 
-    pub fn get_widget_rc(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
+    pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
         return &self.widget;
     }
 }
@@ -60,5 +60,9 @@ impl<T: WidgetTrait + 'static> NewWidget<T> {
         return Ownerless {
             widget: self.widget,
         };
+    }
+
+    pub fn get(&self) -> &Rc<RefCell<T>> {
+        return &self.widget;
     }
 }

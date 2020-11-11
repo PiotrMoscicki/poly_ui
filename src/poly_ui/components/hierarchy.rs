@@ -32,7 +32,7 @@ impl Hierarchy {
             .remove(
                 self.children
                     .iter()
-                    .position(|elem| elem.get_widget_rc().borrow().id() == child.borrow().id())
+                    .position(|elem| elem.get().borrow().id() == child.borrow().id())
                     .unwrap(),
             )
             .to_ownerless();

@@ -121,9 +121,9 @@ mod tests {
     #[test]
     fn add_child() {
         let mut parent_widget = LinearLayoutWidget::new_raw();
-        let child_widget = NewWidget::new(Widget::new_raw());
-        parent_widget.add(child_widget.to_ownerless());
-        //     .add(child_widget.clone());
+        let new_child_widget = NewWidget::new(Widget::new_raw());
+        //let child_widget = new_child_widget.get();
+        parent_widget.add(new_child_widget.to_ownerless());
         // assert_eq!(
         //     parent_widget.borrow().hierarchy().children()[0]
         //         .borrow()

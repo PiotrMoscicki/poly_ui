@@ -97,14 +97,14 @@ impl WidgetTrait for Widget {
 //************************************************************************************************
 pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
     for child in hierarchy.children() {
-        child.get_widget_rc().borrow_mut().update(dt);
+        child.get().borrow_mut().update(dt);
     }
 }
 
 //************************************************************************************************
 pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn PainterTrait) {
     for child in hierarchy.children() {
-        let borrowed_child = child.get_widget_rc().borrow();
+        let borrowed_child = child.get().borrow();
         let mut sub_canvas =
             parent_canvas.sub_painter(&Transform::new(borrowed_child.pos(), borrowed_child.size()));
         borrowed_child.paint(&mut *sub_canvas);

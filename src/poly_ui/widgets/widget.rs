@@ -66,11 +66,11 @@ impl WidgetTrait for Widget {
         self.size = *value;
     }
 
-    fn add(&mut self, child: Ownerless<dyn WidgetTrait>) -> Rc<RefCell<dyn WidgetTrait>> {
-        return self.hierarchy.add(child);
+    fn add(&mut self, child: Ownerless) {
+        self.hierarchy.add(child);
     }
 
-    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless<dyn WidgetTrait> {
+    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless {
         return self.hierarchy.remove(child);
     }
 

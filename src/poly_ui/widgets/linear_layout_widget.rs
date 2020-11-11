@@ -13,6 +13,7 @@ use crate::poly_ui::app::PainterTrait;
 use super::WidgetTrait;
 use super::Widget;
 use super::Ownerless;
+use super::FreshOwnerless;
 
 #[derive(Debug)]
 pub enum LinearLayoutWidgetDirection {
@@ -48,8 +49,8 @@ impl LinearLayoutWidget {
         };
     }
 
-    pub fn new() -> Ownerless<Self> {
-        return Ownerless::new(Rc::new(RefCell::new(Self::new_raw())));
+    pub fn new() -> Ownerless {
+        return FreshOwnerless::new(Self::new_raw()).to_ownerless();
     }
 }
 
@@ -75,13 +76,11 @@ impl WidgetTrait for LinearLayoutWidget {
         self.base.set_size(value);
     }
 
-    fn add(&mut self, child: Ownerless<dyn WidgetTrait>) -> Rc<RefCell<dyn WidgetTrait>> {
-        let result = self.base.add(child);
-
-        return result;
+    fn add(&mut self, child: Ownerless) {
+        self.base.add(child);
     }
 
-    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless<dyn WidgetTrait> {
+    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless {
         return self.base.remove(child);
     }
 
@@ -105,6 +104,7 @@ mod tests {
     use crate::poly_ui::widgets::Widget;
     use crate::poly_ui::widgets::WidgetTrait;
     use crate::poly_ui::widgets::Ownerless;
+    use crate::poly_ui::widgets::FreshOwnerless;
     // super
     use super::LinearLayoutWidget;
 
@@ -119,8 +119,8 @@ mod tests {
         let a = Box::new(3);
 
         let mut parent_widget = LinearLayoutWidget::new_raw();
-        let child_widget: Ownerless<dyn WidgetTrait> = Ownerless::new(Widget::new());
-        parent_widget.add(child_widget);
+        let child_widget = FreshOwnerless::new(Widget::new_raw());
+        parent_widget.add(child_widget.to_ownerless());
         //     .add(child_widget.clone());
         // assert_eq!(
         //     parent_widget.borrow().hierarchy().children()[0]

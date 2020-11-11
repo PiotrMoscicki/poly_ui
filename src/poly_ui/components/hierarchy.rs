@@ -11,25 +11,22 @@ use crate::poly_ui::widgets::WidgetTrait;
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Hierarchy {
-    children: Vec<Owned<dyn WidgetTrait>>,
+    children: Vec<Owned>,
 }
 
 //************************************************************************************************
 impl Hierarchy {
     pub fn new() -> Self {
         return Self {
-            children: Vec::<Owned<dyn WidgetTrait>>::new(),
+            children: Vec::new(),
         };
     }
 
-    pub fn add(&mut self, child: Ownerless<dyn WidgetTrait>) -> Rc<RefCell<dyn WidgetTrait>> {
-        let owned = child.to_owned();
-        let result = owned.get_widget_rc().clone();
-        self.children.push(owned);
-        return result;
+    pub fn add(&mut self, child: Ownerless) {
+        self.children.push(child.to_owned());
     }
 
-    pub fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless<dyn WidgetTrait> {
+    pub fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless {
         return self.children.remove(
             self.children
                 .iter()
@@ -38,7 +35,7 @@ impl Hierarchy {
         ).to_ownerless();
     }
 
-    pub fn children(&self) -> &Vec<Owned<dyn WidgetTrait>> {
+    pub fn children(&self) -> &Vec<Owned> {
         return &self.children;
     }
 }

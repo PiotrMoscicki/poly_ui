@@ -8,6 +8,7 @@ mod window_trait;
 
 pub use widget::Widget;
 pub use ownership::Ownerless;
+pub use ownership::FreshOwnerless;
 pub use ownership::Owned;
 pub use widget_trait::WidgetTrait;
 pub use widget::paint_children;

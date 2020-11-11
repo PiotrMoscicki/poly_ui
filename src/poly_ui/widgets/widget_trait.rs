@@ -26,8 +26,8 @@ pub trait WidgetTrait: Debug {
     fn set_size(&mut self, value: &Vector2<u32>);
     
     // child widgets
-    fn add(&mut self, child: Ownerless<dyn WidgetTrait>) -> Rc<RefCell<dyn WidgetTrait>>;
-    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless<dyn WidgetTrait>;
+    fn add(&mut self, child: Ownerless);
+    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless;
 
     fn update(&mut self, dt: f32);
     fn paint(&self, canvas: &mut dyn PainterTrait);

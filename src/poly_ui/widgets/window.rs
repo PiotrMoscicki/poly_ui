@@ -14,13 +14,14 @@ use super::WindowProviderTrait;
 use super::WindowTrait;
 use super::Owned;
 use super::Ownerless;
+use super::FreshOwnerless;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
 pub struct Window {
-    widget: Owned<Widget>,
+    widget: Owned,
     id: Uuid,
     window_provider: Box<dyn WindowProviderTrait>,
 }
@@ -29,7 +30,7 @@ pub struct Window {
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         return Self {
-            widget: Ownerless::new(Widget::new()).to_owned(),
+            widget: FreshOwnerless::new(Widget::new_raw()).to_ownerless().to_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         };

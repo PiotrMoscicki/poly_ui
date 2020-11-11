@@ -52,6 +52,10 @@ impl LinearLayoutWidget {
     pub fn new() -> NewWidget<Self> {
         return NewWidget::new(Self::new_raw());
     }
+
+    pub fn set_dir(&mut self, dir: LinearLayoutWidgetDirection) {
+        self.dir = dir;
+    }
 }
 
 //************************************************************************************************
@@ -86,6 +90,12 @@ impl WidgetTrait for LinearLayoutWidget {
 
     fn update(&mut self, dt: f32) {
         // ensure child widgets have correct transforms
+        match &self.dir {
+            LinearLayoutWidgetDirection::LeftToRight => {},
+            LinearLayoutWidgetDirection::RightToLeft => {},
+            LinearLayoutWidgetDirection::TopToBottom => {},
+            LinearLayoutWidgetDirection::BotomToTop => {},
+        }
 
         self.base.update(dt);
     }
@@ -103,21 +113,13 @@ mod tests {
     // crate
     use crate::poly_ui::widgets::Widget;
     use crate::poly_ui::widgets::WidgetTrait;
-    use crate::poly_ui::widgets::Ownerless;
     use crate::poly_ui::widgets::NewWidget;
     // super
     use super::LinearLayoutWidget;
 
-    use std::{
-        cell::RefCell,
-        rc::Rc,
-    };
-
     //********************************************************************************************
     #[test]
     fn add_child() {
-        let a = Box::new(3);
-
         let mut parent_widget = LinearLayoutWidget::new_raw();
         let child_widget = NewWidget::new(Widget::new_raw());
         parent_widget.add(child_widget.to_ownerless());

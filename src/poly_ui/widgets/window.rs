@@ -2,9 +2,8 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use std::{
     boxed::Box,
-    cell::{Ref, RefCell, RefMut},
+    cell::{Ref, RefMut},
     fmt::Debug,
-    rc::Rc,
 };
 use uuid::Uuid;
 
@@ -13,8 +12,6 @@ use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
 use super::Owned;
-use super::Ownerless;
-use super::NewWidget;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -74,6 +71,6 @@ impl WindowTrait for Window {
     }
 
     fn paint(&mut self) {
-        //self.window_provider.paint_widget(&*self.widget.borrow());
+        self.window_provider.paint_widget(&*self.widget.get_widget_rc().borrow());
     }
 }

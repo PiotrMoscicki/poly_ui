@@ -30,7 +30,7 @@ pub struct Window {
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         return Self {
-            widget: NewWidget::new(Widget::new_raw()).to_ownerless().to_owned(),
+            widget: Widget::new().to_ownerless().to_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         };

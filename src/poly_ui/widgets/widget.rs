@@ -16,6 +16,7 @@ use crate::poly_ui::components::Transform;
 // super
 use super::WidgetTrait;
 use super::Ownerless;
+use super::NewWidget;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -39,8 +40,8 @@ impl Widget {
         };
     }
 
-    pub fn new() -> Rc<RefCell<Self>> {
-        return Rc::new(RefCell::new(Self::new_raw()));
+    pub fn new() -> NewWidget<Self> {
+        return NewWidget::new(Self::new_raw());
     }
 }
 

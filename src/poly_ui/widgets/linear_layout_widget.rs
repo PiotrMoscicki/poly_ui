@@ -49,8 +49,8 @@ impl LinearLayoutWidget {
         };
     }
 
-    pub fn new() -> Ownerless {
-        return NewWidget::new(Self::new_raw()).to_ownerless();
+    pub fn new() -> NewWidget<Self> {
+        return NewWidget::new(Self::new_raw());
     }
 }
 

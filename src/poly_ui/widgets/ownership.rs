@@ -31,7 +31,7 @@ pub struct Owned {
 }
 
 //************************************************************************************************
-impl<> Owned {
+impl Owned {
     pub fn to_ownerless(self) -> Ownerless {
         return Ownerless{
             widget: self.widget, 
@@ -47,12 +47,12 @@ impl<> Owned {
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct FreshOwnerless<T: WidgetTrait + 'static> {
+pub struct NewWidget<T: WidgetTrait + 'static> {
     widget: Rc<RefCell<T>>,
 }
 
 //************************************************************************************************
-impl<T: WidgetTrait + 'static> FreshOwnerless<T> {
+impl<T: WidgetTrait + 'static> NewWidget<T> {
     pub fn new(widget: T) -> Self {
         return Self {
             widget: Rc::new(RefCell::new(widget)),

@@ -13,7 +13,7 @@ use crate::poly_ui::app::PainterTrait;
 use super::WidgetTrait;
 use super::Widget;
 use super::Ownerless;
-use super::FreshOwnerless;
+use super::NewWidget;
 
 #[derive(Debug)]
 pub enum LinearLayoutWidgetDirection {
@@ -50,7 +50,7 @@ impl LinearLayoutWidget {
     }
 
     pub fn new() -> Ownerless {
-        return FreshOwnerless::new(Self::new_raw()).to_ownerless();
+        return NewWidget::new(Self::new_raw()).to_ownerless();
     }
 }
 
@@ -104,7 +104,7 @@ mod tests {
     use crate::poly_ui::widgets::Widget;
     use crate::poly_ui::widgets::WidgetTrait;
     use crate::poly_ui::widgets::Ownerless;
-    use crate::poly_ui::widgets::FreshOwnerless;
+    use crate::poly_ui::widgets::NewWidget;
     // super
     use super::LinearLayoutWidget;
 
@@ -119,7 +119,7 @@ mod tests {
         let a = Box::new(3);
 
         let mut parent_widget = LinearLayoutWidget::new_raw();
-        let child_widget = FreshOwnerless::new(Widget::new_raw());
+        let child_widget = NewWidget::new(Widget::new_raw());
         parent_widget.add(child_widget.to_ownerless());
         //     .add(child_widget.clone());
         // assert_eq!(

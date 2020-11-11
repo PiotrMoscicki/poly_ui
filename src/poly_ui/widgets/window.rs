@@ -12,8 +12,8 @@ use super::Widget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
-use super::Ownerless;
 use super::Owned;
+use super::Ownerless;
 
 //************************************************************************************************
 //************************************************************************************************

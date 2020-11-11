@@ -5,21 +5,30 @@ use std::{
 };
 // super
 use super::WidgetTrait;
+use super::Widget;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct Ownerless<T: WidgetTrait + ?Sized> {
+pub struct Ownerless<T> {
     widget: Rc<RefCell<T>>,
 }
 
 //************************************************************************************************
-impl<T: WidgetTrait + ?Sized> Ownerless<T> {
+impl<T> Ownerless<T> {
     pub fn new(widget: Rc<RefCell<T>>) -> Self {
         return Self {
-            widget:widget,
+            widget: widget,
         };
+    }
+
+    pub fn to_trait_object(self) -> Ownerless<dyn WidgetTrait> {
+        let widget: T = self.widget.borrow_mut().replace(Widget::new_raw());
+
+
+        let result: Ownerless<dyn WidgetTrait> = Ownerless::new(Rc::new(RefCell::new(widget)));
+        return result;
     }
 
     pub fn to_owned(self) -> Owned<T> {
@@ -38,7 +47,7 @@ pub struct Owned<T: WidgetTrait + ?Sized> {
 }
 
 //************************************************************************************************
-impl<T: WidgetTrait> Owned<T> {
+impl<T: WidgetTrait + ?Sized> Owned<T> {
     pub fn to_ownerless(self) -> Ownerless<T> {
         return Ownerless{
             widget: self.widget, 

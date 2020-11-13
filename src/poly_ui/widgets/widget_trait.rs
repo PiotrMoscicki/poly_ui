@@ -1,5 +1,5 @@
 // std
-use std::{cell::RefCell, fmt::Debug, rc::Rc};
+use std::fmt::Debug;
 // deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
@@ -23,7 +23,7 @@ pub trait WidgetTrait: Debug {
 
     // child widgets
     fn add(&mut self, child: Ownerless);
-    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless;
+    fn remove(&mut self, child: &Uuid) -> Ownerless;
 
     fn update(&mut self, dt: f32);
     fn paint(&self, canvas: &mut dyn PainterTrait);

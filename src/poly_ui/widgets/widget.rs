@@ -1,5 +1,3 @@
-// std
-use std::{cell::RefCell, rc::Rc};
 // deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
@@ -68,7 +66,7 @@ impl WidgetTrait for Widget {
         self.hierarchy.add(child);
     }
 
-    fn remove(&mut self, child: &Rc<RefCell<dyn WidgetTrait>>) -> Ownerless {
+    fn remove(&mut self, child: &Uuid) -> Ownerless {
         return self.hierarchy.remove(child);
     }
 

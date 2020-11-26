@@ -523,6 +523,17 @@ mod tests {
             assert_eq!(diff.diff, 11);
             assert_eq!(diff.index, 2);
         }
+        {
+            let items: Vec<(Item, u32)> = vec!(
+                (Item{min_item_size: 30, stretch: 2, ..Default::default()}, 0),
+                (Item{stretch: 5, ..Default::default()}, 0),
+                (Item{..Default::default()}, 0),
+            );
+
+            let diff = LowestMinMaxDiff::get(90, &items);
+            assert_eq!(diff.diff, 11);
+            assert_eq!(diff.index, 2);
+        }
     }
 
     //********************************************************************************************

@@ -94,22 +94,22 @@ impl ValidatedLayout {
             idx += 1;
         }
 
+        // update items max sizes 
+        let layout_stretch = self.get_stretch();
+        let items_count = self.items.len() as u32;
+        for item in &mut self.items {
+            item.update_max_size(self.size, layout_stretch, items_count);
+        }
+
         if let Some(index) = self.get_index_of_item_where_min_equals_max() {
             println!("get_index_of_item_where_min_equals_max() -> Some({})", index);
             // remove item from layout
             let mut item = self.items.remove(index);
-            self.size -= item.current_size;
-            self.stretch -= item.stretch;
-
             // set item final size
             item.current_size = item.min_size;
-
-            // update other items max sizes 
-            let layout_stretch = self.get_stretch();
-            let items_count = self.items.len() as u32;
-            for item in &mut self.items {
-                item.update_max_size(self.size, layout_stretch, items_count);
-            }
+            // fix layout properties after removing item
+            self.size -= item.current_size;
+            self.stretch -= item.stretch;
 
             // calculate rest of items sizes
             self.calculate();
@@ -119,22 +119,15 @@ impl ValidatedLayout {
             self.stretch += item.stretch;
             self.items.insert(index, item);
         }
-        else if let Some(index) = self.get_index_of_item_where_max_is_lower_than_stretch() {
-            println!("get_index_of_item_where_max_is_lower_than_stretch() -> Some({})", index);
+        else if let Some(index) = self.get_index_of_item_with_lowest_max_which_is_lower_than_stretch() {
+            println!("get_index_of_item_with_lowest_max_which_is_lower_than_stretch() -> Some({})", index);
             // remove item from layout
             let mut item = self.items.remove(index);
+            // set item final size
+            item.current_size = item.max_size;
+            // fix layout properties after removing item
             self.size -= item.current_size;
             self.stretch -= item.stretch;
-
-            // set item final size
-            item.current_size = item.min_size;
-
-            // update other items max sizes 
-            let layout_stretch = self.get_stretch();
-            let items_count = self.items.len() as u32;
-            for item in &mut self.items {
-                item.update_max_size(self.size, layout_stretch, items_count);
-            }
 
             // calculate rest of items sizes
             self.calculate();
@@ -146,8 +139,8 @@ impl ValidatedLayout {
         }
         else {
             println!("get_index_of_item_where_min_equals_max() -> None");
-            // no item exceeds its stretch so all available space can be spent on increasing 
-            // remaining items size
+            // no item will have its final size lower or higher than what it gets from the stretch
+            // so all available space can be spent on increasing  remaining items size
             for item in &mut self.items {
                 item.current_size = item.max_size;
             }
@@ -175,7 +168,7 @@ impl ValidatedLayout {
         return None;
     }
 
-    fn get_index_of_item_where_max_is_lower_than_stretch(&self) -> Option<usize> {
+    fn get_index_of_item_with_lowest_max_which_is_lower_than_stretch(&self) -> Option<usize> {
         let mut i = 0;
         for item in &self.items {
             if item.min_size == item.max_size {
@@ -192,13 +185,14 @@ impl ValidatedLayout {
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct InputLayout {
-    pub size: u32,
-    pub items: Vec<InputItem>,
+pub struct Layout {
+    pub size: u32, // size is large enough to fit all items in their lowest sizes
+    pub stretch: u32, // sum of all items' stretch
+    pub items: Vec<ValidatedItem>,
 }
 
 //************************************************************************************************
-impl InputLayout {
+impl Layout {
     pub fn validate(self) -> Option<ValidatedLayout> {
         if self.items.len() > 0 {
             return Some(ValidatedLayout {

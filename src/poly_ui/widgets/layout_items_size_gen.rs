@@ -193,7 +193,34 @@ pub struct Layout {
 
 //************************************************************************************************
 impl Layout {
-    pub fn validate(self) -> Option<ValidatedLayout> {
+    pub fn validate(&mut self) {
+        // if there are some items in the layout
+            // ensure layout has at least minimal width
+                // layout size hast to be equal or higher to sum of all items min sizes
+            // gather items stretch
+                // save sum of all items stretch
+            // at this point layout properties are valid
+            // validate all items
+                // if max item size is lower than min item size 
+                    // set max item size to min item size
+            // all items are valid
+
+            // get lowest current -> max diff of all items
+            // get remaining layout space
+            // if there is some remaining space
+                // if remaining space is big enough to increase each item by lowest current -> max diff
+                    // increase each item size by lowest current -> max diff
+                    // remove item with lowest diff from the layout
+                    // validate
+                    // return removed item to the collection at its old position
+                    // validate layout width and stretch and all the items in the collection
+                // else
+                    // 
+            // else
+                // return
+        // else
+            // return
+
         if self.items.len() > 0 {
             return Some(ValidatedLayout {
                 size: std::cmp::max(self.get_min_size(), self.size),
@@ -239,7 +266,7 @@ mod tests {
     // super
     use super::InputItem;
     use super::ValidatedItem;
-    use super::InputLayout;
+    use super::Layout;
 
     //********************************************************************************************
     #[test]

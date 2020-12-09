@@ -2,183 +2,11 @@
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct ValidatedItem {
+pub struct Item {
     pub stretch: u32, // any value
     pub min_size: u32, // any value
     pub max_size: u32, // ensured to be higher or equal min_size
     pub current_size: u32, // ensured to have at least one element
-}
-
-//************************************************************************************************
-impl ValidatedItem {
-    fn get_size_from_stretch(&mut self, layout_size: u32, layout_stretch: u32, items_count: u32) -> u32 {
-        if layout_stretch > 0 {
-           return layout_size / layout_stretch * self.stretch;
-        }
-        else {
-            return layout_size / items_count;
-        }
-    }
-
-    fn update_max_size(&mut self, layout_size: u32, layout_stretch: u32, items_count: u32) {
-        self.max_size = std::cmp::min(
-            self.max_size, 
-            self.get_size_from_stretch(layout_size, layout_stretch, items_count)
-        );
-        self.max_size = std::cmp::max(self.max_size, self.min_size);
-    }
-}
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-#[derive(Debug)]
-pub struct InputItem {
-    pub stretch: u32, // any value
-    pub min_size: u32, // any value
-    pub max_size: u32, // if max is lower than min, min is used
-}
-
-//************************************************************************************************
-impl InputItem {
-    fn validate(mut self, layout_size: u32, layout_stretch: u32, items_count: u32) -> ValidatedItem {
-        println!("layout_size: {}", layout_size);
-        println!("layout_stretch: {}", layout_stretch);
-        self.update_max_size(layout_size, layout_stretch, items_count);
-
-        return ValidatedItem{
-            stretch: self.stretch,
-            min_size: self.min_size,
-            max_size: self.max_size,
-            current_size: 0,
-        }
-    }
-
-    fn get_size_from_stretch(&mut self, layout_size: u32, layout_stretch: u32, items_count: u32) -> u32 {
-        if layout_stretch > 0 {
-           return layout_size / layout_stretch * self.stretch;
-        }
-        else {
-            return layout_size / items_count;
-        }
-    }
-
-    fn update_max_size(&mut self, layout_size: u32, layout_stretch: u32, items_count: u32) {
-        self.max_size = std::cmp::min(
-            self.max_size, 
-            self.get_size_from_stretch(layout_size, layout_stretch, items_count)
-        );
-        self.max_size = std::cmp::max(self.max_size, self.min_size);
-    }
-}
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-#[derive(Debug)]
-pub struct ValidatedLayout {
-    pub size: u32, // size is large enough to fit all items in their lowest sizes
-    pub stretch: u32, // sum of all items' stretch
-    pub items: Vec<ValidatedItem>,
-}
-
-//************************************************************************************************
-impl ValidatedLayout {
-    pub fn calculate(&mut self) {
-        println!("-------------------------------------------------");
-        println!("calculate()");
-
-        let mut idx = 0;
-        for item in &self.items {
-            println!("size[{}]: {}", idx, item.current_size);
-            idx += 1;
-        }
-
-        // update items max sizes 
-        let layout_stretch = self.get_stretch();
-        let items_count = self.items.len() as u32;
-        for item in &mut self.items {
-            item.update_max_size(self.size, layout_stretch, items_count);
-        }
-
-        if let Some(index) = self.get_index_of_item_where_min_equals_max() {
-            println!("get_index_of_item_where_min_equals_max() -> Some({})", index);
-            // remove item from layout
-            let mut item = self.items.remove(index);
-            // set item final size
-            item.current_size = item.min_size;
-            // fix layout properties after removing item
-            self.size -= item.current_size;
-            self.stretch -= item.stretch;
-
-            // calculate rest of items sizes
-            self.calculate();
-
-            // return item to layout
-            self.size += item.current_size;
-            self.stretch += item.stretch;
-            self.items.insert(index, item);
-        }
-        else if let Some(index) = self.get_index_of_item_with_lowest_max_which_is_lower_than_stretch() {
-            println!("get_index_of_item_with_lowest_max_which_is_lower_than_stretch() -> Some({})", index);
-            // remove item from layout
-            let mut item = self.items.remove(index);
-            // set item final size
-            item.current_size = item.max_size;
-            // fix layout properties after removing item
-            self.size -= item.current_size;
-            self.stretch -= item.stretch;
-
-            // calculate rest of items sizes
-            self.calculate();
-
-            // return item to layout
-            self.size += item.current_size;
-            self.stretch += item.stretch;
-            self.items.insert(index, item);
-        }
-        else {
-            println!("get_index_of_item_where_min_equals_max() -> None");
-            // no item will have its final size lower or higher than what it gets from the stretch
-            // so all available space can be spent on increasing  remaining items size
-            for item in &mut self.items {
-                item.current_size = item.max_size;
-            }
-        }
-    }
-
-    fn get_stretch(&self) -> u32 {
-        let mut result = 0;
-        for item in &self.items {
-            result += item.stretch;
-        }
-
-        return result;
-    }
-
-    fn get_index_of_item_where_min_equals_max(&self) -> Option<usize> {
-        let mut i = 0;
-        for item in &self.items {
-            if item.min_size == item.max_size {
-                return Some(i);
-            }
-            i += 1;
-        }
-
-        return None;
-    }
-
-    fn get_index_of_item_with_lowest_max_which_is_lower_than_stretch(&self) -> Option<usize> {
-        let mut i = 0;
-        for item in &self.items {
-            if item.min_size == item.max_size {
-                return Some(i);
-            }
-            i += 1;
-        }
-
-        return None;
-    }
 }
 
 //************************************************************************************************
@@ -187,86 +15,138 @@ impl ValidatedLayout {
 #[derive(Debug)]
 pub struct Layout {
     pub size: u32, // size is large enough to fit all items in their lowest sizes
-    pub stretch: u32, // sum of all items' stretch
-    pub items: Vec<ValidatedItem>,
+    pub items: Vec<Item>,
 }
 
 //************************************************************************************************
 impl Layout {
     pub fn validate(&mut self) {
-        // if there are some items in the layout
-            // ensure layout has at least minimal width
-                // layout size hast to be equal or higher to sum of all items min sizes
-            // gather items stretch
-                // save sum of all items stretch
-            // at this point layout properties are valid
-            // validate all items
-                // if max item size is lower than min item size 
-                    // set max item size to min item size
-            // all items are valid
-
-            // get lowest current -> max diff of all items
-            // get remaining layout space
-            // if there is some remaining space
-                // if remaining space is big enough to increase each item by lowest current -> max diff
-                    // increase each item size by lowest current -> max diff
-                    // remove item with lowest diff from the layout
-                    // validate
-                    // return removed item to the collection at its old position
-                    // validate layout width and stretch and all the items in the collection
-                // else
-                    // 
-            // else
-                // return
-        // else
-            // return
-
         if self.items.len() > 0 {
-            return Some(ValidatedLayout {
-                size: std::cmp::max(self.get_min_size(), self.size),
-                stretch: self.get_stretch(),
-                items: self.get_validated_items(),
-            });
+            self.ensure_layout_has_at_least_minimal_width();
+            self.validate_all_items();
+            
+            let items_stretch = self.gather_items_stretch();
+            let item_with_lowest_current_max_diff = self.get_item_with_lowest_current_max_diff();
+            let lowest_current_max_diff = 
+                self.items[item_with_lowest_current_max_diff].get_current_max_diff();
+            let remaining_free_layout_space = self.remaining_free_layout_space();
+            
+            if remaining_free_layout_space == 0 {
+                return;
+            }
+            else if remaining_free_layout_space < lowest_current_max_diff * items_stretch {
+                self.set_every_item_size_to_at_least_min();
+                self.increase_every_item_size(remaining_free_layout_space / items_stretch);
+                let remainder = remaining_free_layout_space % items_stretch;
+                for _ in 0..remainder {
+                    let highest_diff = self.get_item_with_highest_current_vs_expected_stretch_diff();
+                    self.items[highest_diff].current_size += 1;
+                }
+            }
+            else {
+                self.increase_every_item_size(lowest_current_max_diff);
+                
+                let mut item = self.items.remove(item_with_lowest_current_max_diff);
+                self.size -= item.current_size;
+
+                self.validate();
+                
+                self.size += item.current_size;
+                self.items.insert(item_with_lowest_current_max_diff, item);
+            }
         }
         else {
-            return None;
+            return;
         }
     }
 
-    fn get_min_size(&self) -> u32 {
-        let mut result = 0;
-        for item in &self.items {
-            result += item.min_size;
+    fn ensure_layout_has_at_least_minimal_width(&mut self) {
+        let mut sum_of_min_sizes = 0;
+        
+        for item in self.items {
+            sum_of_min_sizes += item.min_size;
         }
-        return result;
+
+        if self.size < sum_of_min_sizes {
+            self.size = sum_of_min_sizes;
+        }
     }
 
-    fn get_stretch(&self) -> u32 {
+    fn gather_items_stretch(&mut self) -> u32 {
         let mut result = 0;
-        for item in &self.items {
+
+        for item in self.items {
             result += item.stretch;
         }
 
         return result;
     }
 
-    fn get_validated_items(self) -> Vec<ValidatedItem> {
-        let mut result = Vec::new();
-        let layout_stretch = self.get_stretch();
-        let items_count = self.items.len() as u32;
+    fn validate_all_items(&mut self) {
         for item in self.items {
-            result.push(item.validate(self.size, layout_stretch, items_count));
+            if item.max_size < item.min_size {
+                item.max_size = item.min_size;
+            }
         }
+    }
+
+    fn get_item_with_lowest_current_max_diff(&mut self) -> usize {
+        let mut idx = 0;
+        let mut lowest_idx = 0;
+        let mut lowest_diff = self.items[0].max_size - self.items[0].min_size;
+        for item in self.items {
+            let potential_lowest = item.max_size - item.min_size;
+            if potential_lowest < lowest_diff {
+                lowest_diff = potential_lowest;
+                lowest_idx = idx;
+            }
+
+            idx += 1;
+        }
+
+        return lowest_idx;
+    }
+
+    fn remaining_free_layout_space(&mut self) -> u32 {
+        let mut result = self.size;
+
+        for item in self.items {
+            result -= std::cmp::max(item.current_size, item.min_size);
+        }
+
         return result;
+    }
+
+    fn increase_every_item_size(&mut self, diff: u32) {
+        for item in self.items {
+            item.current_size += diff * item.stretch;
+        }
+    }
+
+    fn set_every_item_size_to_at_least_min(&mut self) {
+        for item in self.items {
+            if item.current_size < item.min_size {
+                item.current_size = item.min_size;
+            }
+        }
+    }
+
+    fn get_item_with_highest_current_vs_expected_stretch_diff(&self) -> usize {
+        let mut highest_idx = 0;
+        //let mut highest_diff = 
+        // stretch_value = stretch / total_stretch
+        // current_stretch_value = size / total_size
+        
+        // stretch / total_stretch = size / total_size
+        // stretch * total_size = size * total_stretch
+        //
     }
 }
 
 #[cfg(test)]
 mod tests {
     // super
-    use super::InputItem;
-    use super::ValidatedItem;
-    use super::Layout;
+    use super::*;
 
     //********************************************************************************************
     #[test]

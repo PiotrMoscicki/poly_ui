@@ -8,7 +8,6 @@ pub use event::KeyReleaseEvent;
 pub use event::MousePressEvent;
 pub use event::MouseReleaseEvent;
 pub use event::MouseMoveEvent;
-pub use event::EventData;
 pub use event::Event;
 
 pub use event_handler::EventHandler;

@@ -138,14 +138,23 @@ impl Layout {
     }
 
     fn get_item_with_highest_current_vs_expected_stretch_diff(&self) -> usize {
+        let total_stretch = self.gather_items_stretch();
         let mut highest_idx = 0;
-        //let mut highest_diff = 
+        let mut highest_diff = 0;
+        let mut idx = 0;
+        
+        for item in &self.items {
+            let current_stretch = item.current_size / self.size;
+            let expected_stretch = item.stretch / total_stretch;
+            idx += 1;
+        }
         // stretch_value = stretch / total_stretch
         // current_stretch_value = size / total_size
         
         // stretch / total_stretch = size / total_size
         // stretch * total_size = size * total_stretch
-        //
+        
+        return highest_idx;
     }
 }
 

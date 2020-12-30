@@ -340,362 +340,362 @@ fn get_items_sizes(goal_total: u32, items: &Vec<Item>) -> Vec<u32> {
 #[cfg(test)]
 mod tests {
     // deps
-    use nalgebra::Point2;
-    use nalgebra::Vector2;
-    // crate
-    use crate::poly_ui::widgets::Widget;
-    use crate::poly_ui::widgets::WidgetTrait;
-    // super
-    use super::Item;
-    use super::LowestMinMaxDiff;
-    use super::LinearLayoutWidget;
-    use super::LinearLayoutDirection;
+    // use nalgebra::Point2;
+    // use nalgebra::Vector2;
+    // // crate
+    // use crate::poly_ui::widgets::Widget;
+    // use crate::poly_ui::widgets::WidgetTrait;
+    // // super
+    // use super::Item;
+    // use super::LowestMinMaxDiff;
+    // use super::LinearLayoutWidget;
+    // use super::LinearLayoutDirection;
 
     //********************************************************************************************
-    #[test]
-    fn get_total_stretch() {
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 1, ..Default::default()}, 0),
-                (Item{ stretch: 2, ..Default::default()}, 0),
-                (Item{ stretch: 3, ..Default::default()}, 0),
-            );
+    //#[test]
+    // fn get_total_stretch() {
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 1, ..Default::default()}, 0),
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //             (Item{ stretch: 3, ..Default::default()}, 0),
+    //         );
 
-            assert_eq!(super::get_total_stretch(&items), 6);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 5, ..Default::default()}, 0),
-                (Item{ stretch: 5, ..Default::default()}, 0),
-                (Item{ stretch: 5, ..Default::default()}, 0),
-            );
+    //         assert_eq!(super::get_total_stretch(&items), 6);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 5, ..Default::default()}, 0),
+    //             (Item{ stretch: 5, ..Default::default()}, 0),
+    //             (Item{ stretch: 5, ..Default::default()}, 0),
+    //         );
 
-            assert_eq!(super::get_total_stretch(&items), 15);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 0, ..Default::default()}, 0),
-                (Item{ stretch: 0, ..Default::default()}, 0),
-                (Item{ stretch: 0, ..Default::default()}, 0),
-            );
+    //         assert_eq!(super::get_total_stretch(&items), 15);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 0, ..Default::default()}, 0),
+    //             (Item{ stretch: 0, ..Default::default()}, 0),
+    //             (Item{ stretch: 0, ..Default::default()}, 0),
+    //         );
 
-            assert_eq!(super::get_total_stretch(&items), 0);
-        }
-    }
+    //         assert_eq!(super::get_total_stretch(&items), 0);
+    //     }
+    // }
 
-    //********************************************************************************************
-    #[test]
-    fn get_item_max_size() {
-        assert_eq!(super::get_item_max_size(100, 5, &Item{..Default::default()}), 20);
-        assert_eq!(super::get_item_max_size(100, 3, &Item{..Default::default()}), 33);
-        assert_eq!(
-            super::get_item_max_size(100, 3, &Item{max_item_size: 40, ..Default::default()}),
-            33
-        );
-        assert_eq!(
-            super::get_item_max_size(100, 3, &Item{max_item_size: 10, ..Default::default()}),
-            10
-        );
-        assert_eq!(
-            super::get_item_max_size(100, 20, &Item{max_item_size: 10, ..Default::default()}),
-            5
-        );
-    }
+    // //********************************************************************************************
+    // #[test]
+    // fn get_item_max_size() {
+    //     assert_eq!(super::get_item_max_size(100, 5, &Item{..Default::default()}), 20);
+    //     assert_eq!(super::get_item_max_size(100, 3, &Item{..Default::default()}), 33);
+    //     assert_eq!(
+    //         super::get_item_max_size(100, 3, &Item{max_item_size: 40, ..Default::default()}),
+    //         33
+    //     );
+    //     assert_eq!(
+    //         super::get_item_max_size(100, 3, &Item{max_item_size: 10, ..Default::default()}),
+    //         10
+    //     );
+    //     assert_eq!(
+    //         super::get_item_max_size(100, 20, &Item{max_item_size: 10, ..Default::default()}),
+    //         5
+    //     );
+    // }
 
-    //********************************************************************************************
-    #[test]
-    fn get_item_min_max_diff() {
-        assert_eq!(super::get_item_min_max_diff(100, 5, &Item{..Default::default()}), 20);
-        assert_eq!(super::get_item_min_max_diff(100, 3, &Item{..Default::default()}), 33);
-        assert_eq!(
-            super::get_item_min_max_diff(100, 3, &Item{max_item_size: 40, ..Default::default()}),
-            33
-        );
-        assert_eq!(
-            super::get_item_min_max_diff(100, 3, &Item{max_item_size: 10, ..Default::default()}),
-            10
-        );
-        assert_eq!(
-            super::get_item_min_max_diff(100, 20, &Item{max_item_size: 10, ..Default::default()}),
-            5
-        );
-        assert_eq!(
-            super::get_item_min_max_diff(100, 5, &Item{min_item_size: 10, ..Default::default()}),
-            10
-        );
-        assert_eq!(
-            super::get_item_min_max_diff(
-                100, 
-                5, 
-                &Item{min_item_size: 10, max_item_size: 15, ..Default::default()}),
-            5
-        );
-    }
+    // //********************************************************************************************
+    // #[test]
+    // fn get_item_min_max_diff() {
+    //     assert_eq!(super::get_item_min_max_diff(100, 5, &Item{..Default::default()}), 20);
+    //     assert_eq!(super::get_item_min_max_diff(100, 3, &Item{..Default::default()}), 33);
+    //     assert_eq!(
+    //         super::get_item_min_max_diff(100, 3, &Item{max_item_size: 40, ..Default::default()}),
+    //         33
+    //     );
+    //     assert_eq!(
+    //         super::get_item_min_max_diff(100, 3, &Item{max_item_size: 10, ..Default::default()}),
+    //         10
+    //     );
+    //     assert_eq!(
+    //         super::get_item_min_max_diff(100, 20, &Item{max_item_size: 10, ..Default::default()}),
+    //         5
+    //     );
+    //     assert_eq!(
+    //         super::get_item_min_max_diff(100, 5, &Item{min_item_size: 10, ..Default::default()}),
+    //         10
+    //     );
+    //     assert_eq!(
+    //         super::get_item_min_max_diff(
+    //             100, 
+    //             5, 
+    //             &Item{min_item_size: 10, max_item_size: 15, ..Default::default()}),
+    //         5
+    //     );
+    // }
 
-    //********************************************************************************************
-    #[test]
-    fn get_lowest_min_max_diff() {
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    // //********************************************************************************************
+    // #[test]
+    // fn get_lowest_min_max_diff() {
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 33);
-            assert_eq!(diff.index, 0);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 2, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 33);
+    //         assert_eq!(diff.index, 0);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 25);
-            assert_eq!(diff.index, 1);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 2, ..Default::default()}, 0),
-                (Item{ stretch: 2, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 25);
+    //         assert_eq!(diff.index, 1);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 20);
-            assert_eq!(diff.index, 2);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 2, ..Default::default()}, 0),
-                (Item{ stretch: 2, ..Default::default()}, 0),
-                (Item{ stretch: 2, ..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 20);
+    //         assert_eq!(diff.index, 2);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //             (Item{ stretch: 2, ..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 32);
-            assert_eq!(diff.index, 0);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{..Default::default()}, 0),
-                (Item{ min_item_size: 10, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 32);
+    //         assert_eq!(diff.index, 0);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{..Default::default()}, 0),
+    //             (Item{ min_item_size: 10, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 23);
-            assert_eq!(diff.index, 1);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ max_item_size: 11, ..Default::default()}, 0),
-                (Item{ min_item_size: 10, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 23);
+    //         assert_eq!(diff.index, 1);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ max_item_size: 11, ..Default::default()}, 0),
+    //             (Item{ min_item_size: 10, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 11);
-            assert_eq!(diff.index, 0);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ max_item_size: 11, ..Default::default()}, 0),
-                (Item{ min_item_size: 10, ..Default::default()}, 0),
-                (Item{ max_item_size: 11, stretch: 2, ..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 11);
+    //         assert_eq!(diff.index, 0);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ max_item_size: 11, ..Default::default()}, 0),
+    //             (Item{ min_item_size: 10, ..Default::default()}, 0),
+    //             (Item{ max_item_size: 11, stretch: 2, ..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 11);
-            assert_eq!(diff.index, 0);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{ max_item_size: 11, stretch: 2, ..Default::default()}, 0),
-                (Item{ min_item_size: 10, ..Default::default()}, 0),
-                (Item{ max_item_size: 11, ..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 11);
+    //         assert_eq!(diff.index, 0);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{ max_item_size: 11, stretch: 2, ..Default::default()}, 0),
+    //             (Item{ min_item_size: 10, ..Default::default()}, 0),
+    //             (Item{ max_item_size: 11, ..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(100, &items);
-            assert_eq!(diff.diff, 11);
-            assert_eq!(diff.index, 2);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{min_item_size: 30, stretch: 2, ..Default::default()}, 0),
-                (Item{stretch: 5, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         let diff = LowestMinMaxDiff::get(100, &items);
+    //         assert_eq!(diff.diff, 11);
+    //         assert_eq!(diff.index, 2);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{min_item_size: 30, stretch: 2, ..Default::default()}, 0),
+    //             (Item{stretch: 5, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let diff = LowestMinMaxDiff::get(90, &items);
-            assert_eq!(diff.diff, 11);
-            assert_eq!(diff.index, 2);
-        }
-    }
+    //         let diff = LowestMinMaxDiff::get(90, &items);
+    //         assert_eq!(diff.diff, 11);
+    //         assert_eq!(diff.index, 2);
+    //     }
+    // }
 
-    //********************************************************************************************
-    #[test]
-    fn get_remainder() {
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{..Default::default()}, 25),
-                (Item{..Default::default()}, 15),
-                (Item{..Default::default()}, 2),
-            );
+    // //********************************************************************************************
+    // #[test]
+    // fn get_remainder() {
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{..Default::default()}, 25),
+    //             (Item{..Default::default()}, 15),
+    //             (Item{..Default::default()}, 2),
+    //         );
 
-            assert_eq!(super::get_remainder(50, &items).unwrap(), 8);
-            assert_eq!(super::get_remainder(40, &items), None);
-            assert_eq!(super::get_remainder(42, &items), None);
-            assert_eq!(super::get_remainder(0, &items), None);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{min_item_size: 3, ..Default::default()}, 12),
-                (Item{..Default::default()}, 15),
-                (Item{min_item_size: 12, ..Default::default()}, 3),
-            );
+    //         assert_eq!(super::get_remainder(50, &items).unwrap(), 8);
+    //         assert_eq!(super::get_remainder(40, &items), None);
+    //         assert_eq!(super::get_remainder(42, &items), None);
+    //         assert_eq!(super::get_remainder(0, &items), None);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{min_item_size: 3, ..Default::default()}, 12),
+    //             (Item{..Default::default()}, 15),
+    //             (Item{min_item_size: 12, ..Default::default()}, 3),
+    //         );
 
-            assert_eq!(super::get_remainder(45, &items).unwrap(), 6);
-            assert_eq!(super::get_remainder(39, &items), None);
-            assert_eq!(super::get_remainder(30, &items), None);
-            assert_eq!(super::get_remainder(0, &items), None);
-        }
-    }
+    //         assert_eq!(super::get_remainder(45, &items).unwrap(), 6);
+    //         assert_eq!(super::get_remainder(39, &items), None);
+    //         assert_eq!(super::get_remainder(30, &items), None);
+    //         assert_eq!(super::get_remainder(0, &items), None);
+    //     }
+    // }
 
-    //********************************************************************************************
-    #[test]
-    fn increase_every_item_size() {
-        {
-            let mut items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 1, ..Default::default()}, 25),
-                (Item{ stretch: 2, ..Default::default()}, 15),
-                (Item{ stretch: 3, ..Default::default()}, 2),
-            );
+    // //********************************************************************************************
+    // #[test]
+    // fn increase_every_item_size() {
+    //     {
+    //         let mut items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 1, ..Default::default()}, 25),
+    //             (Item{ stretch: 2, ..Default::default()}, 15),
+    //             (Item{ stretch: 3, ..Default::default()}, 2),
+    //         );
 
-            super::increase_every_item_size(5, &mut items);
+    //         super::increase_every_item_size(5, &mut items);
 
-            assert_eq!(items[0].1, 30);
-            assert_eq!(items[1].1, 25);
-            assert_eq!(items[2].1, 17);
-        }
-        {
-            let mut items: Vec<(Item, u32)> = vec!(
-                (Item{ stretch: 0, ..Default::default()}, 25),
-                (Item{ stretch: 0, ..Default::default()}, 15),
-                (Item{ stretch: 0, ..Default::default()}, 2),
-            );
+    //         assert_eq!(items[0].1, 30);
+    //         assert_eq!(items[1].1, 25);
+    //         assert_eq!(items[2].1, 17);
+    //     }
+    //     {
+    //         let mut items: Vec<(Item, u32)> = vec!(
+    //             (Item{ stretch: 0, ..Default::default()}, 25),
+    //             (Item{ stretch: 0, ..Default::default()}, 15),
+    //             (Item{ stretch: 0, ..Default::default()}, 2),
+    //         );
 
-            super::increase_every_item_size(5, &mut items);
+    //         super::increase_every_item_size(5, &mut items);
 
-            assert_eq!(items[0].1, 25);
-            assert_eq!(items[1].1, 15);
-            assert_eq!(items[2].1, 2);
-        }
-    }
+    //         assert_eq!(items[0].1, 25);
+    //         assert_eq!(items[1].1, 15);
+    //         assert_eq!(items[2].1, 2);
+    //     }
+    // }
     
-    //********************************************************************************************
-    #[test]
-    fn get_items_sizes_impl() {
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    // //********************************************************************************************
+    // #[test]
+    // fn get_items_sizes_impl() {
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let sizes = super::get_items_sizes_impl(6, items);
+    //         let sizes = super::get_items_sizes_impl(6, items);
 
-            assert_eq!(sizes[0], 2);
-            assert_eq!(sizes[1], 2);
-            assert_eq!(sizes[2], 2);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{stretch: 2, ..Default::default()}, 0),
-                (Item{stretch: 0, ..Default::default()}, 0),
-                (Item{stretch: 0, ..Default::default()}, 0),
-            );
+    //         assert_eq!(sizes[0], 2);
+    //         assert_eq!(sizes[1], 2);
+    //         assert_eq!(sizes[2], 2);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{stretch: 2, ..Default::default()}, 0),
+    //             (Item{stretch: 0, ..Default::default()}, 0),
+    //             (Item{stretch: 0, ..Default::default()}, 0),
+    //         );
 
-            let sizes = super::get_items_sizes_impl(6, items);
+    //         let sizes = super::get_items_sizes_impl(6, items);
 
-            let mut idx = 0;
-            for size in &sizes {
-                println!("size[{}]: {}", idx, size);
-                idx += 1;
-            }
+    //         let mut idx = 0;
+    //         for size in &sizes {
+    //             println!("size[{}]: {}", idx, size);
+    //             idx += 1;
+    //         }
 
-            assert_eq!(sizes[0], 6);
-            assert_eq!(sizes[1], 0);
-            assert_eq!(sizes[2], 0);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{stretch: 2, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         assert_eq!(sizes[0], 6);
+    //         assert_eq!(sizes[1], 0);
+    //         assert_eq!(sizes[2], 0);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{stretch: 2, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let sizes = super::get_items_sizes_impl(8, items);
+    //         let sizes = super::get_items_sizes_impl(8, items);
 
-            assert_eq!(sizes[0], 4);
-            assert_eq!(sizes[1], 2);
-            assert_eq!(sizes[2], 2);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{stretch: 2, ..Default::default()}, 0),
-                (Item{stretch: 5, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         assert_eq!(sizes[0], 4);
+    //         assert_eq!(sizes[1], 2);
+    //         assert_eq!(sizes[2], 2);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{stretch: 2, ..Default::default()}, 0),
+    //             (Item{stretch: 5, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let sizes = super::get_items_sizes_impl(8, items);
+    //         let sizes = super::get_items_sizes_impl(8, items);
 
-            assert_eq!(sizes[0], 2);
-            assert_eq!(sizes[1], 5);
-            assert_eq!(sizes[2], 1);
-        }
-        {
-            let items: Vec<(Item, u32)> = vec!(
-                (Item{min_item_size: 30, stretch: 2, ..Default::default()}, 0),
-                (Item{stretch: 5, ..Default::default()}, 0),
-                (Item{..Default::default()}, 0),
-            );
+    //         assert_eq!(sizes[0], 2);
+    //         assert_eq!(sizes[1], 5);
+    //         assert_eq!(sizes[2], 1);
+    //     }
+    //     {
+    //         let items: Vec<(Item, u32)> = vec!(
+    //             (Item{min_item_size: 30, stretch: 2, ..Default::default()}, 0),
+    //             (Item{stretch: 5, ..Default::default()}, 0),
+    //             (Item{..Default::default()}, 0),
+    //         );
 
-            let sizes = super::get_items_sizes_impl(90, items);
+    //         let sizes = super::get_items_sizes_impl(90, items);
 
-            let mut idx = 0;
-            for size in &sizes {
-                println!("size[{}]: {}", idx, size);
-                idx += 1;
-            }
+    //         let mut idx = 0;
+    //         for size in &sizes {
+    //             println!("size[{}]: {}", idx, size);
+    //             idx += 1;
+    //         }
 
-            assert_eq!(sizes[0], 30);
-            assert_eq!(sizes[1], 50);
-            assert_eq!(sizes[2], 10);
-        }
-    }
+    //         assert_eq!(sizes[0], 30);
+    //         assert_eq!(sizes[1], 50);
+    //         assert_eq!(sizes[2], 10);
+    //     }
+    // }
 
-    //********************************************************************************************
-    #[test]
-    fn check_children_transforms_left_to_right_dir() {
-        let mut parent_widget = LinearLayoutWidget::new_raw();
-        parent_widget.set_size(&Vector2::<u32>::new(60, 20));
-        parent_widget.set_dir(LinearLayoutDirection::LeftToRight);
+    // //********************************************************************************************
+    // #[test]
+    // fn check_children_transforms_left_to_right_dir() {
+    //     let mut parent_widget = LinearLayoutWidget::new_raw();
+    //     parent_widget.set_size(&Vector2::<u32>::new(60, 20));
+    //     parent_widget.set_dir(LinearLayoutDirection::LeftToRight);
 
-        let new_child_widget = Widget::new();
-        let child_widget = new_child_widget.get().clone();
-        parent_widget.add(new_child_widget.to_ownerless());
+    //     let new_child_widget = Widget::new();
+    //     let child_widget = new_child_widget.get().clone();
+    //     parent_widget.add(new_child_widget.to_ownerless());
 
-        assert_eq!(
-            child_widget.borrow().pos(),
-            &Point2::<i32>::new(0, 0)
-        );
-        assert_eq!(
-            child_widget.borrow().size(),
-            &Vector2::<u32>::new(60, 20)
-        );
-    }
+    //     assert_eq!(
+    //         child_widget.borrow().pos(),
+    //         &Point2::<i32>::new(0, 0)
+    //     );
+    //     assert_eq!(
+    //         child_widget.borrow().size(),
+    //         &Vector2::<u32>::new(60, 20)
+    //     );
+    // }
 }

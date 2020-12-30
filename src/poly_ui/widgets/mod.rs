@@ -7,10 +7,8 @@ mod window_provider_trait;
 mod window_trait;
 mod layout_items_size_gen;
 
-pub use layout_items_size_gen::InputItem;
-pub use layout_items_size_gen::ValidatedItem;
-pub use layout_items_size_gen::InputLayout;
-pub use layout_items_size_gen::ValidatedLayout;
+pub use layout_items_size_gen::Item;
+pub use layout_items_size_gen::Layout;
 pub use linear_layout_widget::LinearLayoutDirection;
 pub use linear_layout_widget::LinearLayoutWidget;
 pub use ownership::NewWidget;

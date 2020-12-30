@@ -35,7 +35,7 @@ impl Item {
         return self.current_size;
     }
 
-    fn get_max_minus_current(&seld) -> u32 {
+    fn get_max_minus_current(&self) -> u32 {
         return self.max_size - self.current_size;
     }
 }
@@ -96,7 +96,7 @@ impl Layout {
             else {
                 self.increase_every_item_size(lowest_max_minus_current);
                 
-                let mut item = self.items.remove(item_with_lowest_max_minus_current);
+                let item = self.items.remove(item_with_lowest_max_minus_current);
                 self.size -= item.current_size;
 
                 self.validate();
@@ -113,7 +113,7 @@ impl Layout {
     fn ensure_layout_has_at_least_minimal_width(&mut self) {
         let mut sum_of_min_sizes = 0;
         
-        for item in self.items {
+        for item in &self.items {
             sum_of_min_sizes += item.min_size;
         }
 
@@ -122,10 +122,10 @@ impl Layout {
         }
     }
 
-    fn gather_items_stretch(&mut self) -> u32 {
+    fn gather_items_stretch(&self) -> u32 {
         let mut result = 0;
 
-        for item in self.items {
+        for item in &self.items {
             result += item.stretch;
         }
 
@@ -133,18 +133,18 @@ impl Layout {
     }
 
     fn validate_all_items(&mut self) {
-        for item in self.items {
+        for item in &mut self.items {
             if item.max_size < item.min_size {
                 item.max_size = item.min_size;
             }
         }
     }
 
-    fn get_item_with_lowest_max_minus_current(&mut self) -> usize {
+    fn get_item_with_lowest_max_minus_current(&self) -> usize {
         let mut idx = 0;
         let mut lowest_idx = 0;
         let mut lowest_diff = self.items[0].max_size - self.items[0].min_size;
-        for item in self.items {
+        for item in &self.items {
             let potential_lowest = item.max_size - item.min_size;
             if potential_lowest < lowest_diff {
                 lowest_diff = potential_lowest;
@@ -157,10 +157,10 @@ impl Layout {
         return lowest_idx;
     }
 
-    fn remaining_free_layout_space(&mut self) -> u32 {
+    fn remaining_free_layout_space(&self) -> u32 {
         let mut result = self.size;
 
-        for item in self.items {
+        for item in &self.items {
             result -= std::cmp::max(item.current_size, item.min_size);
         }
 
@@ -168,13 +168,13 @@ impl Layout {
     }
 
     fn increase_every_item_size(&mut self, diff: u32) {
-        for item in self.items {
+        for item in &mut self.items {
             item.current_size += diff * item.stretch;
         }
     }
 
     fn set_every_item_size_to_at_least_min(&mut self) {
-        for item in self.items {
+        for item in &mut self.items {
             if item.current_size < item.min_size {
                 item.current_size = item.min_size;
             }
@@ -187,8 +187,8 @@ impl Layout {
         let mut highest_idx = 0;
         let mut highest_diff = 0;
         let mut idx = 0;
-        for item in self.items {
-            let potential_highest = self::get_item_expected_minus_current_stretch(item, total_stretch, self.size);
+        for item in &self.items {
+            let potential_highest = Self::get_item_expected_minus_current_stretch(item, total_stretch, self.size);
 
             if potential_highest > highest_diff {
                 highest_idx = idx;

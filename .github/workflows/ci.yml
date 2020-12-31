@@ -18,10 +18,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install sdl2
       run: sudo apt-get install -y libsdl2-dev
-<<<<<<< HEAD
     - name: Install sdl2-ttf
-=======
->>>>>>> 2566c9bf7371b416b6a2e3feb28193cfb775f1f4
       run: sudo apt-get install -y libsdl2-ttf-dev
     - name: Build
       run: cargo build --verbose

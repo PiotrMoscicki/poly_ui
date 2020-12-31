@@ -12,7 +12,7 @@ pub struct Ownerless {
 
 //************************************************************************************************
 impl Ownerless {
-    pub fn to_owned(self) -> Owned {
+    pub fn make_owned(self) -> Owned {
         Owned {
             widget: self.widget,
         }
@@ -33,7 +33,7 @@ pub struct Owned {
 
 //************************************************************************************************
 impl Owned {
-    pub fn to_ownerless(self) -> Ownerless {
+    pub fn make_ownerless(self) -> Ownerless {
         Ownerless {
             widget: self.widget,
         }
@@ -60,7 +60,7 @@ impl<T: WidgetTrait + 'static> NewWidget<T> {
         }
     }
 
-    pub fn to_ownerless(self) -> Ownerless {
+    pub fn make_ownerless(self) -> Ownerless {
         Ownerless {
             widget: self.widget,
         }

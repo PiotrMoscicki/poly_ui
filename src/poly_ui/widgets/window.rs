@@ -27,7 +27,7 @@ pub struct Window {
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         Self {
-            widget: Widget::new().to_ownerless().to_owned(),
+            widget: Widget::new().make_ownerless().make_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         }

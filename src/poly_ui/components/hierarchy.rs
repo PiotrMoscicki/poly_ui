@@ -23,11 +23,11 @@ impl Hierarchy {
     }
 
     pub fn add(&mut self, child: Ownerless) {
-        self.children.push(child.to_owned());
+        self.children.push(child.make_owned());
     }
 
     pub fn remove(&mut self, id: &Uuid) -> Ownerless {
-        self.children.remove(self.index(id).unwrap()).to_ownerless()
+        self.children.remove(self.index(id).unwrap()).make_ownerless()
     }
 
     pub fn index(&self, id: &Uuid) -> Option<usize> {

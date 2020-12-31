@@ -27,7 +27,9 @@ impl Hierarchy {
     }
 
     pub fn remove(&mut self, id: &Uuid) -> Ownerless {
-        self.children.remove(self.index(id).unwrap()).make_ownerless()
+        self.children
+            .remove(self.index(id).unwrap())
+            .make_ownerless()
     }
 
     pub fn index(&self, id: &Uuid) -> Option<usize> {

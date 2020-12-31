@@ -54,7 +54,6 @@ impl WindowTrait for Window {
 
     fn set_pos(&mut self, new: Point2<i32>) {
         self.window_provider.set_pos(new);
-        return ();
     }
 
     fn size(&self) -> Vector2<u32> {
@@ -63,7 +62,6 @@ impl WindowTrait for Window {
 
     fn set_size(&mut self, new: Vector2<u32>) {
         self.window_provider.set_size(new);
-        return ();
     }
 
     fn update(&mut self, dt: f32) {

@@ -25,7 +25,7 @@ impl Painter {
         );
 
         return Painter {
-            canvas: canvas,
+            canvas,
             transform: Transform::new(&Point2::<i32>::new(0, 0), &output_size),
         };
     }

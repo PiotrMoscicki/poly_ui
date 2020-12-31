@@ -240,7 +240,7 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
     // remaining space should be the same
     //
 
-    println!("");
+    println!();
     println!("-------------------------------------------------");
     let mut idx = 0;
     for item in &items {

@@ -1,3 +1,4 @@
+mod layout_items_size_gen;
 mod linear_layout_widget;
 mod ownership;
 mod widget;
@@ -5,7 +6,6 @@ mod widget_trait;
 mod window;
 mod window_provider_trait;
 mod window_trait;
-mod layout_items_size_gen;
 
 pub use layout_items_size_gen::Item;
 pub use layout_items_size_gen::Layout;

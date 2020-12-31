@@ -6,10 +6,10 @@ use uuid::Uuid;
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
 // super
+use super::paint_children;
+use super::update_children;
 use super::NewWidget;
 use super::Ownerless;
-use super::update_children;
-use super::paint_children;
 use super::WidgetTrait;
 
 //************************************************************************************************
@@ -117,12 +117,12 @@ impl WidgetTrait for LinearLayoutWidget {
     }
 
     fn add(&mut self, child: Ownerless) {
-        self.items.push(Item{
+        self.items.push(Item {
             widget: Some(*child.get().borrow().id()),
             ..Default::default()
         });
         self.hierarchy.add(child);
-        
+
         get_items_sizes(0, &self.items);
     }
 
@@ -157,7 +157,7 @@ fn get_total_stretch(items: &Vec<(Item, u32)>) -> u32 {
     return result;
 }
 
-fn get_item_max_size(goal_total: u32, total_stretch: u32, item: &Item) -> u32{
+fn get_item_max_size(goal_total: u32, total_stretch: u32, item: &Item) -> u32 {
     let size_per_stretch_unit = goal_total / total_stretch;
     return std::cmp::min(item.max_item_size, size_per_stretch_unit * item.stretch);
 }
@@ -185,9 +185,10 @@ impl LowestMinMaxDiff {
             let potential_lowest_diff = get_item_min_max_diff(goal_total, total_stretch, &item.0);
             let potential_lowest_stretch = item.0.stretch;
 
-            if potential_lowest_diff < lowest_diff 
-                || (potential_lowest_diff == lowest_diff 
-                    && potential_lowest_stretch < lowest_stretch) {
+            if potential_lowest_diff < lowest_diff
+                || (potential_lowest_diff == lowest_diff
+                    && potential_lowest_stretch < lowest_stretch)
+            {
                 lowest_diff = potential_lowest_diff;
                 lowest_stretch = potential_lowest_stretch;
                 lowest_idx = potential_lowest_idx;
@@ -195,7 +196,7 @@ impl LowestMinMaxDiff {
 
             potential_lowest_idx += 1;
         }
-    
+
         return Self {
             index: lowest_idx,
             diff: lowest_diff,
@@ -209,8 +210,7 @@ fn get_remainder(mut goal_total: u32, items: &Vec<(Item, u32)>) -> Option<u32> {
 
         if goal_total > item_required_size {
             goal_total -= item_required_size;
-        }
-        else {
+        } else {
             return None;
         }
     }
@@ -230,16 +230,16 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
     // get remaining space
     // check if adding lowest min max diff to every item will not exceed total size
     // if not exceeds
-        // add lowest min max diff to every item
-        // remove item with lowest min max diff from the collection
-        // get sizes of the rest of the items
-        // prepend size of the removeditem (with lowest min max diff) to the returned collection
-        // return the collection
+    // add lowest min max diff to every item
+    // remove item with lowest min max diff from the collection
+    // get sizes of the rest of the items
+    // prepend size of the removeditem (with lowest min max diff) to the returned collection
+    // return the collection
     // if exceeds
-        // set minimal size to each item where current size is lower than minimal size
-        // remaining space should be the same
-        //  
-    
+    // set minimal size to each item where current size is lower than minimal size
+    // remaining space should be the same
+    //
+
     println!("");
     println!("-------------------------------------------------");
     let mut idx = 0;
@@ -262,11 +262,11 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
 
     println!("total_stretch: {}", total_stretch);
 
-    // Calculate how much remaining space do we need if we're going to increase all items 
+    // Calculate how much remaining space do we need if we're going to increase all items
     // sizes by all items by the lowest min max diff.
     let required = lowest_min_max.diff as u64 * total_stretch as u64;
     println!("required: {}", required);
-    // If this required space is lower than what we have ve proceed with resizing the 
+    // If this required space is lower than what we have ve proceed with resizing the
     // items.
     if required <= *remainder.as_ref().unwrap_or(&0) as u64 {
         println!("required space is lower or equal than remainder");
@@ -282,26 +282,29 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
         result.insert(lowest_min_max.index, lowest_min_max_diff_item_size);
         return result;
     }
-    // If we don't have enough space to increase all items sizes by the lowest min max 
+    // If we don't have enough space to increase all items sizes by the lowest min max
     // diff.
     else {
         if remainder.is_some() {
-            // Find out how much size can we add to each item without extending the 
+            // Find out how much size can we add to each item without extending the
             // available space.
             let diff = remainder.as_ref().unwrap() / total_stretch;
-            // Find out how much remaining size do we have after applying diff calculated 
+            // Find out how much remaining size do we have after applying diff calculated
             // line above.
-            let mut remainder_after_adding_diff = 
+            let mut remainder_after_adding_diff =
                 (remainder.as_ref().unwrap() % total_stretch) as usize;
             println!("diff: {}", diff);
-            println!("remainder_after_adding_diff: {}", remainder_after_adding_diff);
+            println!(
+                "remainder_after_adding_diff: {}",
+                remainder_after_adding_diff
+            );
             increase_every_item_size(diff, &mut items);
 
             // Ensure items have at least mimimal size
             for item in &mut items {
                 item.1 = std::cmp::max(item.0.min_item_size, item.1);
             }
-            
+
             // Add remaining free space to first items in collection
             let mut idx = 0;
             while remainder_after_adding_diff > 0 {
@@ -314,8 +317,8 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
                     idx = 0;
                 }
             }
-        }   
-        
+        }
+
         let mut result: Vec<u32> = Vec::new();
         for item in items {
             result.push(item.1);
@@ -328,7 +331,7 @@ fn get_items_sizes(goal_total: u32, items: &Vec<Item>) -> Vec<u32> {
     let mut items_with_width: Vec<(Item, u32)> = Vec::new();
 
     for item in items {
-        items_with_width.push((Item{ ..*item}, 0));
+        items_with_width.push((Item { ..*item }, 0));
     }
 
     return get_items_sizes_impl(goal_total, items_with_width);
@@ -425,8 +428,8 @@ mod tests {
     //     );
     //     assert_eq!(
     //         super::get_item_min_max_diff(
-    //             100, 
-    //             5, 
+    //             100,
+    //             5,
     //             &Item{min_item_size: 10, max_item_size: 15, ..Default::default()}),
     //         5
     //     );
@@ -595,7 +598,7 @@ mod tests {
     //         assert_eq!(items[2].1, 2);
     //     }
     // }
-    
+
     // //********************************************************************************************
     // #[test]
     // fn get_items_sizes_impl() {

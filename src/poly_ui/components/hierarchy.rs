@@ -27,14 +27,12 @@ impl Hierarchy {
     }
 
     pub fn remove(&mut self, id: &Uuid) -> Ownerless {
-        return self
-            .children
-            .remove(self.index(id).unwrap())
-            .to_ownerless();
+        return self.children.remove(self.index(id).unwrap()).to_ownerless();
     }
 
     pub fn index(&self, id: &Uuid) -> Option<usize> {
-        return self.children
+        return self
+            .children
             .iter()
             .position(|elem| elem.get().borrow().id() == id);
     }

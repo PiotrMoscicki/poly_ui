@@ -3,6 +3,7 @@ FROM gitpod/workspace-full
 USER gitpod
 
 RUN sudo apt-get install -y libsdl2-dev
+RUN sudo apt-get install -y libsdl2-ttf-dev
 
 # Install custom tools, runtime, etc. using apt-get
 # For example, the command below would install "bastet" - a command line tetris clone:

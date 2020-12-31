@@ -17,9 +17,9 @@ pub struct Hierarchy {
 //************************************************************************************************
 impl Hierarchy {
     pub fn new() -> Self {
-        return Self {
+        Self {
             children: Vec::new(),
-        };
+        }
     }
 
     pub fn add(&mut self, child: Ownerless) {
@@ -27,17 +27,17 @@ impl Hierarchy {
     }
 
     pub fn remove(&mut self, id: &Uuid) -> Ownerless {
-        return self.children.remove(self.index(id).unwrap()).to_ownerless();
+        self.children.remove(self.index(id).unwrap()).to_ownerless()
     }
 
     pub fn index(&self, id: &Uuid) -> Option<usize> {
-        return self
+        self
             .children
             .iter()
-            .position(|elem| elem.get().borrow().id() == id);
+            .position(|elem| elem.get().borrow().id() == id)
     }
 
     pub fn children(&self) -> &Vec<Owned> {
-        return &self.children;
+        &self.children
     }
 }

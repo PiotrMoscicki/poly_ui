@@ -11,32 +11,32 @@ pub struct Item {
 
 impl Item {
     pub fn new(stretch: u32, min_size: Option<u32>, max_size: Option<u32>) -> Self {
-        return Self {
+        Self {
             stretch,
             min_size: min_size.unwrap_or(0),
             max_size: max_size.unwrap_or(u32::MAX),
             current_size: 0,
-        };
+        }
     }
 
     pub fn get_stretch(&self) -> u32 {
-        return self.stretch;
+        self.stretch
     }
 
     pub fn get_min_size(&self) -> u32 {
-        return self.min_size;
+        self.min_size
     }
 
     pub fn get_max_size(&self) -> u32 {
-        return self.max_size;
+        self.max_size
     }
 
     pub fn get_current_size(&self) -> u32 {
-        return self.current_size;
+        self.current_size
     }
 
     fn get_max_minus_current(&self) -> u32 {
-        return self.max_size - self.current_size;
+        self.max_size - self.current_size
     }
 }
 
@@ -59,15 +59,15 @@ impl Layout {
 
         result.validate();
 
-        return result;
+        result
     }
 
     pub fn get_size(&self) -> u32 {
-        return self.size;
+        self.size
     }
 
     pub fn get_items(&self) -> &Vec<Item> {
-        return &self.items;
+        &self.items
     }
 
     fn validate(&mut self) {
@@ -123,7 +123,7 @@ impl Layout {
             result += item.stretch;
         }
 
-        return result;
+        result
     }
 
     fn validate_all_items(&mut self) {
@@ -148,7 +148,7 @@ impl Layout {
             idx += 1;
         }
 
-        return lowest_idx;
+        lowest_idx
     }
 
     fn remaining_free_layout_space(&self) -> u32 {
@@ -158,7 +158,7 @@ impl Layout {
             result -= std::cmp::max(item.current_size, item.min_size);
         }
 
-        return result;
+        result
     }
 
     fn increase_every_item_size(&mut self, diff: u32) {
@@ -193,7 +193,7 @@ impl Layout {
             idx += 1;
         }
 
-        return highest_idx;
+        highest_idx
     }
 
     fn get_item_expected_minus_current_stretch(
@@ -201,7 +201,7 @@ impl Layout {
         total_stretch: u32,
         total_size: u32,
     ) -> u32 {
-        return item.stretch * total_size - item.current_size * total_stretch;
+        item.stretch * total_size - item.current_size * total_stretch
     }
 }
 

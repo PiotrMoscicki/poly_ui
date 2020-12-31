@@ -63,7 +63,7 @@ pub struct LinearLayoutWidget {
 //************************************************************************************************
 impl LinearLayoutWidget {
     pub fn new_raw() -> Self {
-        return Self {
+        Self {
             id: Uuid::new_v4(),
             pos: Point2::<i32>::new(0, 0),
             size: Vector2::<u32>::new(0, 0),
@@ -71,11 +71,11 @@ impl LinearLayoutWidget {
 
             dir: LinearLayoutDirection::LeftToRight,
             items: Vec::new(),
-        };
+        }
     }
 
     pub fn new() -> NewWidget<Self> {
-        return NewWidget::new(Self::new_raw());
+        NewWidget::new(Self::new_raw())
     }
 
     pub fn set_dir(&mut self, dir: LinearLayoutDirection) {
@@ -85,10 +85,10 @@ impl LinearLayoutWidget {
     pub fn layout_length(&self) -> u32 {
         match &self.dir {
             LinearLayoutDirection::LeftToRight | LinearLayoutDirection::RightToLeft => {
-                return self.size.x;
+                self.size.x
             }
             LinearLayoutDirection::TopToBottom | LinearLayoutDirection::BotomToTop => {
-                return self.size.y;
+                self.size.y
             }
         }
     }
@@ -97,11 +97,11 @@ impl LinearLayoutWidget {
 //************************************************************************************************
 impl WidgetTrait for LinearLayoutWidget {
     fn id(&self) -> &Uuid {
-        return &self.id;
+        &self.id
     }
 
     fn pos(&self) -> &Point2<i32> {
-        return &self.pos;
+        &self.pos
     }
 
     fn set_pos(&mut self, value: &Point2<i32>) {
@@ -109,7 +109,7 @@ impl WidgetTrait for LinearLayoutWidget {
     }
 
     fn size(&self) -> &Vector2<u32> {
-        return &self.size;
+        &self.size
     }
 
     fn set_size(&mut self, value: &Vector2<u32>) {
@@ -127,7 +127,7 @@ impl WidgetTrait for LinearLayoutWidget {
     }
 
     fn remove(&mut self, child: &Uuid) -> Ownerless {
-        return self.hierarchy.remove(child);
+        self.hierarchy.remove(child)
     }
 
     fn update(&mut self, dt: f32) {
@@ -154,16 +154,16 @@ fn get_total_stretch(items: &Vec<(Item, u32)>) -> u32 {
     for item in items {
         result += item.0.stretch;
     }
-    return result;
+    result
 }
 
 fn get_item_max_size(goal_total: u32, total_stretch: u32, item: &Item) -> u32 {
     let size_per_stretch_unit = goal_total / total_stretch;
-    return std::cmp::min(item.max_item_size, size_per_stretch_unit * item.stretch);
+    std::cmp::min(item.max_item_size, size_per_stretch_unit * item.stretch)
 }
 
 fn get_item_min_max_diff(goal_total: u32, total_stretch: u32, item: &Item) -> u32 {
-    return get_item_max_size(goal_total, total_stretch, item) - item.min_item_size;
+    get_item_max_size(goal_total, total_stretch, item) - item.min_item_size
 }
 
 #[derive(Debug)]
@@ -197,10 +197,10 @@ impl LowestMinMaxDiff {
             potential_lowest_idx += 1;
         }
 
-        return Self {
+        Self {
             index: lowest_idx,
             diff: lowest_diff,
-        };
+        }
     }
 }
 
@@ -215,7 +215,7 @@ fn get_remainder(mut goal_total: u32, items: &Vec<(Item, u32)>) -> Option<u32> {
         }
     }
 
-    return Some(goal_total);
+    Some(goal_total)
 }
 
 fn increase_every_item_size(diff: u32, items: &mut Vec<(Item, u32)>) {
@@ -280,7 +280,7 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
         let mut result = get_items_sizes_impl(goal_total - lowest_min_max_diff_item_size, items);
         // Insert removed item size at the front.
         result.insert(lowest_min_max.index, lowest_min_max_diff_item_size);
-        return result;
+        result
     }
     // If we don't have enough space to increase all items sizes by the lowest min max
     // diff.
@@ -323,7 +323,7 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
         for item in items {
             result.push(item.1);
         }
-        return result;
+        result
     }
 }
 
@@ -334,7 +334,7 @@ fn get_items_sizes(goal_total: u32, items: &Vec<Item>) -> Vec<u32> {
         items_with_width.push((Item { ..*item }, 0));
     }
 
-    return get_items_sizes_impl(goal_total, items_with_width);
+    get_items_sizes_impl(goal_total, items_with_width)
 }
 
 //************************************************************************************************

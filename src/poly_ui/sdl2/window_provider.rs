@@ -19,7 +19,7 @@ pub struct WindowProvider {
 //************************************************************************************************
 impl WindowProvider {
     pub fn new(wnd: sdl2::video::Window) -> Self {
-        return WindowProvider { window: Some(wnd) };
+        WindowProvider { window: Some(wnd) }
     }
 }
 
@@ -52,7 +52,7 @@ impl WindowProviderTrait for WindowProvider {
     fn pos(&self) -> Point2<i32> {
         match &self.window {
             Some(wnd) => {
-                return Point2::<i32>::new(wnd.position().0, wnd.position().1);
+                Point2::<i32>::new(wnd.position().0, wnd.position().1)
             }
             None => panic!(),
         }
@@ -61,8 +61,8 @@ impl WindowProviderTrait for WindowProvider {
     fn set_pos(&mut self, new: Point2<i32>) {
         match &mut self.window {
             Some(wnd) => {
-                return wnd
-                    .set_position(WindowPos::Positioned(new.x), WindowPos::Positioned(new.y));
+                wnd
+                    .set_position(WindowPos::Positioned(new.x), WindowPos::Positioned(new.y))
             }
             None => panic!(),
         }
@@ -71,7 +71,7 @@ impl WindowProviderTrait for WindowProvider {
     fn size(&self) -> Vector2<u32> {
         match &self.window {
             Some(wnd) => {
-                return Vector2::<u32>::new(wnd.size().0, wnd.size().1);
+                Vector2::<u32>::new(wnd.size().0, wnd.size().1)
             }
             None => panic!(),
         }
@@ -80,7 +80,7 @@ impl WindowProviderTrait for WindowProvider {
     fn set_size(&mut self, new: Vector2<u32>) {
         match &mut self.window {
             Some(wnd) => {
-                return wnd.set_size(new.x, new.y).unwrap();
+                wnd.set_size(new.x, new.y).unwrap()
             }
             None => panic!(),
         }

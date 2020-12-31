@@ -13,9 +13,9 @@ pub struct Transform {
 //************************************************************************************************
 impl Transform {
     pub fn new(pos: &Point2<i32>, size: &Vector2<u32>) -> Self {
-        return Self {
+        Self {
             pos: *pos,
             size: *size,
-        };
+        }
     }
 }

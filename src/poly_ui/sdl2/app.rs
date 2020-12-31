@@ -19,16 +19,23 @@ pub struct App {
 }
 
 //************************************************************************************************
+impl Default for App {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+//************************************************************************************************
 impl App {
     pub fn new() -> Self {
         let context = sdl2::init().unwrap();
         let video = Rc::new(RefCell::new(context.video().unwrap()));
 
-        return App {
+        App {
             sdl_context: context,
             _sdl_video: video.clone(),
             windows_manager: WindowsManager::new(video),
-        };
+        }
     }
 }
 
@@ -55,6 +62,6 @@ impl AppTrait for App {
     }
 
     fn get_windows_manager(&mut self) -> &mut dyn WindowsManagerTrait {
-        return &mut self.windows_manager;
+        &mut self.windows_manager
     }
 }

@@ -1,0 +1,33 @@
+name: CI
+# This workflow is triggered on pushes to the repository.
+on: [push, pull_request]
+
+jobs:
+  ci:
+   runs-on: ${{ matrix.os }}
+   
+   strategy:
+    matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest] ## add different compilers
+        
+   steps:
+   - name: Set up root privilleges (Linux && macOS)
+     run: echo ::set-env name=SUDO::sudo
+     if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+   - name: Set up root privilleges (Windows)
+     run: echo ::set-env name=SUDO::$()
+     if: matrix.os == 'windows-latest'
+   - name: Install Dependencies (Linux)
+     run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
+          sudo apt-get install -y libsdl2-ttf-dev
+     if: matrix.os == 'ubuntu-latest'    
+   - name: Install Dependencies (macOS)
+     run: |
+          brew update && brew install SDL2 && brew install SDL2_ttf
+     if: matrix.os == 'macOS-latest'
+   - name: Build
+     run: cargo build --verbose
+   - name: Run tests
+     run: cargo test --verbose

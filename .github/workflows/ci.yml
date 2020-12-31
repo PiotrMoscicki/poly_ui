@@ -6,7 +6,7 @@ env:
 
 jobs:
   rustfmt:
-    name: Rustfmt
+    name: rust-fmt
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

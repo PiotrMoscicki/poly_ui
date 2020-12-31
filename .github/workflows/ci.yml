@@ -19,6 +19,20 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
       
+  macos-build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install sdl2
+      run: brew install SDL2
+    - name: Install sdl2-ttf
+      run: brew install SDL2_ttf
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
+      
   windows-build:
     runs-on: windows-latest
 

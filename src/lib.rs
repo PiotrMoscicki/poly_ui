@@ -1,7 +1,9 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
+pub mod poly_ui {
+    pub mod app;
+
+    pub mod components;
+    pub mod events;
+    pub mod widgets;
+
+    pub mod sdl2;
 }

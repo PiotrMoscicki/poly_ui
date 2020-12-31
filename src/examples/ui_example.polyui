@@ -1,0 +1,49 @@
+{
+  "name": "root_widget",
+  "type": "Widget",
+  "children": [
+    {
+      "name": "user_filter",
+      "type": "LineEdit",
+      "children": []
+    },
+    {
+      "name": "add_entity_button",
+      "type": "PushButton",
+      "children": []
+    },
+    {
+      "name": "hierarchy_tree",
+      "type": "TreeView",
+      "children": []
+    }
+  ],
+  "layout": {
+      "type": "GridLayout",
+      "row_stretch": [ 0, 1 ],
+      "col_stretch": [ 2, 1 ],
+      "widgets": [
+        {
+          "name": "add_entity_button",
+          "row": 0,
+          "col": 0,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "name": "hierarchy_tree",
+          "row": 0,
+          "col": 1,
+          "row_span": 1,
+          "col_span": 1
+        },
+        {
+          "name": "user_filter",
+          "row": 1,
+          "col": 0,
+          "row_span": 1,
+          "col_span": 2
+        }
+      ]
+  }
+}

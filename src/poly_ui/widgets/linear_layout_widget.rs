@@ -84,12 +84,8 @@ impl LinearLayoutWidget {
 
     pub fn layout_length(&self) -> u32 {
         match &self.dir {
-            LinearLayoutDirection::LeftToRight | LinearLayoutDirection::RightToLeft => {
-                self.size.x
-            }
-            LinearLayoutDirection::TopToBottom | LinearLayoutDirection::BotomToTop => {
-                self.size.y
-            }
+            LinearLayoutDirection::LeftToRight | LinearLayoutDirection::RightToLeft => self.size.x,
+            LinearLayoutDirection::TopToBottom | LinearLayoutDirection::BotomToTop => self.size.y,
         }
     }
 }

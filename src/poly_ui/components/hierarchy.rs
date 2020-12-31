@@ -31,8 +31,7 @@ impl Hierarchy {
     }
 
     pub fn index(&self, id: &Uuid) -> Option<usize> {
-        self
-            .children
+        self.children
             .iter()
             .position(|elem| elem.get().borrow().id() == id)
     }

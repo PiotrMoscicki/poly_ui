@@ -26,3 +26,4 @@ Clone and run.
 
 ##
 After running you should see a test window:
+![Image](/media/README/example_run.bmp "icon")

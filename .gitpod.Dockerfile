@@ -4,6 +4,8 @@ USER gitpod
 
 RUN sudo apt-get install -y libsdl2-dev
 RUN sudo apt-get install -y libsdl2-ttf-dev
+RUN rustup component add clippy
+RUN rustup component add rustfmt
 
 # Install custom tools, runtime, etc. using apt-get
 # For example, the command below would install "bastet" - a command line tetris clone:

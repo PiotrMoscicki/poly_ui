@@ -24,10 +24,10 @@ impl Painter {
             canvas.borrow().as_ref().unwrap().output_size().unwrap().1,
         );
 
-        return Painter {
-            canvas: canvas,
+        Painter {
+            canvas,
             transform: Transform::new(&Point2::<i32>::new(0, 0), &output_size),
-        };
+        }
     }
 
     fn ensure_correct_viewport(&mut self) {
@@ -55,7 +55,7 @@ impl Painter {
 //************************************************************************************************
 impl PainterTrait for Painter {
     fn sub_painter(&self, transform: &Transform) -> Box<dyn PainterTrait> {
-        return Box::new(Painter {
+        Box::new(Painter {
             canvas: self.canvas.clone(),
             transform: Transform::new(
                 &Point2::<i32>::new(
@@ -64,11 +64,11 @@ impl PainterTrait for Painter {
                 ),
                 &transform.size,
             ),
-        });
+        })
     }
 
     fn size(&self) -> Vector2<u32> {
-        return self.transform.size;
+        self.transform.size
     }
 
     fn clear(&mut self) {
@@ -83,12 +83,12 @@ impl PainterTrait for Painter {
 
     fn draw_color(&self) -> Color {
         let color = self.canvas.borrow().as_ref().unwrap().draw_color();
-        return Color {
+        Color {
             r: color.r,
             g: color.g,
             b: color.b,
             a: color.a,
-        };
+        }
     }
 
     fn set_draw_color(&mut self, new: &Color) {

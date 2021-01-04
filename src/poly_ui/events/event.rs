@@ -260,27 +260,27 @@ pub enum MouseButton {
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct KeyPressEvent {
-    key: Key
+    key: Key,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct KeyReleaseEvent {
-    key: Key
+    key: Key,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct MousePressEvent {
-    button: MouseButton
+    button: MouseButton,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct MouseReleaseEvent {
-    button: MouseButton
+    button: MouseButton,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct MouseMoveEvent {
-    pos: Point2<u32>
+    pos: Point2<u32>,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]

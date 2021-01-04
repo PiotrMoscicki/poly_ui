@@ -26,44 +26,42 @@ pub struct Window {
 //************************************************************************************************
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
-        return Self {
-            widget: Widget::new().to_ownerless().to_owned(),
+        Self {
+            widget: Widget::new().make_ownerless().make_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
-        };
+        }
     }
 }
 
 //************************************************************************************************
 impl WindowTrait for Window {
     fn widget(&self) -> Ref<dyn WidgetTrait> {
-        return self.widget.get().borrow();
+        self.widget.get().borrow()
     }
 
     fn widget_mut(&mut self) -> RefMut<dyn WidgetTrait> {
-        return self.widget.get().borrow_mut();
+        self.widget.get().borrow_mut()
     }
 
     fn id(&self) -> &Uuid {
-        return &self.id;
+        &self.id
     }
 
     fn pos(&self) -> Point2<i32> {
-        return self.window_provider.pos();
+        self.window_provider.pos()
     }
 
     fn set_pos(&mut self, new: Point2<i32>) {
         self.window_provider.set_pos(new);
-        return ();
     }
 
     fn size(&self) -> Vector2<u32> {
-        return self.window_provider.size();
+        self.window_provider.size()
     }
 
     fn set_size(&mut self, new: Vector2<u32>) {
         self.window_provider.set_size(new);
-        return ();
     }
 
     fn update(&mut self, dt: f32) {

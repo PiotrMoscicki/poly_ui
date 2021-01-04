@@ -12,14 +12,14 @@ pub struct Ownerless {
 
 //************************************************************************************************
 impl Ownerless {
-    pub fn to_owned(self) -> Owned {
-        return Owned {
+    pub fn make_owned(self) -> Owned {
+        Owned {
             widget: self.widget,
-        };
+        }
     }
 
     pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
-        return &self.widget;
+        &self.widget
     }
 }
 
@@ -33,14 +33,14 @@ pub struct Owned {
 
 //************************************************************************************************
 impl Owned {
-    pub fn to_ownerless(self) -> Ownerless {
-        return Ownerless {
+    pub fn make_ownerless(self) -> Ownerless {
+        Ownerless {
             widget: self.widget,
-        };
+        }
     }
 
     pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
-        return &self.widget;
+        &self.widget
     }
 }
 
@@ -55,18 +55,18 @@ pub struct NewWidget<T: WidgetTrait + 'static> {
 //************************************************************************************************
 impl<T: WidgetTrait + 'static> NewWidget<T> {
     pub fn new(widget: T) -> Self {
-        return Self {
+        Self {
             widget: Rc::new(RefCell::new(widget)),
-        };
+        }
     }
 
-    pub fn to_ownerless(self) -> Ownerless {
-        return Ownerless {
+    pub fn make_ownerless(self) -> Ownerless {
+        Ownerless {
             widget: self.widget,
-        };
+        }
     }
 
     pub fn get(&self) -> &Rc<RefCell<T>> {
-        return &self.widget;
+        &self.widget
     }
 }

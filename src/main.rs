@@ -24,5 +24,5 @@ fn main() -> Result<(), String> {
 
     let mut app = poly_ui::sdl2::App::new();
     let _window = app.get_windows_manager().create_window("dupaaa", 800, 600);
-    return app.exec();
+    app.exec()
 }

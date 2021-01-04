@@ -18,10 +18,10 @@ pub struct WindowsManager {
 //************************************************************************************************
 impl WindowsManager {
     pub fn new(video: Rc<RefCell<sdl2::VideoSubsystem>>) -> Self {
-        return WindowsManager {
+        WindowsManager {
             sdl_video: video,
             windows: Vec::new(),
-        };
+        }
     }
 }
 
@@ -46,7 +46,7 @@ impl WindowsManagerTrait for WindowsManager {
         let window_provider = Box::new(WindowProvider::new(window));
         let window = Rc::new(RefCell::new(Window::new(window_provider)));
         self.windows.push(window.clone());
-        return window;
+        window
     }
 
     fn update_windows(&mut self, dt: f32) {

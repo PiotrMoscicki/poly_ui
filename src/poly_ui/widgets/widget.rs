@@ -27,27 +27,27 @@ pub struct Widget {
 //************************************************************************************************
 impl Widget {
     pub fn new_raw() -> Self {
-        return Self {
+        Self {
             id: Uuid::new_v4(),
             pos: Point2::<i32>::new(0, 0),
             size: Vector2::<u32>::new(0, 0),
             hierarchy: Hierarchy::new(),
-        };
+        }
     }
 
     pub fn new() -> NewWidget<Self> {
-        return NewWidget::new(Self::new_raw());
+        NewWidget::new(Self::new_raw())
     }
 }
 
 //************************************************************************************************
 impl WidgetTrait for Widget {
     fn id(&self) -> &Uuid {
-        return &self.id;
+        &self.id
     }
 
     fn pos(&self) -> &Point2<i32> {
-        return &self.pos;
+        &self.pos
     }
 
     fn set_pos(&mut self, value: &Point2<i32>) {
@@ -55,7 +55,7 @@ impl WidgetTrait for Widget {
     }
 
     fn size(&self) -> &Vector2<u32> {
-        return &self.size;
+        &self.size
     }
 
     fn set_size(&mut self, value: &Vector2<u32>) {
@@ -67,7 +67,7 @@ impl WidgetTrait for Widget {
     }
 
     fn remove(&mut self, child: &Uuid) -> Ownerless {
-        return self.hierarchy.remove(child);
+        self.hierarchy.remove(child)
     }
 
     fn update(&mut self, dt: f32) {

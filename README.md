@@ -27,3 +27,4 @@ Clone and run.
 ##
 After running you should see a test window:
 ![Image](/media/README/example_run.bmp "icon")
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/PiotrMoscicki/poly_ui_proto)

@@ -49,23 +49,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
+      - name: Install tarpaulin
+        run: cargo install cargo-tarpaulin
+      - name: Generate code coverage
+        run: |
+          cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out Xml
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v1
         with:
-          toolchain: stable
-          prifile: minimal
-          override: true
-      - name: Run cargo-tarpaulin
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          args: '--ignore-tests --out Lcov'
-      - name: Upload to Coveralls
-        # upload only if push
-        if: ${{ github.event_name == 'push' }}
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './lcov.info'
+          fail_ci_if_error: true
 
   linux-tests:
     runs-on: ubuntu-latest

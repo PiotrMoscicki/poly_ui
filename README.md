@@ -1,6 +1,7 @@
 # poly_ui_proto
 
 [![GitHub Actions](https://github.com/PiotrMoscicki/poly_ui_proto/workflows/CI/badge.svg)](https://github.com/PiotrMoscicki/poly_ui_proto/actions)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/PiotrMoscicki/poly_ui_proto)
 
 Prototype of the user interface library for Rust using SDL2

@@ -52,8 +52,7 @@ jobs:
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
-          prifile: minimal
+          toolchain: nightly
           override: true
       - name: Install tarpaulin
         run: cargo install cargo-tarpaulin

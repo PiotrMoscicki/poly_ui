@@ -49,6 +49,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          prifile: minimal
+          override: true
       - name: Install tarpaulin
         run: cargo install cargo-tarpaulin
       - name: Generate code coverage

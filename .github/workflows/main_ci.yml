@@ -1,0 +1,112 @@
+name: main CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rustfmt:
+    name: rust-fmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          components: rustfmt
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+          
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          components: clippy
+      - name: Clippy Check
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+          
+  # coverage:
+  #   name: Code coverage
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+
+  #     - name: Install stable toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #         override: true
+
+  #     - name: Run cargo-tarpaulin (main)
+  #       uses: actions-rs/tarpaulin@v0.1
+
+  #     - name: Upload to codecov.io
+  #       uses: codecov/codecov-action@v1.0.14
+  #       with:
+  #         fail_ci_if_error: true
+
+  #     - name: Archive code coverage results
+  #       uses: actions/upload-artifact@v2.2.0
+  #       with:
+  #         name: code-coverage-report
+  #         path: cobertura.xml
+
+  linux-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install sdl2
+      run: sudo apt-get install -y libsdl2-dev
+    - name: Install sdl2-ttf
+      run: sudo apt-get install -y libsdl2-ttf-dev
+    - name: Run tests
+      run: cargo test --verbose
+      
+  macos-tests:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install sdl2
+      run: brew install SDL2
+    - name: Install sdl2-ttf
+      run: brew install SDL2_ttf
+    - name: Run tests
+      run: cargo test --verbose
+      
+  windows-tests:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Run tests
+      run: cargo test --verbose

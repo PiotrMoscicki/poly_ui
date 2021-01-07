@@ -21,13 +21,6 @@ pub struct App {
 //************************************************************************************************
 impl Default for App {
     fn default() -> Self {
-        Self::new()
-    }
-}
-
-//************************************************************************************************
-impl App {
-    pub fn new() -> Self {
         let context = sdl2::init().unwrap();
         let video = Rc::new(RefCell::new(context.video().unwrap()));
 

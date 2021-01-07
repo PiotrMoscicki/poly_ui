@@ -71,7 +71,7 @@ impl Layout {
     }
 
     fn validate(&mut self) {
-        if self.items.len() > 0 {
+        if !self.items.is_empty() {
             let items_stretch = self.gather_items_stretch();
             let item_with_lowest_max_minus_current = self.get_item_with_lowest_max_minus_current();
             let lowest_max_minus_current =
@@ -79,7 +79,7 @@ impl Layout {
             let remaining_free_layout_space = self.remaining_free_layout_space();
 
             if remaining_free_layout_space == 0 {
-                return;
+                // layout is ready
             } else if remaining_free_layout_space < lowest_max_minus_current * items_stretch {
                 self.set_every_item_size_to_at_least_min();
                 self.increase_every_item_size(remaining_free_layout_space / items_stretch);
@@ -99,8 +99,6 @@ impl Layout {
                 self.size += item.current_size;
                 self.items.insert(item_with_lowest_max_minus_current, item);
             }
-        } else {
-            return;
         }
     }
 
@@ -135,17 +133,14 @@ impl Layout {
     }
 
     fn get_item_with_lowest_max_minus_current(&self) -> usize {
-        let mut idx = 0;
         let mut lowest_idx = 0;
         let mut lowest_diff = self.items[0].max_size - self.items[0].min_size;
-        for item in &self.items {
+        for (idx, item) in self.items.iter().enumerate() {
             let potential_lowest = item.max_size - item.min_size;
             if potential_lowest < lowest_diff {
                 lowest_diff = potential_lowest;
                 lowest_idx = idx;
             }
-
-            idx += 1;
         }
 
         lowest_idx
@@ -180,8 +175,7 @@ impl Layout {
 
         let mut highest_idx = 0;
         let mut highest_diff = 0;
-        let mut idx = 0;
-        for item in &self.items {
+        for (idx, item) in self.items.iter().enumerate() {
             let potential_highest =
                 Self::get_item_expected_minus_current_stretch(item, total_stretch, self.size);
 
@@ -189,8 +183,6 @@ impl Layout {
                 highest_idx = idx;
                 highest_diff = potential_highest;
             }
-
-            idx += 1;
         }
 
         highest_idx
@@ -208,6 +200,7 @@ impl Layout {
 #[cfg(test)]
 mod tests {
     // super
+    //use super::*;
     //use super::*;
 
     //********************************************************************************************

@@ -39,7 +39,7 @@ impl std::hash::Hash for dyn WidgetTrait {
 //************************************************************************************************
 impl std::cmp::PartialEq for dyn WidgetTrait {
     fn eq(&self, other: &Self) -> bool {
-        return self.id() == other.id();
+        self.id() == other.id()
     }
 }
 

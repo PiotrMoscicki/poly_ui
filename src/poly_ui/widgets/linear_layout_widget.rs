@@ -37,12 +37,12 @@ struct Item {
 //************************************************************************************************
 impl Default for Item {
     fn default() -> Self {
-        return Self {
+        Self {
             widget: None,
             stretch: 1,
             min_item_size: 0,
             max_item_size: u32::MAX,
-        };
+        }
     }
 }
 
@@ -67,7 +67,7 @@ impl LinearLayoutWidget {
             id: Uuid::new_v4(),
             pos: Point2::<i32>::new(0, 0),
             size: Vector2::<u32>::new(0, 0),
-            hierarchy: Hierarchy::new(),
+            hierarchy: Hierarchy::default(),
 
             dir: LinearLayoutDirection::LeftToRight,
             items: Vec::new(),
@@ -145,7 +145,7 @@ impl WidgetTrait for LinearLayoutWidget {
     }
 }
 
-fn get_total_stretch(items: &Vec<(Item, u32)>) -> u32 {
+fn get_total_stretch(items: &[(Item, u32)]) -> u32 {
     let mut result: u32 = 0;
     for item in items {
         result += item.0.stretch;
@@ -169,7 +169,7 @@ struct LowestMinMaxDiff {
 }
 
 impl LowestMinMaxDiff {
-    fn get(goal_total: u32, items: &Vec<(Item, u32)>) -> Self {
+    fn get(goal_total: u32, items: &[(Item, u32)]) -> Self {
         let total_stretch = get_total_stretch(items);
 
         let mut lowest_idx = 0;
@@ -200,7 +200,7 @@ impl LowestMinMaxDiff {
     }
 }
 
-fn get_remainder(mut goal_total: u32, items: &Vec<(Item, u32)>) -> Option<u32> {
+fn get_remainder(mut goal_total: u32, items: &[(Item, u32)]) -> Option<u32> {
     for item in items {
         let item_required_size = std::cmp::max(item.1, item.0.min_item_size);
 
@@ -238,10 +238,8 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
 
     println!();
     println!("-------------------------------------------------");
-    let mut idx = 0;
-    for item in &items {
+    for (idx, item) in items.iter().enumerate() {
         println!("size[{}]: {}", idx, item.1);
-        idx += 1;
     }
 
     // Get space that can be spent on resizing items. If item current width is lower than minimal
@@ -323,7 +321,7 @@ fn get_items_sizes_impl(goal_total: u32, mut items: Vec<(Item, u32)>) -> Vec<u32
     }
 }
 
-fn get_items_sizes(goal_total: u32, items: &Vec<Item>) -> Vec<u32> {
+fn get_items_sizes(goal_total: u32, items: &[Item]) -> Vec<u32> {
     let mut items_with_width: Vec<(Item, u32)> = Vec::new();
 
     for item in items {

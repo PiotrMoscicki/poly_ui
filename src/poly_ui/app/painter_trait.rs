@@ -1,6 +1,6 @@
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::{boxed::Box, vec::Vec};
+use std::boxed::Box;
 
 use crate::poly_ui::components::Transform;
 
@@ -44,11 +44,11 @@ pub trait PainterTrait {
     fn set_draw_color(&mut self, new: &Color);
 
     fn draw_point(&mut self, point: &Point2<i32>);
-    fn draw_points(&mut self, points: &Vec<Point2<i32>>);
+    fn draw_points(&mut self, points: &[Point2<i32>]);
     fn draw_line(&mut self, line: &Line);
-    fn draw_lines(&mut self, lines: &Vec<Line>);
+    fn draw_lines(&mut self, lines: &[Line]);
     fn draw_rect(&mut self, rect: Rect);
-    fn draw_rects(&mut self, rect: &Vec<Rect>);
+    fn draw_rects(&mut self, rect: &[Rect]);
     fn fill_rect(&mut self, rect: Rect);
-    fn fill_rects(&mut self, rect: &Vec<Rect>);
+    fn fill_rects(&mut self, rect: &[Rect]);
 }

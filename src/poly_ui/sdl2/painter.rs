@@ -114,7 +114,7 @@ impl PainterTrait for Painter {
             .unwrap();
     }
 
-    fn draw_points(&mut self, points: &Vec<Point2<i32>>) {
+    fn draw_points(&mut self, points: &[Point2<i32>]) {
         self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Point>::new();
 
@@ -143,7 +143,7 @@ impl PainterTrait for Painter {
             .unwrap();
     }
 
-    fn draw_lines(&mut self, lines: &Vec<Line>) {
+    fn draw_lines(&mut self, lines: &[Line]) {
         self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Point>::new();
 
@@ -175,7 +175,7 @@ impl PainterTrait for Painter {
             .unwrap();
     }
 
-    fn draw_rects(&mut self, rects: &Vec<Rect>) {
+    fn draw_rects(&mut self, rects: &[Rect]) {
         self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Rect>::new();
 
@@ -211,7 +211,7 @@ impl PainterTrait for Painter {
             .unwrap();
     }
 
-    fn fill_rects(&mut self, rects: &Vec<Rect>) {
+    fn fill_rects(&mut self, rects: &[Rect]) {
         self.ensure_correct_viewport();
         let mut converted = Vec::<sdl2::rect::Rect>::new();
 

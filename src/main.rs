@@ -22,7 +22,9 @@ fn main() -> Result<(), String> {
     //     run(path)?;
     // }
 
-    let mut app = poly_ui::sdl2::App::new();
-    let _window = app.get_windows_manager().create_window("dupaaa", 800, 600);
+    let mut app = poly_ui::sdl2::App::default();
+    let _window = app
+        .get_windows_manager()
+        .create_window("Test window", 800, 600);
     app.exec()
 }

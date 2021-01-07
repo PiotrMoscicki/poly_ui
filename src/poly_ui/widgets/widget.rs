@@ -31,7 +31,7 @@ impl Widget {
             id: Uuid::new_v4(),
             pos: Point2::<i32>::new(0, 0),
             size: Vector2::<u32>::new(0, 0),
-            hierarchy: Hierarchy::new(),
+            hierarchy: Hierarchy::default(),
         }
     }
 

@@ -1,11 +1,11 @@
-# poly_ui_proto
+# poly_ui
 
 [![GitHub Actions](https://github.com/PiotrMoscicki/poly_ui_proto/workflows/main%20CI/badge.svg)](https://github.com/PiotrMoscicki/poly_ui_proto/actions)
 [![GitHub Actions](https://github.com/PiotrMoscicki/poly_ui_proto/workflows/dev%20CI/badge.svg)](https://github.com/PiotrMoscicki/poly_ui_proto/actions)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/PiotrMoscicki/poly_ui_proto)
 
-Prototype of the user interface library for Rust using SDL2
+User interface library for Rust using SDL2
 
 ## Quick start
 ### Windows

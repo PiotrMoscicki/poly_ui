@@ -1,0 +1,19 @@
+name: Changelog generation
+
+on:
+  push:
+    branches: dev
+    
+jobs:
+  changelog-generation:
+    name: changelog-generation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Generate
+        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -783,6 +783,41 @@ mod tests {
         }
     }
 
+    //********************************************************************************************
+    //#[test]
+    //fn get_item_expected_minus_current_stretch() {
+    //    {
+    //        let layout = Layout {
+    //            size: 0,
+    //            items: vec![Item {
+    //                stretch: 0,
+    //                min_size: 0,
+    //                max_size: 0,
+    //                current_size: 0,
+    //            }],
+    //        };
+    //        assert_eq!(
+    //            Layout::get_item_expected_minus_current_stretch(&layout.items[0], 0, 0),
+    //            0
+    //        );
+    //    }
+    //    {
+    //        let layout = Layout {
+    //            size: 0,
+    //            items: vec![Item {
+    //                stretch: 1,
+    //                min_size: 0,
+    //                max_size: 0,
+    //                current_size: 0,
+    //            }],
+    //        };
+    //        assert_eq!(
+    //            Layout::get_item_expected_minus_current_stretch(&layout.items[0], 0, 0),
+    //            0
+    //        );
+    //    }
+    //}
+
     // //********************************************************************************************
     // #[test]
     // fn no_items() {

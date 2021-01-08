@@ -206,136 +206,136 @@ mod tests {
     #[test]
     fn ensure_layout_has_at_least_minimal_width() {
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.ensure_layout_has_at_least_minimal_width();
             assert_eq!(layout.size, 0);
         }
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.ensure_layout_has_at_least_minimal_width();
             assert_eq!(layout.size, 0);
         }
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 5,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 5,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 1,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.ensure_layout_has_at_least_minimal_width();
             assert_eq!(layout.size, 0);
         }
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 5,
                         min_size: 15,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 5,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 1,
                         min_size: 5,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.ensure_layout_has_at_least_minimal_width();
             assert_eq!(layout.size, 20);
         }
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 5,
                         min_size: 35,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 5,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 1,
                         min_size: 5,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.ensure_layout_has_at_least_minimal_width();
             assert_eq!(layout.size, 40);
@@ -346,28 +346,28 @@ mod tests {
     #[test]
     fn validated_item_update_max_size() {
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.validate_all_items();
             assert_eq!(layout.items[0].max_size, 0);
@@ -375,28 +375,28 @@ mod tests {
             assert_eq!(layout.items[2].max_size, 0);
         }
         {
-            let mut layout = Layout{
+            let mut layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 0,
                         min_size: 5,
                         max_size: 10,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 10,
                         max_size: 5,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 5,
                         max_size: 5,
                         current_size: 0,
                     },
-                )
+                ],
             };
             layout.validate_all_items();
             assert_eq!(layout.items[0].max_size, 10);
@@ -408,54 +408,54 @@ mod tests {
     #[test]
     fn gather_items_stretch() {
         {
-            let layout = Layout{
+            let layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             assert_eq!(layout.gather_items_stretch(), 0);
         }
         {
-            let layout = Layout{
+            let layout = Layout {
                 size: 0,
-                items: vec!(
-                    Item{
+                items: vec![
+                    Item {
                         stretch: 1,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 2,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                    Item{
+                    Item {
                         stretch: 3,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
                     },
-                )
+                ],
             };
             assert_eq!(layout.gather_items_stretch(), 6);
         }

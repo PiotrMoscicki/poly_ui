@@ -374,6 +374,35 @@ mod tests {
             assert_eq!(layout.items[1].max_size, 0);
             assert_eq!(layout.items[2].max_size, 0);
         }
+        {
+            let mut layout = Layout{
+                size: 0,
+                items: vec!(
+                    Item{
+                        stretch: 0,
+                        min_size: 5,
+                        max_size: 10,
+                        current_size: 0,
+                    },
+                    Item{
+                        stretch: 0,
+                        min_size: 10,
+                        max_size: 5,
+                        current_size: 0,
+                    },
+                    Item{
+                        stretch: 0,
+                        min_size: 5,
+                        max_size: 5,
+                        current_size: 0,
+                    },
+                )
+            };
+            layout.validate_all_items();
+            assert_eq!(layout.items[0].max_size, 10);
+            assert_eq!(layout.items[1].max_size, 10);
+            assert_eq!(layout.items[2].max_size, 5);
+        }
     }
 
     // //********************************************************************************************

@@ -405,17 +405,61 @@ mod tests {
         }
     }
 
-    // //********************************************************************************************
-    // #[test]
-    // fn input_item_update_max_size() {
-    //     let mut item = InputItem{
-    //         stretch: 0,
-    //         min_size: 0,
-    //         max_size: u32::MAX,
-    //     };
-    //     item.update_max_size(120, 0, 4);
-    //     assert_eq!(item.max_size, 30);
-    // }
+    #[test]
+    fn gather_items_stretch() {
+        {
+            let layout = Layout{
+                size: 0,
+                items: vec!(
+                    Item{
+                        stretch: 0,
+                        min_size: 0,
+                        max_size: 0,
+                        current_size: 0,
+                    },
+                    Item{
+                        stretch: 0,
+                        min_size: 0,
+                        max_size: 0,
+                        current_size: 0,
+                    },
+                    Item{
+                        stretch: 0,
+                        min_size: 0,
+                        max_size: 0,
+                        current_size: 0,
+                    },
+                )
+            };
+            assert_eq!(layout.gather_items_stretch(), 0);
+        }
+        {
+            let layout = Layout{
+                size: 0,
+                items: vec!(
+                    Item{
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: 0,
+                        current_size: 0,
+                    },
+                    Item{
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 0,
+                        current_size: 0,
+                    },
+                    Item{
+                        stretch: 3,
+                        min_size: 0,
+                        max_size: 0,
+                        current_size: 0,
+                    },
+                )
+            };
+            assert_eq!(layout.gather_items_stretch(), 6);
+        }
+    }
 
     // //********************************************************************************************
     // #[test]

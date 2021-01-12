@@ -8,12 +8,16 @@
 User interface library for Rust using SDL2
 
 ## Quick start
+### Gitpod
+Just click on the gitpod badge. Opened environment will be ready to work.
+
 ### Windows
 Clone and run. The build script (build.rs) will copy necessary libraries to the root dir of the cloned repository.
 
 ### Linux
 Install necessary SDL2 libraries:
 ```sh
+sudo apt-get update -y
 sudo apt-get install -y libsdl2-dev
 sudo apt-get install -y libsdl2-ttf-dev
 ```

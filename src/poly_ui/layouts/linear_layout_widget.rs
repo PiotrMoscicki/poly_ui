@@ -5,12 +5,11 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
-// super
-use super::paint_children;
-use super::update_children;
-use super::NewWidget;
-use super::Ownerless;
-use super::WidgetTrait;
+use crate::poly_ui::widgets::paint_children;
+use crate::poly_ui::widgets::update_children;
+use crate::poly_ui::widgets::NewWidget;
+use crate::poly_ui::widgets::Ownerless;
+use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************

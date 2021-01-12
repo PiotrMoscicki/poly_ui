@@ -2,6 +2,7 @@ FROM gitpod/workspace-full
 
 USER gitpod
 
+RUN sudo apt-get update -y
 RUN sudo apt-get install -y libsdl2-dev
 RUN sudo apt-get install -y libsdl2-ttf-dev
 RUN rustup component add clippy

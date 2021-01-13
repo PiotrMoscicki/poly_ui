@@ -853,6 +853,146 @@ mod tests {
         }
     }
 
+    //********************************************************************************************
+    #[test]
+    fn get_item_with_highest_expected_minus_current_stretch() {
+        {
+            let layout = Layout {
+                size: 0,
+                items: vec![Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                }],
+            };
+            assert_eq!(
+                layout.get_item_with_highest_expected_minus_current_stretch(),
+                0
+            );
+        }
+        {
+            let layout = Layout {
+                size: 12,
+                items: vec![Item {
+                    stretch: 1,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 2,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 3,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                }],
+            };
+            assert_eq!(
+                layout.get_item_with_highest_expected_minus_current_stretch(),
+                2
+            );
+        }
+        {
+            let layout = Layout {
+                size: 12,
+                items: vec![Item {
+                    stretch: 1,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 2,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 3,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 2,
+                }],
+            };
+            assert_eq!(
+                layout.get_item_with_highest_expected_minus_current_stretch(),
+                1
+            );
+        }
+        {
+            let layout = Layout {
+                size: 12,
+                items: vec![Item {
+                    stretch: 1,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 2,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 3,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 4,
+                }],
+            };
+            assert_eq!(
+                layout.get_item_with_highest_expected_minus_current_stretch(),
+                1
+            );
+        }
+        {
+            let layout = Layout {
+                size: 12,
+                items: vec![Item {
+                    stretch: 1,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 2,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 4,
+                },
+                Item {
+                    stretch: 3,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 4,
+                }],
+            };
+            assert_eq!(
+                layout.get_item_with_highest_expected_minus_current_stretch(),
+                0
+            );
+        }
+    }
+
     // //********************************************************************************************
     // #[test]
     // fn no_items() {

@@ -72,15 +72,24 @@ impl Layout {
 
     fn validate(&mut self) {
         if !self.items.is_empty() {
+            println!("validate not empty ---------------------------------------");
             let items_stretch = self.gather_items_stretch();
             let item_with_lowest_max_minus_current = self.get_item_with_lowest_max_minus_current();
             let lowest_max_minus_current =
                 self.items[item_with_lowest_max_minus_current].get_max_minus_current();
             let remaining_free_layout_space = self.remaining_free_layout_space();
 
+            println!("items_stretch = {}", items_stretch);
+            println!("item_with_lowest_max_minus_current = {}", item_with_lowest_max_minus_current);
+            println!("lowest_max_minus_current = {}", lowest_max_minus_current);
+            println!("remaining_free_layout_space = {}", remaining_free_layout_space);
+
             if remaining_free_layout_space == 0 {
+                println!("first");
+                self.set_every_item_size_to_at_least_min();
                 // layout is ready
             } else if remaining_free_layout_space < lowest_max_minus_current * items_stretch {
+                println!("second");
                 self.set_every_item_size_to_at_least_min();
                 self.increase_every_item_size(remaining_free_layout_space / items_stretch);
                 let remainder = remaining_free_layout_space % items_stretch;
@@ -89,6 +98,8 @@ impl Layout {
                     self.items[highest_diff].current_size += 1;
                 }
             } else {
+                println!("third");
+
                 self.increase_every_item_size(lowest_max_minus_current);
 
                 let item = self.items.remove(item_with_lowest_max_minus_current);
@@ -217,19 +228,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -244,19 +255,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -271,19 +282,19 @@ mod tests {
                     Item {
                         stretch: 5,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 5,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 1,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -298,19 +309,19 @@ mod tests {
                     Item {
                         stretch: 5,
                         min_size: 15,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 5,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 1,
                         min_size: 5,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -325,19 +336,19 @@ mod tests {
                     Item {
                         stretch: 5,
                         min_size: 35,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 5,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 1,
                         min_size: 5,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -420,19 +431,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -446,19 +457,19 @@ mod tests {
                     Item {
                         stretch: 1,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 2,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 3,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -477,19 +488,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -560,19 +571,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -586,19 +597,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -612,19 +623,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 1,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 2,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 3,
                     },
                 ],
@@ -643,19 +654,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 1,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 2,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -672,19 +683,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 1,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                     Item {
                         stretch: 2,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 0,
                     },
                 ],
@@ -701,19 +712,19 @@ mod tests {
                     Item {
                         stretch: 0,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 1,
                     },
                     Item {
                         stretch: 1,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 2,
                     },
                     Item {
                         stretch: 2,
                         min_size: 0,
-                        max_size: 0,
+                        max_size: u32::MAX,
                         current_size: 3,
                     },
                 ],
@@ -797,7 +808,7 @@ mod tests {
                 items: vec![Item {
                     stretch: 0,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 }],
             };
@@ -812,7 +823,7 @@ mod tests {
                 items: vec![Item {
                     stretch: 1,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 }],
             };
@@ -827,7 +838,7 @@ mod tests {
                 items: vec![Item {
                     stretch: 2,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 }],
             };
@@ -842,7 +853,7 @@ mod tests {
                 items: vec![Item {
                     stretch: 3,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 4,
                 }],
             };
@@ -862,19 +873,19 @@ mod tests {
                 items: vec![Item {
                     stretch: 0,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 0,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 0,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 }],
             };
@@ -889,19 +900,19 @@ mod tests {
                 items: vec![Item {
                     stretch: 1,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 2,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 3,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 }],
             };
@@ -916,19 +927,19 @@ mod tests {
                 items: vec![Item {
                     stretch: 1,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 2,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 3,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 2,
                 }],
             };
@@ -943,19 +954,19 @@ mod tests {
                 items: vec![Item {
                     stretch: 1,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 2,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 3,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 4,
                 }],
             };
@@ -970,19 +981,19 @@ mod tests {
                 items: vec![Item {
                     stretch: 1,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 0,
                 },
                 Item {
                     stretch: 2,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 4,
                 },
                 Item {
                     stretch: 3,
                     min_size: 0,
-                    max_size: 0,
+                    max_size: u32::MAX,
                     current_size: 4,
                 }],
             };
@@ -993,81 +1004,51 @@ mod tests {
         }
     }
 
-    // //********************************************************************************************
+    //********************************************************************************************
+    #[test]
+    fn validate_no_items() {
+        let mut layout = Layout{
+            size: 120,
+            items: vec!{},
+        };
+
+        layout.validate();
+
+        assert_eq!(layout.size, 120);
+        assert_eq!(layout.items.len(), 0);
+    }
+
+    //********************************************************************************************
     // #[test]
-    // fn no_items() {
-    //     let input = InputLayout{
+    // fn validate_no_stretch_min_max() {
+    //     let mut layout = Layout {
     //         size: 120,
-    //         items: vec!{},
-    //     };
-    //     let validated = input.validate();
-    //     assert_eq!(validated.is_none(), true);
-    // }
-
-    // //********************************************************************************************
-    // #[test]
-    // fn no_min_max_stretch() {
-    //     let input = InputLayout{
-    //         size: 120,
-    //         items: vec!{
-    //             InputItem{stretch: 0, min_size: 0, max_size: u32::MAX},
-    //             InputItem{stretch: 0, min_size: 0, max_size: u32::MAX},
-    //             InputItem{stretch: 0, min_size: 0, max_size: u32::MAX},
-    //             InputItem{stretch: 0, min_size: 0, max_size: u32::MAX},
+    //         items: vec![Item {
+    //             stretch: 0,
+    //             min_size: 0,
+    //             max_size: u32::MAX,
+    //             current_size: 0,
     //         },
-    //     };
-    //     let mut validated = input.validate().unwrap();
-    //     validated.calculate();
-
-    //     assert_eq!(validated.size, 120);
-    //     assert_eq!(validated.stretch, 0);
-    //     assert_eq!(validated.items[0].current_size, 30);
-    //     assert_eq!(validated.items[1].current_size, 30);
-    //     assert_eq!(validated.items[2].current_size, 30);
-    //     assert_eq!(validated.items[3].current_size, 30);
-    // }
-
-    // //********************************************************************************************
-    // #[test]
-    // fn no_min_max() {
-    //     let input = InputLayout{
-    //         size: 120,
-    //         items: vec!{
-    //             InputItem{stretch: 0, min_size: 0, max_size: u32::MAX},
-    //             InputItem{stretch: 1, min_size: 0, max_size: u32::MAX},
-    //             InputItem{stretch: 2, min_size: 0, max_size: u32::MAX},
-    //             InputItem{stretch: 3, min_size: 0, max_size: u32::MAX},
+    //         Item {
+    //             stretch: 0,
+    //             min_size: 0,
+    //             max_size: u32::MAX,
+    //             current_size: 0,
     //         },
+    //         Item {
+    //             stretch: 0,
+    //             min_size: 0,
+    //             max_size: u32::MAX,
+    //             current_size: 0,
+    //         }],
     //     };
-    //     let mut validated = input.validate().unwrap();
-    //     validated.calculate();
 
-    //     assert_eq!(validated.size, 120);
-    //     assert_eq!(validated.stretch, 6);
-    //     assert_eq!(validated.items[0].current_size, 0);
-    //     assert_eq!(validated.items[1].current_size, 20);
-    //     assert_eq!(validated.items[2].current_size, 40);
-    //     assert_eq!(validated.items[3].current_size, 60);
-    // }
+    //     layout.validate();
 
-    // //********************************************************************************************
-    // #[test]
-    // fn milka() {
-    //     let input = InputLayout{
-    //         size: 16,
-    //         items: vec!{
-    //             InputItem{stretch: 2, min_size: 1, max_size: u32::MAX},
-    //             InputItem{stretch: 1, min_size: 6, max_size: u32::MAX},
-    //             InputItem{stretch: 1, min_size: 2, max_size: u32::MAX},
-    //         },
-    //     };
-    //     let mut validated = input.validate().unwrap();
-    //     validated.calculate();
-
-    //     assert_eq!(validated.size, 16);
-    //     assert_eq!(validated.stretch, 4);
-    //     assert_eq!(validated.items[0].current_size, 0);
-    //     assert_eq!(validated.items[1].current_size, 20);
-    //     assert_eq!(validated.items[2].current_size, 40);
+    //     assert_eq!(layout.size, 120);
+    //     assert_eq!(layout.items.len(), 3);
+    //     assert_eq!(layout.items[0].current_size, 40);
+    //     assert_eq!(layout.items[1].current_size, 40);
+    //     assert_eq!(layout.items[2].current_size, 40);
     // }
 }

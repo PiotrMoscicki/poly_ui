@@ -80,16 +80,23 @@ impl Layout {
             let remaining_free_layout_space = self.remaining_free_layout_space();
 
             println!("items_stretch = {}", items_stretch);
-            println!("item_with_lowest_max_minus_current = {}", item_with_lowest_max_minus_current);
+            println!(
+                "item_with_lowest_max_minus_current = {}",
+                item_with_lowest_max_minus_current
+            );
             println!("lowest_max_minus_current = {}", lowest_max_minus_current);
-            println!("remaining_free_layout_space = {}", remaining_free_layout_space);
+            println!(
+                "remaining_free_layout_space = {}",
+                remaining_free_layout_space
+            );
 
             if remaining_free_layout_space == 0 {
                 println!("first");
                 self.set_every_item_size_to_at_least_min();
-                // layout is ready
+            // layout is ready
             } else if remaining_free_layout_space < lowest_max_minus_current
-                || remaining_free_layout_space < lowest_max_minus_current * items_stretch {
+                || remaining_free_layout_space < lowest_max_minus_current * items_stretch
+            {
                 println!("second");
                 self.set_every_item_size_to_at_least_min();
                 self.increase_every_item_size(remaining_free_layout_space / items_stretch);
@@ -884,24 +891,26 @@ mod tests {
         {
             let layout = Layout {
                 size: 0,
-                items: vec![Item {
-                    stretch: 0,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 0,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 0,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                }],
+                items: vec![
+                    Item {
+                        stretch: 0,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 0,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 0,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                ],
             };
             assert_eq!(
                 layout.get_item_with_highest_expected_minus_current_stretch(),
@@ -911,24 +920,26 @@ mod tests {
         {
             let layout = Layout {
                 size: 12,
-                items: vec![Item {
-                    stretch: 1,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 2,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 3,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                }],
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                ],
             };
             assert_eq!(
                 layout.get_item_with_highest_expected_minus_current_stretch(),
@@ -938,24 +949,26 @@ mod tests {
         {
             let layout = Layout {
                 size: 12,
-                items: vec![Item {
-                    stretch: 1,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 2,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 3,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 2,
-                }],
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 2,
+                    },
+                ],
             };
             assert_eq!(
                 layout.get_item_with_highest_expected_minus_current_stretch(),
@@ -965,24 +978,26 @@ mod tests {
         {
             let layout = Layout {
                 size: 12,
-                items: vec![Item {
-                    stretch: 1,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 2,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 3,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 4,
-                }],
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 4,
+                    },
+                ],
             };
             assert_eq!(
                 layout.get_item_with_highest_expected_minus_current_stretch(),
@@ -992,24 +1007,26 @@ mod tests {
         {
             let layout = Layout {
                 size: 12,
-                items: vec![Item {
-                    stretch: 1,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 2,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 4,
-                },
-                Item {
-                    stretch: 3,
-                    min_size: 0,
-                    max_size: u32::MAX,
-                    current_size: 4,
-                }],
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 4,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 4,
+                    },
+                ],
             };
             assert_eq!(
                 layout.get_item_with_highest_expected_minus_current_stretch(),
@@ -1021,10 +1038,7 @@ mod tests {
     //********************************************************************************************
     #[test]
     fn validate_no_items() {
-        let mut layout = Layout::new(
-            120,
-            vec!{},
-        );
+        let mut layout = Layout::new(120, vec![]);
 
         layout.validate();
 
@@ -1037,24 +1051,26 @@ mod tests {
     fn validate_no_stretch_min_max() {
         let mut layout = Layout::new(
             120,
-            vec![Item {
-                stretch: 0,
-                min_size: 0,
-                max_size: u32::MAX,
-                current_size: 0,
-            },
-            Item {
-                stretch: 0,
-                min_size: 0,
-                max_size: u32::MAX,
-                current_size: 0,
-            },
-            Item {
-                stretch: 0,
-                min_size: 0,
-                max_size: u32::MAX,
-                current_size: 0,
-            }],
+            vec![
+                Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: u32::MAX,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: u32::MAX,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: u32::MAX,
+                    current_size: 0,
+                },
+            ],
         );
 
         layout.validate();

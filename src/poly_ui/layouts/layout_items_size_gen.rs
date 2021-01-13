@@ -174,7 +174,7 @@ impl Layout {
         let total_stretch = self.gather_items_stretch();
 
         let mut highest_idx = 0;
-        let mut highest_diff = 0;
+        let mut highest_diff = 0.0;
         for (idx, item) in self.items.iter().enumerate() {
             let potential_highest =
                 Self::get_item_expected_minus_current_stretch(item, total_stretch, self.size);
@@ -192,8 +192,13 @@ impl Layout {
         item: &Item,
         total_stretch: u32,
         total_size: u32,
-    ) -> u32 {
-        item.stretch * total_size - item.current_size * total_stretch
+    ) -> f32 {
+        if total_stretch == 0 || total_size == 0 {
+            0.0
+        } else {
+            item.stretch as f32 / total_stretch as f32
+                - item.current_size as f32 / total_size as f32
+        }
     }
 }
 
@@ -784,39 +789,69 @@ mod tests {
     }
 
     //********************************************************************************************
-    //#[test]
-    //fn get_item_expected_minus_current_stretch() {
-    //    {
-    //        let layout = Layout {
-    //            size: 0,
-    //            items: vec![Item {
-    //                stretch: 0,
-    //                min_size: 0,
-    //                max_size: 0,
-    //                current_size: 0,
-    //            }],
-    //        };
-    //        assert_eq!(
-    //            Layout::get_item_expected_minus_current_stretch(&layout.items[0], 0, 0),
-    //            0
-    //        );
-    //    }
-    //    {
-    //        let layout = Layout {
-    //            size: 0,
-    //            items: vec![Item {
-    //                stretch: 1,
-    //                min_size: 0,
-    //                max_size: 0,
-    //                current_size: 0,
-    //            }],
-    //        };
-    //        assert_eq!(
-    //            Layout::get_item_expected_minus_current_stretch(&layout.items[0], 0, 0),
-    //            0
-    //        );
-    //    }
-    //}
+    #[test]
+    fn get_item_expected_minus_current_stretch() {
+        {
+            let layout = Layout {
+                size: 0,
+                items: vec![Item {
+                    stretch: 0,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                }],
+            };
+            assert_eq!(
+                Layout::get_item_expected_minus_current_stretch(&layout.items[0], 0, 0),
+                0.0
+            );
+        }
+        {
+            let layout = Layout {
+                size: 0,
+                items: vec![Item {
+                    stretch: 1,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                }],
+            };
+            assert_eq!(
+                Layout::get_item_expected_minus_current_stretch(&layout.items[0], 2, 10),
+                0.5
+            );
+        }
+        {
+            let layout = Layout {
+                size: 0,
+                items: vec![Item {
+                    stretch: 2,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 0,
+                }],
+            };
+            assert_eq!(
+                Layout::get_item_expected_minus_current_stretch(&layout.items[0], 2, 10),
+                1.0
+            );
+        }
+        {
+            let layout = Layout {
+                size: 0,
+                items: vec![Item {
+                    stretch: 3,
+                    min_size: 0,
+                    max_size: 0,
+                    current_size: 4,
+                }],
+            };
+            assert_eq!(
+                Layout::get_item_expected_minus_current_stretch(&layout.items[0], 4, 8),
+                0.25
+            );
+        }
+    }
 
     // //********************************************************************************************
     // #[test]

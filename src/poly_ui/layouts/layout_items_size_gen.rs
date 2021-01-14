@@ -1292,7 +1292,7 @@ mod tests {
                     },
                 ],
             );
-        
+
             assert_eq!(layout.size, 73);
             assert_eq!(layout.items.len(), 3);
             assert_eq!(layout.items[0].current_size, 40);
@@ -1332,4 +1332,3 @@ mod tests {
         //}
     }
 }
-

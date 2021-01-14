@@ -73,6 +73,7 @@ impl Layout {
     fn validate(&mut self) {
         if !self.items.is_empty() {
             println!("validate not empty ---------------------------------------");
+            println!("self = {:?}", self);
             let items_stretch = self.gather_items_stretch();
             let item_with_lowest_max_minus_current = self.get_item_with_lowest_max_minus_current();
             let lowest_max_minus_current =
@@ -99,10 +100,7 @@ impl Layout {
             {
                 println!("second");
                 self.set_every_item_size_to_at_least_min();
-                self.increase_every_item_size(remaining_free_layout_space / items_stretch);
-                println!("remaining_free_layout_space = {:?}", self.items);
-                let remainder = remaining_free_layout_space % items_stretch;
-                for _ in 0..remainder {
+                for _ in 0..remaining_free_layout_space {
                     let highest_diff = self.get_item_with_highest_expected_minus_current_stretch();
                     self.items[highest_diff].current_size += 1;
                 }
@@ -371,6 +369,33 @@ mod tests {
             };
             layout.ensure_layout_has_at_least_minimal_width();
             assert_eq!(layout.size, 40);
+        }
+        {
+            let mut layout = Layout {
+                size: 73,
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 40,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 40,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 20,
+                        max_size: 60,
+                        current_size: 0,
+                    },
+                ],
+            };
+            layout.ensure_layout_has_at_least_minimal_width();
+            assert_eq!(layout.size, 73);
         }
     }
 
@@ -669,6 +694,32 @@ mod tests {
                 ],
             };
             assert_eq!(layout.remaining_free_layout_space(), 4);
+        }
+        {
+            let layout = Layout {
+                size: 73,
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 40,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 40,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 20,
+                        max_size: 60,
+                        current_size: 0,
+                    },
+                ],
+            };
+            assert_eq!(layout.remaining_free_layout_space(), 13);
         }
     }
 
@@ -1155,36 +1206,130 @@ mod tests {
     //********************************************************************************************
     #[test]
     fn validate() {
-        let layout = Layout::new(
-            10,
-            vec![
-                Item {
-                    stretch: 1,
-                    min_size: 40,
-                    max_size: u32::MAX,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 2,
-                    min_size: 0,
-                    max_size: 40,
-                    current_size: 0,
-                },
-                Item {
-                    stretch: 3,
-                    min_size: 20,
-                    max_size: 60,
-                    current_size: 0,
-                },
-            ],
-        );
+        {
+            let layout = Layout::new(
+                10,
+                vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 40,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 40,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 20,
+                        max_size: 60,
+                        current_size: 0,
+                    },
+                ],
+            );
 
-        assert_eq!(layout.size, 60);
-        assert_eq!(layout.items.len(), 3);
-        assert_eq!(layout.items[0].current_size, 40);
-        assert_eq!(layout.items[1].current_size, 0);
-        assert_eq!(layout.items[2].current_size, 20);
+            assert_eq!(layout.size, 60);
+            assert_eq!(layout.items.len(), 3);
+            assert_eq!(layout.items[0].current_size, 40);
+            assert_eq!(layout.items[1].current_size, 0);
+            assert_eq!(layout.items[2].current_size, 20);
+        }
+        {
+            let layout = Layout::new(
+                61,
+                vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 40,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 40,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 20,
+                        max_size: 60,
+                        current_size: 0,
+                    },
+                ],
+            );
 
-        //layout
+            assert_eq!(layout.size, 61);
+            assert_eq!(layout.items.len(), 3);
+            assert_eq!(layout.items[0].current_size, 40);
+            assert_eq!(layout.items[1].current_size, 1);
+            assert_eq!(layout.items[2].current_size, 20);
+        }
+        {
+            let layout = Layout::new(
+                73,
+                vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 40,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 40,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 20,
+                        max_size: 60,
+                        current_size: 0,
+                    },
+                ],
+            );
+        
+            assert_eq!(layout.size, 73);
+            assert_eq!(layout.items.len(), 3);
+            assert_eq!(layout.items[0].current_size, 40);
+            assert_eq!(layout.items[1].current_size, 10);
+            assert_eq!(layout.items[2].current_size, 23);
+        }
+        //{
+        //    let layout = Layout::new(
+        //        300,
+        //        vec![
+        //            Item {
+        //                stretch: 1,
+        //                min_size: 40,
+        //                max_size: u32::MAX,
+        //                current_size: 0,
+        //            },
+        //            Item {
+        //                stretch: 2,
+        //                min_size: 0,
+        //                max_size: 40,
+        //                current_size: 0,
+        //            },
+        //            Item {
+        //                stretch: 3,
+        //                min_size: 20,
+        //                max_size: 60,
+        //                current_size: 0,
+        //            },
+        //        ],
+        //    );
+        //
+        //    assert_eq!(layout.size, 300);
+        //    assert_eq!(layout.items.len(), 3);
+        //    assert_eq!(layout.items[0].current_size, 200);
+        //    assert_eq!(layout.items[1].current_size, 40);
+        //    assert_eq!(layout.items[2].current_size, 60);
+        //}
     }
 }
+

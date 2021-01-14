@@ -149,6 +149,7 @@ impl Layout {
             if item.max_size < item.min_size {
                 item.max_size = item.min_size;
             }
+            item.current_size = 0;
         }
 
         if self.gather_items_stretch() == 0 {
@@ -381,7 +382,7 @@ mod tests {
                 size: 0,
                 items: vec![
                     Item {
-                        stretch: 01,
+                        stretch: 1,
                         min_size: 0,
                         max_size: 0,
                         current_size: 0,
@@ -390,13 +391,13 @@ mod tests {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
-                        current_size: 0,
+                        current_size: 1,
                     },
                     Item {
                         stretch: 0,
                         min_size: 0,
                         max_size: 0,
-                        current_size: 0,
+                        current_size: 2,
                     },
                 ],
             };
@@ -407,6 +408,9 @@ mod tests {
             assert_eq!(layout.items[0].stretch, 1);
             assert_eq!(layout.items[1].stretch, 0);
             assert_eq!(layout.items[2].stretch, 0);
+            assert_eq!(layout.items[0].current_size, 0);
+            assert_eq!(layout.items[1].current_size, 0);
+            assert_eq!(layout.items[2].current_size, 0);
         }
         {
             let mut layout = Layout {
@@ -416,19 +420,19 @@ mod tests {
                         stretch: 0,
                         min_size: 5,
                         max_size: 10,
-                        current_size: 0,
+                        current_size: 10,
                     },
                     Item {
                         stretch: 0,
                         min_size: 10,
                         max_size: 5,
-                        current_size: 0,
+                        current_size: 20,
                     },
                     Item {
                         stretch: 0,
                         min_size: 5,
                         max_size: 5,
-                        current_size: 0,
+                        current_size: 30,
                     },
                 ],
             };
@@ -439,6 +443,9 @@ mod tests {
             assert_eq!(layout.items[0].stretch, 1);
             assert_eq!(layout.items[1].stretch, 1);
             assert_eq!(layout.items[2].stretch, 1);
+            assert_eq!(layout.items[0].current_size, 0);
+            assert_eq!(layout.items[1].current_size, 0);
+            assert_eq!(layout.items[2].current_size, 0);
         }
     }
 
@@ -1038,9 +1045,7 @@ mod tests {
     //********************************************************************************************
     #[test]
     fn validate_no_items() {
-        let mut layout = Layout::new(120, vec![]);
-
-        layout.validate();
+        let layout = Layout::new(120, vec![]);
 
         assert_eq!(layout.size, 120);
         assert_eq!(layout.items.len(), 0);
@@ -1049,7 +1054,7 @@ mod tests {
     //********************************************************************************************
     #[test]
     fn validate_no_stretch_min_max() {
-        let mut layout = Layout::new(
+        let layout = Layout::new(
             120,
             vec![
                 Item {
@@ -1073,8 +1078,6 @@ mod tests {
             ],
         );
 
-        layout.validate();
-
         assert_eq!(layout.size, 120);
         assert_eq!(layout.items.len(), 3);
         assert_eq!(layout.items[0].current_size, 40);
@@ -1086,7 +1089,7 @@ mod tests {
     #[test]
     fn validate_stretch() {
         {
-            let mut layout = Layout::new(
+            let layout = Layout::new(
                 120,
                 vec![
                     Item {
@@ -1110,8 +1113,6 @@ mod tests {
                 ],
             );
 
-            layout.validate();
-
             assert_eq!(layout.size, 120);
             assert_eq!(layout.items.len(), 3);
             assert_eq!(layout.items[0].current_size, 20);
@@ -1119,7 +1120,7 @@ mod tests {
             assert_eq!(layout.items[2].current_size, 60);
         }
         {
-            let mut layout = Layout::new(
+            let layout = Layout::new(
                 120,
                 vec![
                     Item {
@@ -1143,8 +1144,6 @@ mod tests {
                 ],
             );
 
-            layout.validate();
-
             assert_eq!(layout.size, 120);
             assert_eq!(layout.items.len(), 3);
             assert_eq!(layout.items[0].current_size, 30);
@@ -1154,38 +1153,38 @@ mod tests {
     }
 
     //********************************************************************************************
-    // #[test]
-    // fn validate() {
-    //     let mut layout = Layout::new(
-    //         120,
-    //         vec![
-    //             Item {
-    //                 stretch: 1,
-    //                 min_size: 40,
-    //                 max_size: u32::MAX,
-    //                 current_size: 0,
-    //             },
-    //             Item {
-    //                 stretch: 2,
-    //                 min_size: 0,
-    //                 max_size: u32::MAX,
-    //                 current_size: 0,
-    //             },
-    //             Item {
-    //                 stretch: 3,
-    //                 min_size: 0,
-    //                 max_size: u32::MAX,
-    //                 current_size: 0,
-    //             },
-    //         ],
-    //     );
+    #[test]
+    fn validate() {
+        let layout = Layout::new(
+            10,
+            vec![
+                Item {
+                    stretch: 1,
+                    min_size: 40,
+                    max_size: u32::MAX,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 2,
+                    min_size: 0,
+                    max_size: 40,
+                    current_size: 0,
+                },
+                Item {
+                    stretch: 3,
+                    min_size: 20,
+                    max_size: 60,
+                    current_size: 0,
+                },
+            ],
+        );
 
-    //     layout.validate();
+        assert_eq!(layout.size, 60);
+        assert_eq!(layout.items.len(), 3);
+        assert_eq!(layout.items[0].current_size, 40);
+        assert_eq!(layout.items[1].current_size, 0);
+        assert_eq!(layout.items[2].current_size, 20);
 
-    //     assert_eq!(layout.size, 120);
-    //     assert_eq!(layout.items.len(), 3);
-    //     assert_eq!(layout.items[0].current_size, 20);
-    //     assert_eq!(layout.items[1].current_size, 40);
-    //     assert_eq!(layout.items[2].current_size, 60);
-    // }
+        //layout
+    }
 }

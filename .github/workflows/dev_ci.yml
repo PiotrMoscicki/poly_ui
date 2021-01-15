@@ -85,7 +85,7 @@ jobs:
         uses: rhysd/github-action-benchmark@v1
         with:
           name: Benchmark.js Benchmark
-          tool: 'benchmarkjs'
+          tool: 'cargo'
           output-file-path: output.txt
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true

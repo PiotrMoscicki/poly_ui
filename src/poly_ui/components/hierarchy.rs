@@ -5,6 +5,8 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::widgets::Owned;
 use crate::poly_ui::widgets::Ownerless;
+// super
+use super::Transform
 
 //************************************************************************************************
 //************************************************************************************************
@@ -12,6 +14,7 @@ use crate::poly_ui::widgets::Ownerless;
 #[derive(Debug, Default)]
 pub struct Hierarchy {
     children: Vec<Owned>,
+    transforms: Vec<Transform>,
 }
 
 //************************************************************************************************

@@ -46,6 +46,7 @@ pub struct Layout {
 }
 
 //************************************************************************************************
+/// @todo(#14): Add documentation
 impl Layout {
     pub fn new(size: u32, items: Vec<Item>) -> Self {
         let mut result = Self { size, items };

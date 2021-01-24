@@ -8,55 +8,43 @@ use uuid::Uuid;
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
-use crate::poly_ui::widgets::NewWidget;
 use crate::poly_ui::widgets::Ownerless;
 use crate::poly_ui::widgets::WidgetTrait;
+use crate::poly_ui::widgets::NewWidget;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct CanvasLayout {
+pub struct PushButton {
     id: Uuid,
     hierarchy: Hierarchy,
+
+    border_color: Color,
 }
 
 //************************************************************************************************
-impl CanvasLayout {
+impl PushButton {
     pub fn new_raw() -> Self {
         Self {
             id: Uuid::new_v4(),
             hierarchy: Hierarchy::default(),
+            border_color: &Color {
+                r: 255,
+                g: 0,
+                b: 255,
+                a: 128,
+            },
         }
     }
 
     pub fn new() -> NewWidget<Self> {
         NewWidget::new(Self::new_raw())
     }
-
-    pub fn add_child_with_transform(&mut self, child: Ownerless, transform: &Transform) {
-        self.hierarchy.add_with_transform(child, transform);
-    }
-
-    pub fn set_child_transform(&mut self, child: &Uuid, new_transform: &Transform) {
-        self.hierarchy.set_transform(child, new_transform);
-    }
-
-    pub fn set_child_pos(&mut self, child: &Uuid, new_pos: &Point2<i32>) {
-        self.hierarchy.set_pos(child, new_pos);
-    }
-
-    pub fn set_child_size(&mut self, child: &Uuid, new_size: &Vector2<u32>) {
-        self.hierarchy.set_size(child, new_size);
-    }
-
-    pub fn get_child_transform(&self, child: &Uuid) -> &Transform {
-        self.hierarchy.get_transform(child)
-    }
 }
 
 //************************************************************************************************
-impl WidgetTrait for CanvasLayout {
+impl WidgetTrait for PushButton {
     fn id(&self) -> &Uuid {
         &self.id
     }
@@ -82,18 +70,13 @@ impl WidgetTrait for CanvasLayout {
     }
 
     fn paint(&self, painter: &mut dyn PainterTrait) {
+        painter.set_draw_color(&self.border_color);
+        let painter_size = painter.size();
+        painter.draw_rect(Rect {
+            pos: Point2::<i32>::new(0, 0),
+            size: painter_size,
+        });
+
         self.hierarchy.paint_children(painter);
     }
-}
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-#[cfg(test)]
-mod tests {
-    //use super::*;
-
-    //#[test]
-    //fn get_total_stretch() {
-    //}
 }

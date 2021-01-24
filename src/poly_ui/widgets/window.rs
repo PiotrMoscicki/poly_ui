@@ -1,14 +1,17 @@
-use nalgebra::Point2;
-use nalgebra::Vector2;
+// std
 use std::{
     boxed::Box,
     cell::{Ref, RefMut},
     fmt::Debug,
 };
+// deps
+use nalgebra::Point2;
+use nalgebra::Vector2;
 use uuid::Uuid;
-
+// crate
+use crate::poly_ui::layouts::CanvasLayout;
+// super
 use super::Owned;
-use super::Widget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
@@ -27,7 +30,7 @@ pub struct Window {
 impl Window {
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         Self {
-            widget: Widget::new().make_ownerless().make_owned(),
+            widget: CanvasLayout::new().make_ownerless().make_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         }

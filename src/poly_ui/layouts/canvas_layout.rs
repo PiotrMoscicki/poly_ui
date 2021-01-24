@@ -10,18 +10,30 @@ use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::Ownerless;
 use crate::poly_ui::widgets::WidgetTrait;
+use crate::poly_ui::widgets::NewWidget;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
-pub struct CanvasLayoutWidget {
+pub struct CanvasLayout {
     id: Uuid,
     hierarchy: Hierarchy,
 }
 
 //************************************************************************************************
-impl CanvasLayoutWidget {
+impl CanvasLayout {
+    pub fn new_raw() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            hierarchy: Hierarchy::default(),
+        }
+    }
+
+    pub fn new() -> NewWidget<Self> {
+        NewWidget::new(Self::new_raw())
+    }
+
     pub fn add_child_with_transform(&mut self, child: Ownerless, transform: &Transform) {
         self.hierarchy.add_with_transform(child, transform);
     }
@@ -44,7 +56,7 @@ impl CanvasLayoutWidget {
 }
 
 //************************************************************************************************
-impl WidgetTrait for CanvasLayoutWidget {
+impl WidgetTrait for CanvasLayout {
     fn id(&self) -> &Uuid {
         &self.id
     }

@@ -5,8 +5,7 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
-use crate::poly_ui::widgets::paint_children;
-use crate::poly_ui::widgets::update_children;
+use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::NewWidget;
 use crate::poly_ui::widgets::Ownerless;
 use crate::poly_ui::widgets::WidgetTrait;
@@ -95,23 +94,7 @@ impl WidgetTrait for LinearLayoutWidget {
         &self.id
     }
 
-    fn pos(&self) -> &Point2<i32> {
-        &self.pos
-    }
-
-    fn set_pos(&mut self, value: &Point2<i32>) {
-        self.pos = *value;
-    }
-
-    fn size(&self) -> &Vector2<u32> {
-        &self.size
-    }
-
-    fn set_size(&mut self, value: &Vector2<u32>) {
-        self.size = *value;
-    }
-
-    fn add(&mut self, child: Ownerless) {
+    fn add_child(&mut self, child: Ownerless) {
         self.items.push(Item {
             widget: Some(*child.get().borrow().id()),
             ..Default::default()
@@ -121,8 +104,16 @@ impl WidgetTrait for LinearLayoutWidget {
         get_items_sizes(0, &self.items);
     }
 
-    fn remove(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
+    }
+
+    fn get_hierarchy(&self) -> &Hierarchy {
+        &self.hierarchy
+    }
+
+    fn get_child_transform(&self, child: &Uuid) -> &Transform {
+        self.hierarchy.get_transform(child)
     }
 
     fn update(&mut self, dt: f32) {
@@ -135,12 +126,12 @@ impl WidgetTrait for LinearLayoutWidget {
         }
 
         println!("update widget");
-        update_children(&self.hierarchy, dt);
+        self.hierarchy.update_children(dt);
     }
 
     fn paint(&self, painter: &mut dyn PainterTrait) {
         println!("paint widget");
-        paint_children(&self.hierarchy, painter);
+        self.hierarchy.paint_children(painter);
     }
 }
 

@@ -42,17 +42,25 @@ impl WidgetTrait for Widget {
         &self.id
     }
 
-    fn add(&mut self, child: Ownerless) {
+    fn add_child(&mut self, child: Ownerless) {
         self.hierarchy.add(child);
     }
 
-    fn remove(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
+    }
+
+    fn get_hierarchy(&self) -> &Hierarchy {
+        &self.hierarchy
+    }
+
+    fn get_child_transform(&self, child: &Uuid) -> &Transform {
+        self.hierarchy.get_transform(child)
     }
 
     fn update(&mut self, dt: f32) {
         println!("update widget");
-        update_children(&self.hierarchy, dt);
+        self.hierarchy.update_children(dt);
     }
 
     fn paint(&self, painter: &mut dyn PainterTrait) {
@@ -68,6 +76,6 @@ impl WidgetTrait for Widget {
         });
 
         println!("paint widget");
-        paint_children(&self.hierarchy, painter);
+        self.hierarchy.paint_children(painter);
     }
 }

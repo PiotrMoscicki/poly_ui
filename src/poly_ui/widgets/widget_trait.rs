@@ -4,6 +4,7 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
+use crate::poly_ui::components::Transform;
 // super
 use super::Ownerless;
 
@@ -17,6 +18,11 @@ pub trait WidgetTrait: Debug {
     fn add_child(&mut self, child: Ownerless);
     fn remove_child(&mut self, child: &Uuid) -> Ownerless;
 
+    // components
+    fn get_hierarchy(&self) -> &Hierarchy;
+    fn get_child_transform(&self, child: &Uuid) -> &Transform;
+
+    // updates
     fn update(&mut self, dt: f32);
     fn paint(&self, canvas: &mut dyn PainterTrait);
 }
@@ -37,21 +43,3 @@ impl std::cmp::PartialEq for dyn WidgetTrait {
 
 //************************************************************************************************
 impl std::cmp::Eq for dyn WidgetTrait {}
-
-
-//************************************************************************************************
-pub fn update_children(hierarchy: &Hierarchy, dt: f32) {
-    for child in hierarchy.children() {
-        child.get().borrow_mut().update(dt);
-    }
-}
-
-//************************************************************************************************
-pub fn paint_children(hierarchy: &Hierarchy, parent_canvas: &mut dyn PainterTrait) {
-    for child in hierarchy.children() {
-        //let borrowed_child = child.get().borrow();
-        //let mut sub_canvas =
-        //    parent_canvas.sub_painter(&Transform::new(borrowed_child.pos(), borrowed_child.size()));
-        //borrowed_child.paint(&mut *sub_canvas);
-    }
-}

@@ -1,3 +1,4 @@
+// deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
 
@@ -16,6 +17,16 @@ impl Transform {
         Self {
             pos: *pos,
             size: *size,
+        }
+    }
+}
+
+//************************************************************************************************
+impl Default for Transform {
+    fn default() -> Self {
+        Self {
+            pos: Point2::<i32>::new(0, 0),
+            size: Vector2::<u32>::new(0, 0),
         }
     }
 }

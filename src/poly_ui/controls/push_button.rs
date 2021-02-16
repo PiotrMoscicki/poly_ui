@@ -4,14 +4,14 @@ use std::fmt::Debug;
 use nalgebra::Point2;
 use uuid::Uuid;
 // crate
-use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::app::Color;
+use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::app::Rect;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
+use crate::poly_ui::widgets::NewWidget;
 use crate::poly_ui::widgets::Ownerless;
 use crate::poly_ui::widgets::WidgetTrait;
-use crate::poly_ui::widgets::NewWidget;
 
 //************************************************************************************************
 //************************************************************************************************

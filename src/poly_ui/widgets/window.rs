@@ -1,10 +1,5 @@
 // std
-use std::{
-    boxed::Box,
-    cell::RefCell,
-    rc::Rc,
-    fmt::Debug,
-};
+use std::{boxed::Box, cell::RefCell, fmt::Debug, rc::Rc};
 // deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
@@ -13,9 +8,9 @@ use uuid::Uuid;
 use crate::poly_ui::layouts::CanvasLayout;
 // super
 use super::Owned;
+use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
-use super::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************

@@ -1,8 +1,5 @@
 // std
-use std::{
-    rc::Rc,
-    cell::RefCell
-};
+use std::{cell::RefCell, rc::Rc};
 // deps
 use nalgebra::Point2;
 use nalgebra::Vector2;

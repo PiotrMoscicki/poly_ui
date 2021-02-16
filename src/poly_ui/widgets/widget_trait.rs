@@ -1,12 +1,12 @@
 // std
 use std::fmt::Debug;
-// deps
-use nalgebra::Point2;
-use nalgebra::Vector2;
 use uuid::Uuid;
-//crate
+// crate
 use crate::poly_ui::app::PainterTrait;
+use crate::poly_ui::components::Hierarchy;
+use crate::poly_ui::components::Transform;
 // super
+use super::NewWidget;
 use super::Ownerless;
 
 //************************************************************************************************
@@ -15,16 +15,15 @@ use super::Ownerless;
 pub trait WidgetTrait: Debug {
     fn id(&self) -> &Uuid;
 
-    // transform
-    fn pos(&self) -> &Point2<i32>;
-    fn set_pos(&mut self, value: &Point2<i32>);
-    fn size(&self) -> &Vector2<u32>;
-    fn set_size(&mut self, value: &Vector2<u32>);
-
     // child widgets
-    fn add(&mut self, child: Ownerless);
-    fn remove(&mut self, child: &Uuid) -> Ownerless;
+    fn add_child(&mut self, child: Ownerless);
+    fn remove_child(&mut self, child: &Uuid) -> Ownerless;
 
+    // components
+    fn get_hierarchy(&self) -> &Hierarchy;
+    fn get_child_transform(&self, child: &Uuid) -> &Transform;
+
+    // updates
     fn update(&mut self, dt: f32);
     fn paint(&self, canvas: &mut dyn PainterTrait);
 }
@@ -45,3 +44,102 @@ impl std::cmp::PartialEq for dyn WidgetTrait {
 
 //************************************************************************************************
 impl std::cmp::Eq for dyn WidgetTrait {}
+
+//************************************************************************************************
+//************************************************************************************************
+//************************************************************************************************
+#[derive(Debug)]
+pub struct MockWidget {
+    pub update_call_count: u32,
+    pub paint_call_count: u32,
+
+    id: Uuid,
+    hierarchy: Hierarchy,
+}
+
+//************************************************************************************************
+impl MockWidget {
+    pub fn new_raw() -> Self {
+        Self {
+            update_call_count: 0,
+            paint_call_count: 0,
+            id: Uuid::new_v4(),
+            hierarchy: Hierarchy::default(),
+        }
+    }
+
+    pub fn new() -> NewWidget<Self> {
+        NewWidget::new(Self::new_raw())
+    }
+}
+
+//************************************************************************************************
+impl WidgetTrait for MockWidget {
+    fn id(&self) -> &Uuid {
+        &self.id
+    }
+
+    fn add_child(&mut self, child: Ownerless) {
+        self.hierarchy.add(child);
+    }
+
+    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
+        self.hierarchy.remove(child)
+    }
+
+    fn get_hierarchy(&self) -> &Hierarchy {
+        &self.hierarchy
+    }
+
+    fn get_child_transform(&self, child: &Uuid) -> &Transform {
+        self.hierarchy.get_transform(child)
+    }
+
+    fn update(&mut self, dt: f32) {
+        self.hierarchy.update_children(dt);
+        self.update_call_count += 1;
+    }
+
+    fn paint(&self, painter: &mut dyn PainterTrait) {
+        self.hierarchy.paint_children(painter);
+
+        let const_self = self as *const Self;
+        let mut mut_self = const_self as *mut Self;
+
+        unsafe {
+            (*mut_self).paint_call_count += 1;
+        }
+    }
+}
+
+//************************************************************************************************
+//************************************************************************************************
+//************************************************************************************************
+#[cfg(test)]
+mod tests {
+    // crate
+    use crate::poly_ui::app::MockPainter;
+    // super
+    use super::*;
+
+    //********************************************************************************************
+    #[test]
+    fn update() {
+        let mock = MockWidget::new();
+
+        mock.borrow_mut().update(0.0);
+        assert_eq!(mock.borrow().update_call_count, 1);
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn paint() {
+        let mock = MockWidget::new();
+        let mut painter = MockPainter::default();
+
+        mock.borrow_mut().paint(&mut painter);
+        mock.borrow_mut().paint(&mut painter);
+        mock.borrow_mut().paint(&mut painter);
+        assert_eq!(mock.borrow().paint_call_count, 3);
+    }
+}

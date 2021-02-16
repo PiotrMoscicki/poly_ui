@@ -1,5 +1,5 @@
 // std
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::Ref, cell::RefCell, cell::RefMut, rc::Rc};
 // super
 use super::WidgetTrait;
 
@@ -68,5 +68,13 @@ impl<T: WidgetTrait + 'static> NewWidget<T> {
 
     pub fn get(&self) -> &Rc<RefCell<T>> {
         &self.widget
+    }
+
+    pub fn borrow(&self) -> Ref<'_, T> {
+        self.widget.borrow()
+    }
+
+    pub fn borrow_mut(&self) -> RefMut<'_, T> {
+        self.widget.borrow_mut()
     }
 }

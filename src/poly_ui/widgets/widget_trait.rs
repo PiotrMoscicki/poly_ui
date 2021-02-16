@@ -117,6 +117,8 @@ impl WidgetTrait for MockWidget {
 //************************************************************************************************
 #[cfg(test)]
 mod tests {
+    // crate
+    use crate::poly_ui::app::MockPainter;
     // super
     use super::*;
 
@@ -130,11 +132,14 @@ mod tests {
     }
 
     //********************************************************************************************
-    // #[test]
-    // fn paint() {
-    //     let mock = MockWidget::new();
+    #[test]
+    fn paint() {
+        let mock = MockWidget::new();
+        let mut painter = MockPainter::default();
 
-    //     mock.borrow_mut().update(0.0);
-    //     assert_eq!(mock.borrow().update_call_count, 1);
-    // }
+        mock.borrow_mut().paint(&mut painter);
+        mock.borrow_mut().paint(&mut painter);
+        mock.borrow_mut().paint(&mut painter);
+        assert_eq!(mock.borrow().paint_call_count, 3);
+    }
 }

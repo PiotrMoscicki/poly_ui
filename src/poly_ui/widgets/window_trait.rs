@@ -1,16 +1,20 @@
+// std
+use std::{
+    rc::Rc,
+    cell::RefCell
+};
+// deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::cell::{Ref, RefMut};
 use uuid::Uuid;
-
-use super::WidgetTrait;
+// crate
+use crate::poly_ui::layouts::CanvasLayout;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 pub trait WindowTrait {
-    fn widget(&self) -> Ref<dyn WidgetTrait>;
-    fn widget_mut(&mut self) -> RefMut<dyn WidgetTrait>;
+    fn widget(&self) -> &Rc<RefCell<CanvasLayout>>;
 
     fn id(&self) -> &Uuid;
 

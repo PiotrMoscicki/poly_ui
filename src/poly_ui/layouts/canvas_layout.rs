@@ -88,7 +88,7 @@ impl WidgetTrait for CanvasLayout {
 #[cfg(test)]
 mod tests {
     // crate
-    //use crate::poly_ui::widgets::MockWidget;
+    // use crate::poly_ui::widgets::MockWidget;
     // super
     use super::*;
 

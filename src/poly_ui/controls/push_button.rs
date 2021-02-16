@@ -2,10 +2,11 @@
 use std::fmt::Debug;
 // deps
 use nalgebra::Point2;
-use nalgebra::Vector2;
 use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
+use crate::poly_ui::app::Color;
+use crate::poly_ui::app::Rect;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::Ownerless;
@@ -29,7 +30,7 @@ impl PushButton {
         Self {
             id: Uuid::new_v4(),
             hierarchy: Hierarchy::default(),
-            border_color: &Color {
+            border_color: Color {
                 r: 255,
                 g: 0,
                 b: 255,

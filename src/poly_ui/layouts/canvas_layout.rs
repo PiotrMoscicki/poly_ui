@@ -88,7 +88,8 @@ impl WidgetTrait for CanvasLayout {
 #[cfg(test)]
 mod tests {
     // crate
-    // use crate::poly_ui::widgets::MockWidget;
+    use crate::poly_ui::app::MockPainter;
+    use crate::poly_ui::widgets::MockWidget;
     // super
     use super::*;
 
@@ -204,24 +205,37 @@ mod tests {
     }
 
     //********************************************************************************************
-    // #[test]
-    // fn update() {
-    //     let layout = CanvasLayout::new();
-    //     let child = MockWidget::new();
-    //     let child_ptr = child.get();
-    //     layout.borrow_mut().add_child(child.make_ownerless());
+    #[test]
+    fn update() {
+        let layout = CanvasLayout::new();
+        let child = MockWidget::new();
+        let child_ptr = child.get().clone();
+        layout.borrow_mut().add_child(child.make_ownerless());
 
-    //     assert_eq!(child_ptr.borrow().update_call_count, 0);
+        assert_eq!(child_ptr.borrow().update_call_count, 0);
 
-    //     layout.borrow_mut().update(1.0);
+        layout.borrow_mut().update(1.0);
+        layout.borrow_mut().update(1.0);
 
-    //     assert_eq!(
-    //         layout.borrow().get_child_transform(&child_id),
-    //         &transform
-    //     );
-    //     assert_eq!(
-    //         layout.borrow().get_hierarchy().get_transform(&child_id),
-    //         &transform
-    //     );
-    // }
+        assert_eq!(child_ptr.borrow().update_call_count, 2);
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn paint() {
+        let layout = CanvasLayout::new();
+        let child = MockWidget::new();
+        let mut painter = MockPainter::default();
+        let child_ptr = child.get().clone();
+        layout.borrow_mut().add_child(child.make_ownerless());
+
+        assert_eq!(child_ptr.borrow().paint_call_count, 0);
+
+        layout.borrow().paint(&mut painter);
+        layout.borrow().paint(&mut painter);
+        layout.borrow().paint(&mut painter);
+        layout.borrow().paint(&mut painter);
+
+        assert_eq!(child_ptr.borrow().paint_call_count, 4);
+    }
 }

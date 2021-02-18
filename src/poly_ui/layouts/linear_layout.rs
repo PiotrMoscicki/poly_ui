@@ -129,7 +129,7 @@ impl WidgetTrait for LinearLayoutWidget {
         self.hierarchy.update_children(dt);
     }
 
-    fn paint(&self, painter: &mut dyn PainterTrait) {
+    fn paint(&mut self, painter: &mut dyn PainterTrait) {
         println!("paint widget");
         self.hierarchy.paint_children(painter);
     }

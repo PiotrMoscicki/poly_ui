@@ -92,7 +92,7 @@ impl Hierarchy {
 
     pub fn paint_children(&self, parent_canvas: &mut dyn PainterTrait) {
         for child in self.children() {
-            let borrowed_child = child.widget.get().borrow();
+            let mut borrowed_child = child.widget.get().borrow_mut();
             let mut sub_canvas = parent_canvas.sub_painter(&child.transform);
             borrowed_child.paint(&mut *sub_canvas);
         }

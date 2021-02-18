@@ -70,7 +70,7 @@ impl WidgetTrait for PushButton {
         self.hierarchy.update_children(dt);
     }
 
-    fn paint(&self, painter: &mut dyn PainterTrait) {
+    fn paint(&mut self, painter: &mut dyn PainterTrait) {
         painter.set_draw_color(&self.border_color);
         let painter_size = painter.size();
         painter.draw_rect(Rect {

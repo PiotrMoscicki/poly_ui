@@ -77,7 +77,7 @@ impl WidgetTrait for CanvasLayout {
         self.hierarchy.update_children(dt);
     }
 
-    fn paint(&self, painter: &mut dyn PainterTrait) {
+    fn paint(&mut self, painter: &mut dyn PainterTrait) {
         self.hierarchy.paint_children(painter);
     }
 }
@@ -231,10 +231,10 @@ mod tests {
 
         assert_eq!(child_ptr.borrow().paint_call_count, 0);
 
-        layout.borrow().paint(&mut painter);
-        layout.borrow().paint(&mut painter);
-        layout.borrow().paint(&mut painter);
-        layout.borrow().paint(&mut painter);
+        layout.borrow_mut().paint(&mut painter);
+        layout.borrow_mut().paint(&mut painter);
+        layout.borrow_mut().paint(&mut painter);
+        layout.borrow_mut().paint(&mut painter);
 
         assert_eq!(child_ptr.borrow().paint_call_count, 4);
     }

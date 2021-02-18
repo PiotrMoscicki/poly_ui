@@ -21,6 +21,14 @@ impl Ownerless {
     pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
         &self.widget
     }
+
+    pub fn borrow(&self) -> Ref<'_, dyn WidgetTrait> {
+        self.widget.borrow()
+    }
+
+    pub fn borrow_mut(&self) -> RefMut<'_, dyn WidgetTrait> {
+        self.widget.borrow_mut()
+    }
 }
 
 //************************************************************************************************
@@ -41,6 +49,14 @@ impl Owned {
 
     pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
         &self.widget
+    }
+
+    pub fn borrow(&self) -> Ref<'_, dyn WidgetTrait> {
+        self.widget.borrow()
+    }
+
+    pub fn borrow_mut(&self) -> RefMut<'_, dyn WidgetTrait> {
+        self.widget.borrow_mut()
     }
 }
 

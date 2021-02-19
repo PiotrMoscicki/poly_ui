@@ -187,24 +187,80 @@ mod tests {
     #[test]
     fn insert_child_at() {
         let layout = GridLayout::new();
-        let child = MockWidget::new();
-        let child_ptr = child.get().clone();
+        let child1 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
 
-        layout.borrow_mut().insert_child_at(child.make_ownerless(), &None, &None);
+        layout.borrow_mut().insert_child_at(child1.make_ownerless(), &None, &None);
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 1);
         assert_eq!(
             layout.borrow_mut().get_hierarchy().children()[0].widget.borrow().id(), 
-            child_ptr.borrow().id()
+            child_ptr1.borrow().id()
         );
 
         let mut painter = MockPainter::new();
         painter.size = Vector2::<u32>::new(50, 100);
         layout.borrow_mut().paint(&mut painter);
-        Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        
         assert_eq!(
-            layout.borrow_mut().get_child_transform(&child_ptr.borrow().id().clone()),
+            layout.borrow_mut().get_child_transform(&child_ptr1.borrow().id().clone()),
             &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(50, 100))
+        );
+
+
+
+        let child2 = MockWidget::new();
+        let child_ptr2 = child2.get().clone();
+
+        layout.borrow_mut().insert_child_at(child2.make_ownerless(), &None, &None);
+
+        assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 2);
+        assert_eq!(
+            layout.borrow_mut().get_hierarchy().children()[1].widget.borrow().id(), 
+            child_ptr2.borrow().id()
+        );
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(800, 600);
+        layout.borrow_mut().paint(&mut painter);
+        
+        assert_eq!(
+            layout.borrow_mut().get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(400, 300))
+        );
+        assert_eq!(
+            layout.borrow_mut().get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(400, 300), &Vector2::<u32>::new(400, 300))
+        );
+        
+
+
+        let child3 = MockWidget::new();
+        let child_ptr3 = child3.get().clone();
+
+        layout.borrow_mut().insert_child_at(child3.make_ownerless(), &Some(1), &Some(0));
+
+        assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 3);
+        assert_eq!(
+            layout.borrow_mut().get_hierarchy().children()[2].widget.borrow().id(), 
+            child_ptr3.borrow().id()
+        );
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(800, 600);
+        layout.borrow_mut().paint(&mut painter);
+        
+        assert_eq!(
+            layout.borrow_mut().get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(400, 300))
+        );
+        assert_eq!(
+            layout.borrow_mut().get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(400, 300), &Vector2::<u32>::new(400, 300))
+        );
+        assert_eq!(
+            layout.borrow_mut().get_child_transform(&child_ptr3.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 300), &Vector2::<u32>::new(400, 300))
         );
     }
 }

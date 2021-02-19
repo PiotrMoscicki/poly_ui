@@ -67,6 +67,13 @@ impl Layout {
         &self.items
     }
 
+    pub fn refresh(&mut self) {
+        self.ensure_layout_has_at_least_minimal_width();
+        self.validate_all_items();
+
+        self.validate();
+    }
+
     fn validate(&mut self) {
         if !self.items.is_empty() {
             self.set_every_item_size_to_at_least_min();

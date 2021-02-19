@@ -28,7 +28,7 @@ pub struct GridLayout {
     column_layout: Layout,
     is_column_layout_dirty: bool,
 
-    children: Vec<Vec<Uuid>>,
+    children_rows_columns: Vec<Vec<Option<Uuid>>>,
 }
 
 //************************************************************************************************
@@ -41,7 +41,7 @@ impl GridLayout {
             is_row_layout_dirty: true,
             column_layout: Layout::new(0, vec!()),
             is_column_layout_dirty: true,
-            children: vec!(),
+            children_rows_columns: vec!(),
         }
     }
 
@@ -49,15 +49,26 @@ impl GridLayout {
         NewWidget::new(Self::new_raw())
     }
 
-    pub fn insert_child_at(&mut self, child: Ownerless, row: &Option<u32>, col: &Option<u32>) {
+    pub fn insert_child_at(&mut self, child: Ownerless, row: &Option<usize>, col: &Option<usize>) {
+        let fixed_row = row.unwrap_or(self.row_layout.items.len());
+        let fixed_col = col.unwrap_or(self.column_layout.items.len());
+        self.ensure_row_count(fixed_row + 1);
+        self.ensure_column_count(fixed_col+ 1);
+        self.children_rows_columns[fixed_row][fixed_col] = Some(*child.borrow().id());
         self.hierarchy.add_with_transform(child, &Transform::default());
-
     }
 
 
     pub fn set_row_count(&mut self, size: usize) {
         self.row_layout.items.resize(size, Item::new(1, &None, &None));
+        self.children_rows_columns.resize(size, vec!());
         self.is_row_layout_dirty = true;
+    }
+
+    fn ensure_row_count(&mut self, size: usize) {
+        if self.row_layout.items.len() <= size {
+            self.set_row_count(size);
+        }
     }
     
     pub fn set_row_stretch(&mut self, row: u32, stretch: u32) {
@@ -74,7 +85,16 @@ impl GridLayout {
 
     pub fn set_column_count(&mut self, size: usize) {
         self.column_layout.items.resize(size, Item::new(1, &None, &None));
+        for row in &mut self.children_rows_columns {
+            row.resize(size, None);
+        }
         self.is_column_layout_dirty = true;
+    }
+
+    fn ensure_column_count(&mut self, size: usize) {
+        if self.column_layout.items.len() <= size {
+            self.set_column_count(size);
+        }
     }
 
     pub fn set_column_stretch(&mut self, col: u32, stretch: u32) {
@@ -87,6 +107,32 @@ impl GridLayout {
     
     pub fn set_column_min_size(&mut self, col: u32, size: u32) {
 
+    }
+
+    fn refresh_children_transforms(&mut self, size: &Vector2<u32>) {
+        self.row_layout.size = size.y;
+        self.row_layout.refresh();
+        self.column_layout.size = size.x;
+        self.column_layout.refresh();
+
+        let mut row_offset = 0;
+
+        for row in 0..self.row_layout.items.len() {
+            let row_size = self.row_layout.items[row].get_current_size();
+            let mut col_offset = 0;
+
+            for col in 0..self.column_layout.items.len() {
+                let col_size = self.column_layout.items[col].get_current_size();
+
+                match &self.children_rows_columns[row][col] {
+                    Some(id) => self.hierarchy.set_transform(id, &Transform::new(
+                        &Point2::<i32>::new(col_offset, row_offset), &Vector2::<u32>::new(col_size, row_size))),
+                    None => ()
+                }
+                col_offset = col_offset + col_size as i32;
+            }
+            row_offset = row_offset + row_size as i32;
+        }
     }
 }
 
@@ -117,6 +163,14 @@ impl WidgetTrait for GridLayout {
     }
 
     fn paint(&mut self, painter: &mut dyn PainterTrait) {
+        let painter_size = painter.size();
+        if self.is_row_layout_dirty 
+            || self.is_column_layout_dirty 
+            || self.row_layout.size != painter_size.y 
+            || self.column_layout.size != painter_size.x {
+            self.refresh_children_transforms(&painter_size)
+        }
+
         self.hierarchy.paint_children(painter);
     }
 }
@@ -145,11 +199,12 @@ mod tests {
         );
 
         let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(50, 100);
         layout.borrow_mut().paint(&mut painter);
         Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         assert_eq!(
             layout.borrow_mut().get_child_transform(&child_ptr.borrow().id().clone()),
-            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0))
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(50, 100))
         );
     }
 }

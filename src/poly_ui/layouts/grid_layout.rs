@@ -144,7 +144,7 @@ mod tests {
             child_ptr.borrow().id()
         );
 
-        let mut painter = MockPainter{};
+        let mut painter = MockPainter::new();
         layout.borrow_mut().paint(&mut painter);
         Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         assert_eq!(

@@ -146,10 +146,10 @@ mod tests {
 
         let mut painter = MockPainter{};
         layout.borrow_mut().paint(&mut painter);
-
-        // assert_eq!(
-        //     layout.borrow_mut().get_child_transform(child_ptr.borrow_mut().id()),
-        //     &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0))
-        // );
+        Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        assert_eq!(
+            layout.borrow_mut().get_child_transform(&child_ptr.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0))
+        );
     }
 }

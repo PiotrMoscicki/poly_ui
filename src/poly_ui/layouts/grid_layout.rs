@@ -23,12 +23,12 @@ pub struct GridLayout {
     id: Uuid,
     hierarchy: Hierarchy,
 
-    row_layout: Layout,
-    is_row_layout_dirty: bool,
     column_layout: Layout,
     is_column_layout_dirty: bool,
+    row_layout: Layout,
+    is_row_layout_dirty: bool,
 
-    children_rows_columns: Vec<Vec<Option<Uuid>>>,
+    children_columns_rows: Vec<Vec<Option<Uuid>>>,
 }
 
 //************************************************************************************************
@@ -37,11 +37,11 @@ impl GridLayout {
         Self {
             id: Uuid::new_v4(),
             hierarchy: Hierarchy::default(),
-            row_layout: Layout::new(0, vec!()),
-            is_row_layout_dirty: true,
             column_layout: Layout::new(0, vec!()),
             is_column_layout_dirty: true,
-            children_rows_columns: vec!(),
+            row_layout: Layout::new(0, vec!()),
+            is_row_layout_dirty: true,
+            children_columns_rows: vec!(),
         }
     }
 
@@ -49,45 +49,20 @@ impl GridLayout {
         NewWidget::new(Self::new_raw())
     }
 
-    pub fn insert_child_at(&mut self, child: Ownerless, row: &Option<usize>, col: &Option<usize>) {
-        let fixed_row = row.unwrap_or(self.row_layout.items.len());
+    pub fn insert_child_at(&mut self, child: Ownerless, col: &Option<usize>, row: &Option<usize>) {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
-        self.ensure_row_count(fixed_row + 1);
+        let fixed_row = row.unwrap_or(self.row_layout.items.len());
         self.ensure_column_count(fixed_col+ 1);
-        self.children_rows_columns[fixed_row][fixed_col] = Some(*child.borrow().id());
+        self.ensure_row_count(fixed_row + 1);
+        self.children_columns_rows[fixed_col][fixed_row] = Some(*child.borrow().id());
         self.hierarchy.add_with_transform(child, &Transform::default());
     }
-
-
-    pub fn set_row_count(&mut self, size: usize) {
-        self.row_layout.items.resize(size, Item::new(1, &None, &None));
-        self.children_rows_columns.resize(size, vec!());
-        self.is_row_layout_dirty = true;
-    }
-
-    fn ensure_row_count(&mut self, size: usize) {
-        if self.row_layout.items.len() <= size {
-            self.set_row_count(size);
-        }
-    }
     
-    pub fn set_row_stretch(&mut self, row: u32, stretch: u32) {
 
-    }
-    
-    pub fn set_row_max_size(&mut self, row: u32, size: u32) {
-
-    }
-    
-    pub fn set_row_min_size(&mut self, row: u32, size: u32) {
-    }
-    
 
     pub fn set_column_count(&mut self, size: usize) {
         self.column_layout.items.resize(size, Item::new(1, &None, &None));
-        for row in &mut self.children_rows_columns {
-            row.resize(size, None);
-        }
+        self.children_columns_rows.resize(size, vec!());
         self.is_column_layout_dirty = true;
     }
 
@@ -109,29 +84,58 @@ impl GridLayout {
 
     }
 
+
+
+    pub fn set_row_count(&mut self, size: usize) {
+        self.row_layout.items.resize(size, Item::new(1, &None, &None));
+        for column in &mut self.children_columns_rows {
+            column.resize(size, None);
+        }
+        self.is_row_layout_dirty = true;
+    }
+
+    fn ensure_row_count(&mut self, size: usize) {
+        if self.row_layout.items.len() <= size {
+            self.set_row_count(size);
+        }
+    }
+    
+    pub fn set_row_stretch(&mut self, row: u32, stretch: u32) {
+
+    }
+    
+    pub fn set_row_max_size(&mut self, row: u32, size: u32) {
+
+    }
+    
+    pub fn set_row_min_size(&mut self, row: u32, size: u32) {
+    }
+
+
+
     fn refresh_children_transforms(&mut self, size: &Vector2<u32>) {
-        self.row_layout.size = size.y;
-        self.row_layout.refresh();
         self.column_layout.size = size.x;
         self.column_layout.refresh();
+        self.row_layout.size = size.y;
+        self.row_layout.refresh();
 
-        let mut row_offset = 0;
+        let mut col_offset = 0;
 
-        for row in 0..self.row_layout.items.len() {
-            let row_size = self.row_layout.items[row].get_current_size();
-            let mut col_offset = 0;
+        for col in 0..self.column_layout.items.len() {
+            let col_size = self.column_layout.items[col].get_current_size();
+            let mut row_offset = 0;
 
-            for col in 0..self.column_layout.items.len() {
-                let col_size = self.column_layout.items[col].get_current_size();
+            for row in 0..self.row_layout.items.len() {
+                let row_size = self.row_layout.items[row].get_current_size();
 
-                match &self.children_rows_columns[row][col] {
+                match &self.children_columns_rows[col][row] {
                     Some(id) => self.hierarchy.set_transform(id, &Transform::new(
                         &Point2::<i32>::new(col_offset, row_offset), &Vector2::<u32>::new(col_size, row_size))),
                     None => ()
                 }
-                col_offset = col_offset + col_size as i32;
+                row_offset = row_offset + row_size as i32;
             }
-            row_offset = row_offset + row_size as i32;
+            col_offset = col_offset + col_size as i32;
         }
     }
 }
@@ -238,7 +242,7 @@ mod tests {
         let child3 = MockWidget::new();
         let child_ptr3 = child3.get().clone();
 
-        layout.borrow_mut().insert_child_at(child3.make_ownerless(), &Some(1), &Some(0));
+        layout.borrow_mut().insert_child_at(child3.make_ownerless(), &Some(0), &Some(1));
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 3);
         assert_eq!(

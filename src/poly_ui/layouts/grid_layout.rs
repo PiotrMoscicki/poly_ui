@@ -37,11 +37,11 @@ impl GridLayout {
         Self {
             id: Uuid::new_v4(),
             hierarchy: Hierarchy::default(),
-            column_layout: Layout::new(0, vec![]),
+            column_layout: Layout::new(0, vec![Item::new(1, &None, &None)]),
             is_column_layout_dirty: true,
-            row_layout: Layout::new(0, vec![]),
+            row_layout: Layout::new(0, vec![Item::new(1, &None, &None)]),
             is_row_layout_dirty: true,
-            children_columns_rows: vec![],
+            children_columns_rows: vec![vec![None]],
         }
     }
 
@@ -289,5 +289,42 @@ mod tests {
                 .get_child_transform(&child_ptr3.borrow().id().clone()),
             &Transform::new(&Point2::<i32>::new(0, 300), &Vector2::<u32>::new(400, 300))
         );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_column_count() {
+        // let layout = GridLayout::new();
+        // let child1 = MockWidget::new();
+        // let child_ptr1 = child1.get().clone();
+
+        // layout.borrow_mut().set_column_count(1);
+        // assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 0);
+
+        // layout
+        //     .borrow_mut()
+        //     .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+
+        // let mut painter = MockPainter::new();
+        // painter.size = Vector2::<u32>::new(60, 100);
+        // layout.borrow_mut().paint(&mut painter);
+
+        // assert_eq!(
+        //     layout
+        //         .borrow_mut()
+        //         .get_child_transform(&child_ptr1.borrow().id().clone()),
+        //     &Transform::new(&Point2::<i32>::new(30, 0), &Vector2::<u32>::new(30, 100))
+        // );
+        
+        // layout.borrow_mut().set_column_count(3);
+
+        // layout.borrow_mut().paint(&mut painter);
+
+        // assert_eq!(
+        //     layout
+        //         .borrow_mut()
+        //         .get_child_transform(&child_ptr1.borrow().id().clone()),
+        //     &Transform::new(&Point2::<i32>::new(20, 0), &Vector2::<u32>::new(20, 100))
+        // );
     }
 }

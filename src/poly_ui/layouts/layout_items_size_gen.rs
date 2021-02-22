@@ -3,10 +3,10 @@
 //************************************************************************************************
 #[derive(Debug, Clone)]
 pub struct Item {
-    stretch: u32,  // any value
-    min_size: u32, // any value
-    max_size: u32, // ensured to be higher or equal min_size
-    current_size: u32,
+    pub stretch: u32,  // any value
+    pub min_size: u32, // any value
+    pub max_size: u32, // ensured to be higher or equal min_size
+    pub current_size: u32,
 }
 
 impl Item {
@@ -17,22 +17,6 @@ impl Item {
             max_size: max_size.unwrap_or(u32::MAX),
             current_size: 0,
         }
-    }
-
-    pub fn get_stretch(&self) -> u32 {
-        self.stretch
-    }
-
-    pub fn get_min_size(&self) -> u32 {
-        self.min_size
-    }
-
-    pub fn get_max_size(&self) -> u32 {
-        self.max_size
-    }
-
-    pub fn get_current_size(&self) -> u32 {
-        self.current_size
     }
 }
 

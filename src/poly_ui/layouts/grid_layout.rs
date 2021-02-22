@@ -52,7 +52,7 @@ impl GridLayout {
     pub fn insert_child_at(&mut self, child: Ownerless, col: &Option<usize>, row: &Option<usize>) {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
         let fixed_row = row.unwrap_or(self.row_layout.items.len());
-        self.ensure_column_count(fixed_col + 1);
+        self.ensure_column_exists(fixed_col);
         self.ensure_row_count(fixed_row + 1);
         self.children_columns_rows[fixed_col][fixed_row] = Some(*child.borrow().id());
         self.hierarchy
@@ -68,17 +68,21 @@ impl GridLayout {
         self.is_column_layout_dirty = true;
     }
 
-    fn ensure_column_count(&mut self, size: usize) {
-        if self.column_layout.items.len() <= size {
-            self.set_column_count(size);
+    fn ensure_column_exists(&mut self, col: usize) {
+        if self.column_layout.items.len() <= col + 1 {
+            self.set_column_count(col + 1);
         }
     }
 
-    pub fn set_column_stretch(&mut self, col: u32, stretch: u32) {}
+    pub fn set_column_stretch(&mut self, col: usize, stretch: u32) {
+        self.ensure_column_exists(col);
+        self.column_layout.items[col].stretch = stretch;
+        self.is_column_layout_dirty = true;
+    }
 
-    pub fn set_column_max_size(&mut self, col: u32, size: u32) {}
+    pub fn set_column_max_size(&mut self, col: usize, size: u32) {}
 
-    pub fn set_column_min_size(&mut self, col: u32, size: u32) {}
+    pub fn set_column_min_size(&mut self, col: usize, size: u32) {}
 
     pub fn set_row_count(&mut self, size: usize) {
         self.row_layout
@@ -111,11 +115,11 @@ impl GridLayout {
         let mut col_offset = 0;
 
         for col in 0..self.column_layout.items.len() {
-            let col_size = self.column_layout.items[col].get_current_size();
+            let col_size = self.column_layout.items[col].current_size;
             let mut row_offset = 0;
 
             for row in 0..self.row_layout.items.len() {
-                let row_size = self.row_layout.items[row].get_current_size();
+                let row_size = self.row_layout.items[row].current_size;
 
                 match &self.children_columns_rows[col][row] {
                     Some(id) => self.hierarchy.set_transform(
@@ -326,6 +330,44 @@ mod tests {
                 .borrow_mut()
                 .get_child_transform(&child_ptr1.borrow().id().clone()),
             &Transform::new(&Point2::<i32>::new(20, 0), &Vector2::<u32>::new(20, 100))
+        );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_column_stretch() {
+        let layout = GridLayout::new();
+        let child1 = MockWidget::new();
+        let child2 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
+        let child_ptr2 = child2.get().clone();
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+        layout.borrow_mut().set_column_stretch(0, 7);
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child2.make_ownerless(), &None, &Some(0));
+        layout.borrow_mut().set_column_stretch(1, 3);
+        layout.borrow_mut().set_column_stretch(2, 10);
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(100, 100);
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(35, 100))
+        );
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(35, 0), &Vector2::<u32>::new(15, 100))
         );
     }
 }

@@ -53,7 +53,7 @@ impl GridLayout {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
         let fixed_row = row.unwrap_or(self.row_layout.items.len());
         self.ensure_column_exists(fixed_col);
-        self.ensure_row_count(fixed_row + 1);
+        self.ensure_row_exists(fixed_row);
         self.children_columns_rows[fixed_col][fixed_row] = Some(*child.borrow().id());
         self.hierarchy
             .add_with_transform(child, &Transform::default());
@@ -102,17 +102,29 @@ impl GridLayout {
         self.is_row_layout_dirty = true;
     }
 
-    fn ensure_row_count(&mut self, size: usize) {
-        if self.row_layout.items.len() <= size {
-            self.set_row_count(size);
+    fn ensure_row_exists(&mut self, row: usize) {
+        if self.row_layout.items.len() <= row + 1 {
+            self.set_row_count(row + 1);
         }
     }
 
-    pub fn set_row_stretch(&mut self, row: u32, stretch: u32) {}
+    pub fn set_row_stretch(&mut self, row: usize, stretch: u32) {
+        self.ensure_row_exists(row);
+        self.row_layout.items[row].stretch = stretch;
+        self.is_row_layout_dirty = true;
+    }
 
-    pub fn set_row_max_size(&mut self, row: u32, size: u32) {}
+    pub fn set_row_max_size(&mut self, row: usize, size: u32) {
+        self.ensure_row_exists(row);
+        self.row_layout.items[row].max_size = size;
+        self.is_row_layout_dirty = true;
+    }
 
-    pub fn set_row_min_size(&mut self, row: u32, size: u32) {}
+    pub fn set_row_min_size(&mut self, row: usize, size: u32) {
+        self.ensure_row_exists(row);
+        self.row_layout.items[row].min_size = size;
+        self.is_row_layout_dirty = true;
+    }
 
     fn refresh_children_transforms(&mut self, size: &Vector2<u32>) {
         self.column_layout.size = size.x;
@@ -450,6 +462,155 @@ mod tests {
                 .borrow()
                 .get_child_transform(&child_ptr2.borrow().id().clone()),
             &Transform::new(&Point2::<i32>::new(50, 0), &Vector2::<u32>::new(20, 100))
+        );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_row_count() {
+        let layout = GridLayout::new();
+        let child1 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
+
+        layout.borrow_mut().set_row_count(1);
+        assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 0);
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(100, 60);
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow_mut()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 30), &Vector2::<u32>::new(100, 30))
+        );
+
+        layout.borrow_mut().set_row_count(3);
+
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow_mut()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 20), &Vector2::<u32>::new(100, 20))
+        );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_row_stretch() {
+        let layout = GridLayout::new();
+        let child1 = MockWidget::new();
+        let child2 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
+        let child_ptr2 = child2.get().clone();
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+        layout.borrow_mut().set_row_stretch(0, 7);
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child2.make_ownerless(), &Some(0), &None);
+        layout.borrow_mut().set_row_stretch(1, 3);
+        layout.borrow_mut().set_row_stretch(2, 10);
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(100, 100);
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(100, 35))
+        );
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 35), &Vector2::<u32>::new(100, 15))
+        );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_row_max_size() {
+        let layout = GridLayout::new();
+        let child1 = MockWidget::new();
+        let child2 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
+        let child_ptr2 = child2.get().clone();
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+        layout.borrow_mut().set_row_max_size(0, 10);
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child2.make_ownerless(), &Some(0), &None);
+        layout.borrow_mut().set_row_max_size(2, 20);
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(100, 100);
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(100, 10))
+        );
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 10), &Vector2::<u32>::new(100, 70))
+        );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_row_min_size() {
+        let layout = GridLayout::new();
+        let child1 = MockWidget::new();
+        let child2 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
+        let child_ptr2 = child2.get().clone();
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+        layout.borrow_mut().set_row_min_size(0, 50);
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child2.make_ownerless(), &Some(0), &None);
+        layout.borrow_mut().set_row_min_size(2, 30);
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(100, 100);
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(100, 50))
+        );
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 50), &Vector2::<u32>::new(100, 20))
         );
     }
 }

@@ -61,8 +61,8 @@ impl Layout {
     fn validate(&mut self) {
         if !self.items.is_empty() {
             self.set_every_item_size_to_at_least_min();
-            let remaining_free_layout_space = self.remaining_free_layout_space();
-            for _ in 0..remaining_free_layout_space {
+            let remaining_layout_space = self.remaining_layout_space();
+            for _ in 0..remaining_layout_space {
                 let highest_diff = self.get_item_with_highest_expected_minus_current_stretch();
                 self.items[highest_diff].current_size += 1;
             }
@@ -106,11 +106,15 @@ impl Layout {
         }
     }
 
-    fn remaining_free_layout_space(&self) -> u32 {
+    fn remaining_layout_space(&self) -> u32 {
         let mut result = self.size;
 
         for item in &self.items {
-            result -= std::cmp::max(item.current_size, item.min_size);
+            if result <= item.current_size {
+                return 0;
+            }
+
+            result -= item.current_size;
         }
 
         result
@@ -130,6 +134,14 @@ impl Layout {
         let mut highest_idx = 0;
         let mut highest_diff = 0.0;
         for (idx, item) in self.items.iter().enumerate() {
+            if item.current_size >= item.max_size {
+                if idx == highest_idx {
+                    highest_idx += 1;
+                }
+
+                continue;
+            }
+
             let potential_highest =
                 Self::get_item_expected_minus_current_stretch(item, total_stretch, self.size);
 
@@ -147,7 +159,7 @@ impl Layout {
         total_stretch: u32,
         total_size: u32,
     ) -> f32 {
-        if total_stretch == 0 || total_size == 0 || item.current_size == item.max_size {
+        if total_stretch == 0 || total_size == 0 || item.current_size >= item.max_size {
             0.0
         } else {
             item.stretch as f32 / total_stretch as f32
@@ -462,7 +474,7 @@ mod tests {
 
     //********************************************************************************************
     #[test]
-    fn remaining_free_layout_space() {
+    fn remaining_layout_space() {
         {
             let layout = Layout {
                 size: 0,
@@ -487,7 +499,7 @@ mod tests {
                     },
                 ],
             };
-            assert_eq!(layout.remaining_free_layout_space(), 0);
+            assert_eq!(layout.remaining_layout_space(), 0);
         }
         {
             let layout = Layout {
@@ -513,7 +525,7 @@ mod tests {
                     },
                 ],
             };
-            assert_eq!(layout.remaining_free_layout_space(), 10);
+            assert_eq!(layout.remaining_layout_space(), 10);
         }
         {
             let layout = Layout {
@@ -539,7 +551,7 @@ mod tests {
                     },
                 ],
             };
-            assert_eq!(layout.remaining_free_layout_space(), 4);
+            assert_eq!(layout.remaining_layout_space(), 7);
         }
         {
             let layout = Layout {
@@ -549,23 +561,49 @@ mod tests {
                         stretch: 1,
                         min_size: 40,
                         max_size: u32::MAX,
-                        current_size: 0,
+                        current_size: 15,
                     },
                     Item {
                         stretch: 2,
                         min_size: 0,
                         max_size: 40,
-                        current_size: 0,
+                        current_size: 15,
                     },
                     Item {
                         stretch: 3,
                         min_size: 20,
                         max_size: 60,
-                        current_size: 0,
+                        current_size: 20,
                     },
                 ],
             };
-            assert_eq!(layout.remaining_free_layout_space(), 13);
+            assert_eq!(layout.remaining_layout_space(), 23);
+        }
+        {
+            let layout = Layout {
+                size: 73,
+                items: vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 40,
+                        max_size: u32::MAX,
+                        current_size: 15,
+                    },
+                    Item {
+                        stretch: 2,
+                        min_size: 0,
+                        max_size: 40,
+                        current_size: 15,
+                    },
+                    Item {
+                        stretch: 3,
+                        min_size: 20,
+                        max_size: 60,
+                        current_size: 100,
+                    },
+                ],
+            };
+            assert_eq!(layout.remaining_layout_space(), 0);
         }
     }
 
@@ -1098,6 +1136,40 @@ mod tests {
             assert_eq!(layout.items[0].current_size, 200);
             assert_eq!(layout.items[1].current_size, 40);
             assert_eq!(layout.items[2].current_size, 60);
+        }
+    }
+    #[test]
+    fn validate_max_size() {
+        {
+            let layout = Layout::new(
+                100,
+                vec![
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: 10,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: u32::MAX,
+                        current_size: 0,
+                    },
+                    Item {
+                        stretch: 1,
+                        min_size: 0,
+                        max_size: 20,
+                        current_size: 0,
+                    },
+                ],
+            );
+
+            assert_eq!(layout.size, 100);
+            assert_eq!(layout.items.len(), 3);
+            assert_eq!(layout.items[0].current_size, 10);
+            assert_eq!(layout.items[1].current_size, 70);
+            assert_eq!(layout.items[2].current_size, 20);
         }
     }
 }

@@ -127,10 +127,14 @@ impl GridLayout {
     }
 
     fn refresh_children_transforms(&mut self, size: &Vector2<u32>) {
-        self.column_layout.size = size.x;
-        self.column_layout.refresh();
-        self.row_layout.size = size.y;
-        self.row_layout.refresh();
+        if self.column_layout.size != size.x || self.is_column_layout_dirty {
+            self.column_layout.size = size.x;
+            self.column_layout.refresh();
+        }
+        if self.row_layout.size != size.y || self.is_row_layout_dirty {
+            self.row_layout.size = size.y;
+            self.row_layout.refresh();
+        }
 
         let mut col_offset = 0;
 

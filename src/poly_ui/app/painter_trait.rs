@@ -60,16 +60,26 @@ pub trait PainterTrait {
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Default)]
-pub struct MockPainter {}
+pub struct MockPainter {
+    pub size: Vector2<u32>,
+}
+
+impl MockPainter {
+    pub fn new() -> Self {
+        Self {
+            size: Vector2::<u32>::new(0, 0),
+        }
+    }
+}
 
 //************************************************************************************************
 impl PainterTrait for MockPainter {
     fn sub_painter(&self, _transform: &Transform) -> Box<dyn PainterTrait> {
-        Box::new(MockPainter {})
+        Box::new(MockPainter::new())
     }
 
     fn size(&self) -> Vector2<u32> {
-        Vector2::<u32>::new(0, 0)
+        self.size
     }
 
     fn clear(&mut self) {}

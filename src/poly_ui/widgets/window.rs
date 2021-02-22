@@ -68,6 +68,6 @@ impl WindowTrait for Window {
 
     fn paint(&mut self) {
         self.window_provider
-            .paint_widget(&*self.widget_ptr.borrow());
+            .paint_widget(&mut *self.widget_ptr.borrow_mut());
     }
 }

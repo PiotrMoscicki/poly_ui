@@ -25,7 +25,7 @@ pub trait WidgetTrait: Debug {
 
     // updates
     fn update(&mut self, dt: f32);
-    fn paint(&self, canvas: &mut dyn PainterTrait);
+    fn paint(&mut self, canvas: &mut dyn PainterTrait);
 }
 
 //************************************************************************************************
@@ -100,7 +100,7 @@ impl WidgetTrait for MockWidget {
         self.update_call_count += 1;
     }
 
-    fn paint(&self, painter: &mut dyn PainterTrait) {
+    fn paint(&mut self, painter: &mut dyn PainterTrait) {
         self.hierarchy.paint_children(painter);
 
         let const_self = self as *const Self;

@@ -24,7 +24,7 @@ impl WindowProvider {
 }
 
 impl WindowProviderTrait for WindowProvider {
-    fn paint_widget(&mut self, widget: &dyn WidgetTrait) {
+    fn paint_widget(&mut self, widget: &mut dyn WidgetTrait) {
         let sdl_canvas = Rc::new(RefCell::new(Some(
             self.window
                 .take()

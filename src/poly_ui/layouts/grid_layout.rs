@@ -86,7 +86,11 @@ impl GridLayout {
         self.is_column_layout_dirty = true;
     }
 
-    pub fn set_column_min_size(&mut self, col: usize, size: u32) {}
+    pub fn set_column_min_size(&mut self, col: usize, size: u32) {
+        self.ensure_column_exists(col);
+        self.column_layout.items[col].min_size = size;
+        self.is_column_layout_dirty = true;
+    }
 
     pub fn set_row_count(&mut self, size: usize) {
         self.row_layout
@@ -409,6 +413,43 @@ mod tests {
                 .borrow()
                 .get_child_transform(&child_ptr2.borrow().id().clone()),
             &Transform::new(&Point2::<i32>::new(10, 0), &Vector2::<u32>::new(70, 100))
+        );
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn set_column_min_size() {
+        let layout = GridLayout::new();
+        let child1 = MockWidget::new();
+        let child2 = MockWidget::new();
+        let child_ptr1 = child1.get().clone();
+        let child_ptr2 = child2.get().clone();
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+        layout.borrow_mut().set_column_min_size(0, 50);
+
+        layout
+            .borrow_mut()
+            .insert_child_at(child2.make_ownerless(), &None, &Some(0));
+        layout.borrow_mut().set_column_min_size(2, 30);
+
+        let mut painter = MockPainter::new();
+        painter.size = Vector2::<u32>::new(100, 100);
+        layout.borrow_mut().paint(&mut painter);
+
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr1.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(50, 100))
+        );
+        assert_eq!(
+            layout
+                .borrow()
+                .get_child_transform(&child_ptr2.borrow().id().clone()),
+            &Transform::new(&Point2::<i32>::new(50, 0), &Vector2::<u32>::new(20, 100))
         );
     }
 }

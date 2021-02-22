@@ -151,9 +151,9 @@ impl GridLayout {
                     ),
                     None => (),
                 }
-                row_offset = row_offset + row_size as i32;
+                row_offset += row_size as i32;
             }
-            col_offset = col_offset + col_size as i32;
+            col_offset += col_size as i32;
         }
     }
 }

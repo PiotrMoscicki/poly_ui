@@ -5,13 +5,13 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use uuid::Uuid;
 // crate
-use crate::poly_ui::layouts::CanvasLayout;
+use crate::poly_ui::layouts::GridLayout;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 pub trait WindowTrait {
-    fn widget(&self) -> &Rc<RefCell<CanvasLayout>>;
+    fn widget(&self) -> &Rc<RefCell<GridLayout>>;
 
     fn id(&self) -> &Uuid;
 

@@ -168,9 +168,9 @@ impl PainterTrait for Painter {
             .unwrap()
             .draw_rect(sdl2::rect::Rect::new(
                 rect.pos.x,
-                rect.pos.x,
+                rect.pos.y,
                 rect.size.x,
-                rect.size.x,
+                rect.size.y,
             ))
             .unwrap();
     }
@@ -182,9 +182,9 @@ impl PainterTrait for Painter {
         for rect in rects {
             converted.push(sdl2::rect::Rect::new(
                 rect.pos.x,
-                rect.pos.x,
+                rect.pos.y,
                 rect.size.x,
-                rect.size.x,
+                rect.size.y,
             ));
         }
 
@@ -204,9 +204,9 @@ impl PainterTrait for Painter {
             .unwrap()
             .fill_rect(sdl2::rect::Rect::new(
                 rect.pos.x,
-                rect.pos.x,
+                rect.pos.y,
                 rect.size.x,
-                rect.size.x,
+                rect.size.y,
             ))
             .unwrap();
     }
@@ -218,9 +218,9 @@ impl PainterTrait for Painter {
         for rect in rects {
             converted.push(sdl2::rect::Rect::new(
                 rect.pos.x,
-                rect.pos.x,
+                rect.pos.y,
                 rect.size.x,
-                rect.size.x,
+                rect.size.y,
             ));
         }
 

@@ -2,6 +2,7 @@
 use std::fmt::Debug;
 // deps
 use nalgebra::Point2;
+use nalgebra::Vector2;
 use uuid::Uuid;
 // crate
 use crate::poly_ui::app::Color;
@@ -75,7 +76,7 @@ impl WidgetTrait for PushButton {
         let painter_size = painter.size();
         painter.draw_rect(Rect {
             pos: Point2::<i32>::new(0, 0),
-            size: painter_size,
+            size: Vector2::<u32>::new(painter_size.x, painter_size.y),
         });
 
         self.hierarchy.paint_children(painter);

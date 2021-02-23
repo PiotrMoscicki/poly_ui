@@ -32,10 +32,14 @@ fn main() -> Result<(), String> {
         .get_windows_manager()
         .create_window("Test window", 800, 600);
     let button = PushButton::new();
-    window
-        .borrow_mut()
-        .widget()
-        .borrow_mut()
-        .insert_child_at(button.make_ownerless(), None, None);
+    {
+        let borrowed_window = window.borrow_mut();
+        let mut borrowed_widget = borrowed_window.widget().borrow_mut();
+
+        borrowed_widget.set_row_count(3);
+        borrowed_widget.set_column_count(3);
+        borrowed_widget.insert_child_at(button.make_ownerless(), Some(1), Some(1));
+    }
+
     app.exec()
 }

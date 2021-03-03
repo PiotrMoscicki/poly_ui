@@ -12,10 +12,10 @@ use super::Ownerless;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// Base trait for all widgets. User can't add or remove child in widget of unknown type. 
+/// Base trait for all widgets. User can't add or remove child in widget of unknown type.
 pub trait WidgetTrait: Debug {
     /// # Returns
-    /// Id of this widget.All widgets are identified by their id. 
+    /// Id of this widget.All widgets are identified by their id.
     fn id(&self) -> &Uuid;
 
     // deprecated
@@ -24,14 +24,14 @@ pub trait WidgetTrait: Debug {
     fn remove_child(&mut self, child: &Uuid) -> Ownerless;
 
     /// # Returns
-    /// Hierarchy of this Widget. From there youc an access all children of this widget and their 
+    /// Hierarchy of this Widget. From there youc an access all children of this widget and their
     /// transforms.
     fn get_hierarchy(&self) -> &Hierarchy;
 
     // deprecated
     fn get_child_transform(&self, child: &Uuid) -> &Transform;
 
-    /// This function updateds state of this widget if necessary. This Widget will also call 
+    /// This function updateds state of this widget if necessary. This Widget will also call
     /// update on all its children Widgets.
     /// # Arguments
     /// `dt` - delta time from the last update in milliseconds
@@ -40,7 +40,7 @@ pub trait WidgetTrait: Debug {
     /// This widget will paint itself oin this function call. It will also call paint on all its
     /// children Widgets
     /// # Arguments
-    /// `canvas` - canvas on which this widget should paint itself 
+    /// `canvas` - canvas on which this widget should paint itself
     fn paint(&mut self, canvas: &mut dyn PainterTrait);
 }
 

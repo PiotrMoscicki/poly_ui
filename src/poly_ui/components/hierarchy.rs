@@ -14,7 +14,7 @@ use super::Transform;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// Helper structure containing Owned Widget and its Transform in parent. 
+/// Helper structure containing Owned Widget and its Transform in parent.
 #[derive(Debug)]
 pub struct HierarchyChild {
     pub widget: Owned,
@@ -25,9 +25,9 @@ pub struct HierarchyChild {
 //************************************************************************************************
 //************************************************************************************************
 /// Hierarchy is used to store child Widgets and their Transforms.
-/// 
-/// Transform is stored here not in the child Widget itself because it shouldn't be possible for 
-/// any entity other than parent Widget to change Transform of any of its children. The main 
+///
+/// Transform is stored here not in the child Widget itself because it shouldn't be possible for
+/// any entity other than parent Widget to change Transform of any of its children. The main
 /// drawback is that child Widgets get their size in WidgetTrait::paint() so it might be a bit
 /// counterintuitive to handle it this way fot the Widget developer.
 #[derive(Debug, Default)]
@@ -37,14 +37,14 @@ pub struct Hierarchy {
 
 //************************************************************************************************
 impl Hierarchy {
-    /// Adds provided Ownerless child to the Hierarchy. Children added using this method have 
-    /// default Transform (pos:[0, 0]; size:[0, 0]). Can't add the same widget for the second 
+    /// Adds provided Ownerless child to the Hierarchy. Children added using this method have
+    /// default Transform (pos:[0, 0]; size:[0, 0]). Can't add the same widget for the second
     /// time (widgets are identified by WidgetTrait::id()).
     /// # Arguments
     /// * `child` - Widget to add
     pub fn add(&mut self, child: Ownerless) {
         assert_eq!(self.index(child.borrow().id()).is_none(), true);
-        
+
         self.children.push(HierarchyChild {
             widget: child.make_owned(),
             transform: Transform::default(),
@@ -52,7 +52,7 @@ impl Hierarchy {
     }
 
     /// Adds provided Ownerless Widget to the hierarchy and sets its transform to provided one.
-    /// Can't add the same widget for the second time (widgets are identified by 
+    /// Can't add the same widget for the second time (widgets are identified by
     /// WidgetTrait::id()).
     /// # Arguments
     /// * `child` - Widget to add
@@ -126,7 +126,7 @@ impl Hierarchy {
     /// # Arguments
     /// * `id` - id of the Widget which transform we want to obtain
     /// # Returns
-    /// Transform of the child Widget with provided id. If there is no such widget the function 
+    /// Transform of the child Widget with provided id. If there is no such widget the function
     /// will panic.
     pub fn get_transform(&self, id: &Uuid) -> &Transform {
         &self.children[self.index(id).unwrap()].transform

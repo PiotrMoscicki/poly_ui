@@ -7,8 +7,8 @@ use nalgebra::Vector2;
 //************************************************************************************************
 /// Transform is a structure that stores relative position and size of the Widget. Position of the
 /// Widget can be negative but its size must be always equal or greater than zero.
-/// 
-/// When creating Transform with Transform::default() it will have position (0, 0) and transform 
+///
+/// When creating Transform with Transform::default() it will have position (0, 0) and transform
 /// (0, 0)
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub struct Transform {

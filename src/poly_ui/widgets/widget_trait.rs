@@ -34,13 +34,13 @@ pub trait WidgetTrait: Debug {
     /// This function updateds state of this widget if necessary. This Widget will also call
     /// update on all its children Widgets.
     /// # Arguments
-    /// `dt` - delta time from the last update in milliseconds
+    /// * `dt` - delta time from the last update in milliseconds
     fn update(&mut self, dt: f32);
 
     /// This widget will paint itself oin this function call. It will also call paint on all its
     /// children Widgets
     /// # Arguments
-    /// `canvas` - canvas on which this widget should paint itself
+    /// * `canvas` - canvas on which this widget should paint itself
     fn paint(&mut self, canvas: &mut dyn PainterTrait);
 }
 

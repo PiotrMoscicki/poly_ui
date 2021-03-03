@@ -1,12 +1,15 @@
+// std
+use std::fmt::Debug;
+// deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::fmt::Debug;
-
+// super
 use super::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+
 pub trait WindowProviderTrait: Debug {
     fn paint_widget(&mut self, widget: &mut dyn WidgetTrait);
 

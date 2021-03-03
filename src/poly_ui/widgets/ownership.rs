@@ -15,6 +15,7 @@ pub struct Ownerless {
 
 //************************************************************************************************
 impl Ownerless {
+    // I just realised this is a unnecessary complication, just create non copyable WidgetPtr
     pub fn make_owned(self) -> Owned {
         Owned {
             widget: self.widget,

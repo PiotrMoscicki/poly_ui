@@ -76,11 +76,6 @@ impl PainterTrait for Painter {
         self.canvas.borrow_mut().as_mut().unwrap().clear();
     }
 
-    fn present(&mut self) {
-        self.ensure_correct_viewport();
-        self.canvas.borrow_mut().as_mut().unwrap().present();
-    }
-
     fn draw_color(&self) -> Color {
         let color = self.canvas.borrow().as_ref().unwrap().draw_color();
         Color {

@@ -15,6 +15,8 @@ use crate::poly_ui::widgets::WidgetTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// CanvasLayout allows user for explicitly setting position and size of children widgets. They
+/// will remain unchanged when this layout size will change.
 #[derive(Debug)]
 pub struct CanvasLayout {
     id: Uuid,

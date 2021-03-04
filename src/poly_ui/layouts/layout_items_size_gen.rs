@@ -1,6 +1,7 @@
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// Helper structure representing item in the layout. Used by Layout to generate items sizes.
 #[derive(Debug, Clone)]
 pub struct Item {
     pub stretch: u32,  // any value
@@ -23,7 +24,7 @@ impl Item {
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// helper structure for calculating sizes of items in one dimensional layout. Items can have 
+/// Helper structure for calculating sizes of items in one dimensional layout. Items can have 
 /// minimal and maximal size and stretch factor. The whole layout can get predefined size that 
 /// need to be used by items but if it is too small it will be increased to fit all items. 
 #[derive(Debug)]

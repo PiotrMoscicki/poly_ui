@@ -74,9 +74,7 @@ impl Hierarchy {
     /// # Returns
     /// OwnedWidget Widget that was removed from the Hierarchy.
     pub fn remove(&mut self, id: &Uuid) -> OwnedWidget {
-        self.children
-            .remove(self.index(id).unwrap())
-            .widget
+        self.children.remove(self.index(id).unwrap()).widget
     }
 
     /// Sets position of the Widget with the provided id.

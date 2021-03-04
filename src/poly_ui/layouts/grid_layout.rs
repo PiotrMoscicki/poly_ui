@@ -60,7 +60,12 @@ impl GridLayout {
     ///         column_count + 1).
     /// * `row` - row at which Widget should be inserted. If this parameter is None then widget
     ///         will be added to the row after the current last row (at row == row_count + 1).
-    pub fn insert_child_at(&mut self, child: OwnedWidget, col: &Option<usize>, row: &Option<usize>) {
+    pub fn insert_child_at(
+        &mut self,
+        child: OwnedWidget,
+        col: &Option<usize>,
+        row: &Option<usize>,
+    ) {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
         let fixed_row = row.unwrap_or(self.row_layout.items.len());
         self.ensure_column_exists(fixed_col);

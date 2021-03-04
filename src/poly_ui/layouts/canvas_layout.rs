@@ -76,20 +76,12 @@ impl WidgetTrait for CanvasLayout {
         &self.id
     }
 
-    fn add_child(&mut self, child: Ownerless) {
-        self.hierarchy.add(child);
-    }
-
     fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
     }
 
     fn get_hierarchy(&self) -> &Hierarchy {
         &self.hierarchy
-    }
-
-    fn get_child_transform(&self, child: &Uuid) -> &Transform {
-        self.hierarchy.get_transform(child)
     }
 
     fn update(&mut self, dt: f32) {
@@ -122,20 +114,6 @@ mod tests {
 
     //********************************************************************************************
     #[test]
-    fn add_child() {
-        let layout = CanvasLayout::new();
-        let child = CanvasLayout::new();
-        let child_id = *child.borrow().id();
-        layout.borrow_mut().add_child(child.make_ownerless());
-
-        assert_eq!(
-            layout.borrow().get_child_transform(&child_id),
-            &Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0))
-        );
-    }
-
-    //********************************************************************************************
-    #[test]
     fn add_child_with_transform() {
         let layout = CanvasLayout::new();
         let child = CanvasLayout::new();
@@ -157,8 +135,13 @@ mod tests {
         let child2 = CanvasLayout::new();
         let child1_id = *child1.borrow().id();
         let child2_id = *child2.borrow().id();
-        layout.borrow_mut().add_child(child1.make_ownerless());
-        layout.borrow_mut().add_child(child2.make_ownerless());
+        let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child1.make_ownerless(), &transform);
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child2.make_ownerless(), &transform);
         layout.borrow_mut().remove_child(&child1_id);
 
         assert_eq!(layout.borrow().get_hierarchy().index(&child1_id), None);
@@ -171,7 +154,10 @@ mod tests {
         let layout = CanvasLayout::new();
         let child = CanvasLayout::new();
         let child_id = *child.borrow().id();
-        layout.borrow_mut().add_child(child.make_ownerless());
+        let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child.make_ownerless(), &transform);
 
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
@@ -191,7 +177,10 @@ mod tests {
         let layout = CanvasLayout::new();
         let child = CanvasLayout::new();
         let child_id = *child.borrow().id();
-        layout.borrow_mut().add_child(child.make_ownerless());
+        let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child.make_ownerless(), &transform);
 
         let transform = Transform::new(&Point2::<i32>::new(5, 10), &Vector2::<u32>::new(0, 0));
         layout.borrow_mut().set_child_pos(&child_id, &transform.pos);
@@ -209,7 +198,10 @@ mod tests {
         let layout = CanvasLayout::new();
         let child = CanvasLayout::new();
         let child_id = *child.borrow().id();
-        layout.borrow_mut().add_child(child.make_ownerless());
+        let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child.make_ownerless(), &transform);
 
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(10, 20));
         layout
@@ -229,7 +221,10 @@ mod tests {
         let layout = CanvasLayout::new();
         let child = MockWidget::new();
         let child_ptr = child.get().clone();
-        layout.borrow_mut().add_child(child.make_ownerless());
+        let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child.make_ownerless(), &transform);
 
         assert_eq!(child_ptr.borrow().update_call_count, 0);
 
@@ -246,7 +241,10 @@ mod tests {
         let child = MockWidget::new();
         let mut painter = MockPainter::default();
         let child_ptr = child.get().clone();
-        layout.borrow_mut().add_child(child.make_ownerless());
+        let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
+        layout
+            .borrow_mut()
+            .add_child_with_transform(child.make_ownerless(), &transform);
 
         assert_eq!(child_ptr.borrow().paint_call_count, 0);
 

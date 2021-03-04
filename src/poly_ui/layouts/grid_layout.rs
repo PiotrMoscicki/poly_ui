@@ -229,20 +229,12 @@ impl WidgetTrait for GridLayout {
         &self.id
     }
 
-    fn add_child(&mut self, child: Ownerless) {
-        self.hierarchy.add(child);
-    }
-
     fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
     }
 
     fn get_hierarchy(&self) -> &Hierarchy {
         &self.hierarchy
-    }
-
-    fn get_child_transform(&self, child: &Uuid) -> &Transform {
-        self.hierarchy.get_transform(child)
     }
 
     fn update(&mut self, dt: f32) {

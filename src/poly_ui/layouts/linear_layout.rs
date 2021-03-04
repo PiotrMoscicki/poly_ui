@@ -95,26 +95,12 @@ impl WidgetTrait for LinearLayoutWidget {
         &self.id
     }
 
-    fn add_child(&mut self, child: Ownerless) {
-        self.items.push(Item {
-            widget: Some(*child.get().borrow().id()),
-            ..Default::default()
-        });
-        self.hierarchy.add(child);
-
-        get_items_sizes(0, &self.items);
-    }
-
     fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
     }
 
     fn get_hierarchy(&self) -> &Hierarchy {
         &self.hierarchy
-    }
-
-    fn get_child_transform(&self, child: &Uuid) -> &Transform {
-        self.hierarchy.get_transform(child)
     }
 
     fn update(&mut self, dt: f32) {

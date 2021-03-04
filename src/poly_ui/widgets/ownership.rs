@@ -6,12 +6,16 @@ use super::WidgetTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// One of three wrapper structs for managing the Widgets lifetimes. We can obtain Ownerless
+/// Widgets from NewlyCreated and Owned wrappers. The purpose of this wrappers os to prevent from
+/// adding the same Widget to more than one parent.
 pub struct Ownerless {
     widget: Rc<RefCell<dyn WidgetTrait>>,
 }
 
 //************************************************************************************************
 impl Ownerless {
+    // I just realised this is a unnecessary complication, just create non copyable WidgetPtr
     pub fn make_owned(self) -> Owned {
         Owned {
             widget: self.widget,

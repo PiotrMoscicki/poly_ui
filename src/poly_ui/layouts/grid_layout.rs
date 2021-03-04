@@ -18,6 +18,8 @@ use super::Layout;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// Layout with rows and columns. They can have min/max sizes and stretch factors. Each cell can
+/// get its own widget or can be empty
 #[derive(Debug)]
 pub struct GridLayout {
     id: Uuid,
@@ -49,6 +51,15 @@ impl GridLayout {
         NewWidget::new(Self::new_raw())
     }
 
+    /// Inserts new child widget at specified cell identified by its column and row. If Widget was
+    /// already added the function will panic.
+    /// # Arguments
+    /// * `child` - child Widget that will be added to this layout
+    /// * `col` - column at which Widget should be inserted. If this parameter is None then widget
+    ///         will be added to the column after the current last column (at column ==
+    ///         column_count + 1).
+    /// * `row` - row at which Widget should be inserted. If this parameter is None then widget
+    ///         will be added to the row after the current last row (at row == row_count + 1).
     pub fn insert_child_at(&mut self, child: Ownerless, col: &Option<usize>, row: &Option<usize>) {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
         let fixed_row = row.unwrap_or(self.row_layout.items.len());
@@ -59,6 +70,10 @@ impl GridLayout {
             .add_with_transform(child, &Transform::default());
     }
 
+    /// Sets column count to the provided one. All widget which are present in columns with
+    /// indices equal or greater than provided size will be removed.
+    /// # Arguments
+    /// * `size` - requested column count
     pub fn set_column_count(&mut self, size: usize) {
         self.column_layout
             .items
@@ -68,30 +83,53 @@ impl GridLayout {
         self.is_column_layout_dirty = true;
     }
 
+    /// Checks if there already is a column with provided index. If not then column count is
+    /// increased to create column with provided index.
+    /// # Arguments
+    /// * `col` - index of the column that is ensured to exist after this function call.
     fn ensure_column_exists(&mut self, col: usize) {
         if self.column_layout.items.len() <= col + 1 {
             self.set_column_count(col + 1);
         }
     }
 
+    /// Sets stretch for column with provided index.
+    /// # Arguments
+    /// * `col` - index of the column which stretch should be set. If column with given index does
+    ///         not exist it will be automatically added.
+    /// * `stretch` - new stretch value for the column.
     pub fn set_column_stretch(&mut self, col: usize, stretch: u32) {
         self.ensure_column_exists(col);
         self.column_layout.items[col].stretch = stretch;
         self.is_column_layout_dirty = true;
     }
 
+    /// Sets max size for column with provided index.
+    /// # Arguments
+    /// * `col` - index of the column which size should be set. If column with given index does
+    ///         not exist it will be automatically added.
+    /// * `size` - new size value for the column.
     pub fn set_column_max_size(&mut self, col: usize, size: u32) {
         self.ensure_column_exists(col);
         self.column_layout.items[col].max_size = size;
         self.is_column_layout_dirty = true;
     }
 
+    /// Sets min size for column with provided index.
+    /// # Arguments
+    /// * `col` - index of the column which max size should be set. If column with given index
+    ///         does not exist it will be automatically added.
+    /// * `size` - new min size value for the column.
     pub fn set_column_min_size(&mut self, col: usize, size: u32) {
         self.ensure_column_exists(col);
         self.column_layout.items[col].min_size = size;
         self.is_column_layout_dirty = true;
     }
 
+    /// Sets row count to the provided one. All widgets which are present in rows with indices
+    /// equal or greater than provided size will be removed.
+    /// # Arguments
+    /// * `size` - requested row count.
     pub fn set_row_count(&mut self, size: usize) {
         self.row_layout
             .items
@@ -102,30 +140,53 @@ impl GridLayout {
         self.is_row_layout_dirty = true;
     }
 
+    /// Checks if there already is a row with provided index. If not then row count is increased
+    /// to create row with provided index.
+    /// # Arguments
+    /// * `row` - index of the row that is ensured to exist after this function call.
     fn ensure_row_exists(&mut self, row: usize) {
         if self.row_layout.items.len() <= row + 1 {
             self.set_row_count(row + 1);
         }
     }
 
+    /// Sets stretch for row with provided index.
+    /// # Arguments
+    /// * `row` - index of the row which stretch should be set. If row with given index does not
+    ///         exist it will be automatically added.
+    /// * `stretch` - new stretch value for the row.
     pub fn set_row_stretch(&mut self, row: usize, stretch: u32) {
         self.ensure_row_exists(row);
         self.row_layout.items[row].stretch = stretch;
         self.is_row_layout_dirty = true;
     }
 
+    /// Sets max size for row with provided index.
+    /// # Arguments
+    /// * `row` - index of the row which size should be set. If row with given index does not
+    ///         exist it will be automatically added.
+    /// * `size` - new size value for the row.
     pub fn set_row_max_size(&mut self, row: usize, size: u32) {
         self.ensure_row_exists(row);
         self.row_layout.items[row].max_size = size;
         self.is_row_layout_dirty = true;
     }
 
+    /// Sets min size for row with provided index.
+    /// # Arguments
+    /// * `row` - index of the row which max size should be set. If row with given index does not
+    ///         exist it will be automatically added.
+    /// * `size` - new min size value for the row.
     pub fn set_row_min_size(&mut self, row: usize, size: u32) {
         self.ensure_row_exists(row);
         self.row_layout.items[row].min_size = size;
         self.is_row_layout_dirty = true;
     }
 
+    /// Items sizes might become invalid after new items are added or the layout is resized. This
+    /// function recalculates all items sizes depending on what has changed.
+    /// # Arguments
+    /// * `size` - size of this layout.
     fn refresh_children_transforms(&mut self, size: &Vector2<u32>) {
         if self.column_layout.size != size.x || self.is_column_layout_dirty {
             self.column_layout.size = size.x;

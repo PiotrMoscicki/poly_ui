@@ -10,6 +10,7 @@ use crate::poly_ui::widgets::WindowTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// SDL implementation for the WindowsManager trait
 pub struct WindowsManager {
     sdl_video: Rc<RefCell<sdl2::VideoSubsystem>>,
     windows: Vec<Rc<RefCell<dyn WindowTrait>>>,

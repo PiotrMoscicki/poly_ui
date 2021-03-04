@@ -9,7 +9,7 @@ use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::NewWidget;
-use crate::poly_ui::widgets::Ownerless;
+use crate::poly_ui::widgets::OwnedWidget;
 use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
@@ -41,7 +41,7 @@ impl CanvasLayout {
     /// # Arguments
     /// * `child` - child widget that will be added to this layout
     /// * `transform' - initial Transform for newly added child
-    pub fn add_child_with_transform(&mut self, child: Ownerless, transform: &Transform) {
+    pub fn add_child_with_transform(&mut self, child: OwnedWidget, transform: &Transform) {
         self.hierarchy.add_with_transform(child, transform);
     }
 
@@ -76,7 +76,7 @@ impl WidgetTrait for CanvasLayout {
         &self.id
     }
 
-    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> OwnedWidget {
         self.hierarchy.remove(child)
     }
 
@@ -122,7 +122,7 @@ mod tests {
         layout
             .get()
             .borrow_mut()
-            .add_child_with_transform(child.make_ownerless(), &transform);
+            .add_child_with_transform(child.make_owned(), &transform);
 
         assert_eq!(layout.borrow().get_child_transform(&child_id), &transform);
     }
@@ -138,10 +138,10 @@ mod tests {
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
             .borrow_mut()
-            .add_child_with_transform(child1.make_ownerless(), &transform);
+            .add_child_with_transform(child1.make_owned(), &transform);
         layout
             .borrow_mut()
-            .add_child_with_transform(child2.make_ownerless(), &transform);
+            .add_child_with_transform(child2.make_owned(), &transform);
         layout.borrow_mut().remove_child(&child1_id);
 
         assert_eq!(layout.borrow().get_hierarchy().index(&child1_id), None);
@@ -157,7 +157,7 @@ mod tests {
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
             .borrow_mut()
-            .add_child_with_transform(child.make_ownerless(), &transform);
+            .add_child_with_transform(child.make_owned(), &transform);
 
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
@@ -180,7 +180,7 @@ mod tests {
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
             .borrow_mut()
-            .add_child_with_transform(child.make_ownerless(), &transform);
+            .add_child_with_transform(child.make_owned(), &transform);
 
         let transform = Transform::new(&Point2::<i32>::new(5, 10), &Vector2::<u32>::new(0, 0));
         layout.borrow_mut().set_child_pos(&child_id, &transform.pos);
@@ -201,7 +201,7 @@ mod tests {
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
             .borrow_mut()
-            .add_child_with_transform(child.make_ownerless(), &transform);
+            .add_child_with_transform(child.make_owned(), &transform);
 
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(10, 20));
         layout
@@ -224,7 +224,7 @@ mod tests {
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
             .borrow_mut()
-            .add_child_with_transform(child.make_ownerless(), &transform);
+            .add_child_with_transform(child.make_owned(), &transform);
 
         assert_eq!(child_ptr.borrow().update_call_count, 0);
 
@@ -244,7 +244,7 @@ mod tests {
         let transform = Transform::new(&Point2::<i32>::new(0, 0), &Vector2::<u32>::new(0, 0));
         layout
             .borrow_mut()
-            .add_child_with_transform(child.make_ownerless(), &transform);
+            .add_child_with_transform(child.make_owned(), &transform);
 
         assert_eq!(child_ptr.borrow().paint_call_count, 0);
 

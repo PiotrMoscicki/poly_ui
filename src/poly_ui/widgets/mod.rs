@@ -5,8 +5,7 @@ mod window_provider_trait;
 mod window_trait;
 
 pub use ownership::NewWidget;
-pub use ownership::Owned;
-pub use ownership::Ownerless;
+pub use ownership::OwnedWidget;
 pub use widget_trait::MockWidget;
 pub use widget_trait::WidgetTrait;
 pub use window::Window;

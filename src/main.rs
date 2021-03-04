@@ -40,6 +40,6 @@ fn main() -> Result<(), String> {
         .borrow_mut()
         .widget()
         .borrow_mut()
-        .add_child_with_transform(button.make_ownerless(), &transform);
+        .add_child_with_transform(button.make_owned(), &transform);
     app.exec()
 }

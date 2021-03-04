@@ -6,18 +6,17 @@ use nalgebra::Vector2;
 use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
-use crate::poly_ui::widgets::Owned;
-use crate::poly_ui::widgets::Ownerless;
+use crate::poly_ui::widgets::OwnedWidget;
 // super
 use super::Transform;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// Helper structure containing Owned Widget and its Transform in parent.
+/// Helper structure containing OwnedWidget Widget and its Transform in parent.
 #[derive(Debug)]
 pub struct HierarchyChild {
-    pub widget: Owned,
+    pub widget: OwnedWidget,
     pub transform: Transform,
 }
 
@@ -39,31 +38,31 @@ pub struct Hierarchy {
 
 //************************************************************************************************
 impl Hierarchy {
-    /// Adds provided Ownerless child to the Hierarchy. Children added using this method have
+    /// Adds provided OwnedWidget child to the Hierarchy. Children added using this method have
     /// default Transform (pos:[0, 0]; size:[0, 0]). Can't add the same widget for the second
     /// time (widgets are identified by WidgetTrait::id()).
     /// # Arguments
     /// * `child` - Widget to add
-    pub fn add(&mut self, child: Ownerless) {
+    pub fn add(&mut self, child: OwnedWidget) {
         assert_eq!(self.index(child.borrow().id()).is_none(), true);
 
         self.children.push(HierarchyChild {
-            widget: child.make_owned(),
+            widget: child,
             transform: Transform::default(),
         });
     }
 
-    /// Adds provided Ownerless Widget to the hierarchy and sets its transform to provided one.
+    /// Adds provided OwnedWidget Widget to the hierarchy and sets its transform to provided one.
     /// Can't add the same widget for the second time (widgets are identified by
     /// WidgetTrait::id()).
     /// # Arguments
     /// * `child` - Widget to add
     /// * `transform` - initial transform for newly added widget
-    pub fn add_with_transform(&mut self, child: Ownerless, transform: &Transform) {
+    pub fn add_with_transform(&mut self, child: OwnedWidget, transform: &Transform) {
         assert_eq!(self.index(child.borrow().id()).is_none(), true);
 
         self.children.push(HierarchyChild {
-            widget: child.make_owned(),
+            widget: child,
             transform: *transform,
         });
     }
@@ -73,12 +72,11 @@ impl Hierarchy {
     /// # Arguments
     /// * `id` - id of the widget that should be removed
     /// # Returns
-    /// Ownerless Widget that was removed from the Hierarchy.
-    pub fn remove(&mut self, id: &Uuid) -> Ownerless {
+    /// OwnedWidget Widget that was removed from the Hierarchy.
+    pub fn remove(&mut self, id: &Uuid) -> OwnedWidget {
         self.children
             .remove(self.index(id).unwrap())
             .widget
-            .make_ownerless()
     }
 
     /// Sets position of the Widget with the provided id.

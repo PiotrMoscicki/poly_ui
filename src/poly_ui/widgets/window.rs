@@ -7,7 +7,7 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::layouts::CanvasLayout;
 // super
-use super::Owned;
+use super::OwnedWidget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
@@ -20,7 +20,7 @@ use super::WindowTrait;
 #[derive(Debug)]
 pub struct Window {
     widget_ptr: Rc<RefCell<CanvasLayout>>,
-    owned_widget: Owned,
+    owned_widget: OwnedWidget,
     id: Uuid,
     window_provider: Box<dyn WindowProviderTrait>,
 }
@@ -36,7 +36,7 @@ impl Window {
         let widget = CanvasLayout::new();
         Self {
             widget_ptr: widget.get().clone(),
-            owned_widget: widget.make_ownerless().make_owned(),
+            owned_widget: widget.make_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         }

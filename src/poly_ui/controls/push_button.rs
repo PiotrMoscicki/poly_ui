@@ -50,10 +50,6 @@ impl WidgetTrait for PushButton {
         &self.id
     }
 
-    fn add_child(&mut self, child: Ownerless) {
-        self.hierarchy.add(child);
-    }
-
     fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
     }

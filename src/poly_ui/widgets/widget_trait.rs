@@ -18,9 +18,10 @@ pub trait WidgetTrait: Debug {
     /// Id of this widget.All widgets are identified by their id.
     fn id(&self) -> &Uuid;
 
-    // deprecated
-    fn add_child(&mut self, child: Ownerless);
-    // deprecated
+    /// Removes child with maching id. If there is no child with matching id the function wil
+    /// panic.
+    /// # Returns
+    /// Removed child.
     fn remove_child(&mut self, child: &Uuid) -> Ownerless;
 
     /// # Returns
@@ -28,8 +29,14 @@ pub trait WidgetTrait: Debug {
     /// transforms.
     fn get_hierarchy(&self) -> &Hierarchy;
 
-    // deprecated
-    fn get_child_transform(&self, child: &Uuid) -> &Transform;
+    /// Convenience function for obtaining transform of specified child.
+    /// # Arguments
+    /// * `child` - id of child which transform we want to get.
+    /// # Returns
+    /// Transform of requested child.  
+    fn get_child_transform(&self, child: &Uuid) -> &Transform {
+        self.get_hierarchy().get_transform(child)
+    }
 
     /// This function updateds state of this widget if necessary. This Widget will also call
     /// update on all its children Widgets.
@@ -96,20 +103,12 @@ impl WidgetTrait for MockWidget {
         &self.id
     }
 
-    fn add_child(&mut self, child: Ownerless) {
-        self.hierarchy.add(child);
-    }
-
     fn remove_child(&mut self, child: &Uuid) -> Ownerless {
         self.hierarchy.remove(child)
     }
 
     fn get_hierarchy(&self) -> &Hierarchy {
         &self.hierarchy
-    }
-
-    fn get_child_transform(&self, child: &Uuid) -> &Transform {
-        self.hierarchy.get_transform(child)
     }
 
     fn update(&mut self, dt: f32) {

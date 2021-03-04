@@ -14,6 +14,7 @@ use crate::poly_ui::widgets::WidgetTrait;
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
+/// Enum controlling layout direction. This describes in which direction layout shoudl grow.
 pub enum LinearLayoutDirection {
     LeftToRight,
     RightToLeft,

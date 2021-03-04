@@ -23,6 +23,9 @@ impl Item {
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// helper structure for calculating sizes of items in one dimensional layout. Items can have 
+/// minimal and maximal size and stretch factor. The whole layout can get predefined size that 
+/// need to be used by items but if it is too small it will be increased to fit all items. 
 #[derive(Debug)]
 pub struct Layout {
     pub size: u32,        // size is large enough to fit all items in their lowest sizes
@@ -30,7 +33,6 @@ pub struct Layout {
 }
 
 //************************************************************************************************
-/// @todo(#14): Add documentation
 impl Layout {
     pub fn new(size: u32, items: Vec<Item>) -> Self {
         let mut result = Self { size, items };

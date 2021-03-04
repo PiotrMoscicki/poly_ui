@@ -10,7 +10,7 @@ use crate::poly_ui::app::Rect;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::NewWidget;
-use crate::poly_ui::widgets::Ownerless;
+use crate::poly_ui::widgets::OwnedWidget;
 use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
@@ -50,7 +50,7 @@ impl WidgetTrait for PushButton {
         &self.id
     }
 
-    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> OwnedWidget {
         self.hierarchy.remove(child)
     }
 

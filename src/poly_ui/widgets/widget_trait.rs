@@ -7,7 +7,7 @@ use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 // super
 use super::NewWidget;
-use super::Ownerless;
+use super::OwnedWidget;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -22,7 +22,7 @@ pub trait WidgetTrait: Debug {
     /// panic.
     /// # Returns
     /// Removed child.
-    fn remove_child(&mut self, child: &Uuid) -> Ownerless;
+    fn remove_child(&mut self, child: &Uuid) -> OwnedWidget;
 
     /// # Returns
     /// Hierarchy of this Widget. From there youc an access all children of this widget and their
@@ -103,7 +103,7 @@ impl WidgetTrait for MockWidget {
         &self.id
     }
 
-    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> OwnedWidget {
         self.hierarchy.remove(child)
     }
 

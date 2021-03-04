@@ -9,7 +9,7 @@ use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
 use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::NewWidget;
-use crate::poly_ui::widgets::Ownerless;
+use crate::poly_ui::widgets::OwnedWidget;
 use crate::poly_ui::widgets::WidgetTrait;
 // super
 use super::Item;
@@ -60,7 +60,12 @@ impl GridLayout {
     ///         column_count + 1).
     /// * `row` - row at which Widget should be inserted. If this parameter is None then widget
     ///         will be added to the row after the current last row (at row == row_count + 1).
-    pub fn insert_child_at(&mut self, child: Ownerless, col: &Option<usize>, row: &Option<usize>) {
+    pub fn insert_child_at(
+        &mut self,
+        child: OwnedWidget,
+        col: &Option<usize>,
+        row: &Option<usize>,
+    ) {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
         let fixed_row = row.unwrap_or(self.row_layout.items.len());
         self.ensure_column_exists(fixed_col);
@@ -229,7 +234,7 @@ impl WidgetTrait for GridLayout {
         &self.id
     }
 
-    fn remove_child(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> OwnedWidget {
         self.hierarchy.remove(child)
     }
 
@@ -272,7 +277,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &None, &None);
+            .insert_child_at(child1.make_owned(), &None, &None);
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 1);
         assert_eq!(
@@ -299,7 +304,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &None, &None);
+            .insert_child_at(child2.make_owned(), &None, &None);
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 2);
         assert_eq!(
@@ -335,7 +340,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child3.make_ownerless(), &Some(0), &Some(1));
+            .insert_child_at(child3.make_owned(), &Some(0), &Some(1));
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 3);
         assert_eq!(
@@ -385,7 +390,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), &None, &Some(0));
 
         let mut painter = MockPainter::new();
         painter.size = Vector2::<u32>::new(60, 100);
@@ -421,12 +426,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), &None, &Some(0));
         layout.borrow_mut().set_column_stretch(0, 7);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child2.make_owned(), &None, &Some(0));
         layout.borrow_mut().set_column_stretch(1, 3);
         layout.borrow_mut().set_column_stretch(2, 10);
 
@@ -459,12 +464,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), &None, &Some(0));
         layout.borrow_mut().set_column_max_size(0, 10);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child2.make_owned(), &None, &Some(0));
         layout.borrow_mut().set_column_max_size(2, 20);
 
         let mut painter = MockPainter::new();
@@ -496,12 +501,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), &None, &Some(0));
         layout.borrow_mut().set_column_min_size(0, 50);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &None, &Some(0));
+            .insert_child_at(child2.make_owned(), &None, &Some(0));
         layout.borrow_mut().set_column_min_size(2, 30);
 
         let mut painter = MockPainter::new();
@@ -534,7 +539,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), &Some(0), &None);
 
         let mut painter = MockPainter::new();
         painter.size = Vector2::<u32>::new(100, 60);
@@ -570,12 +575,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), &Some(0), &None);
         layout.borrow_mut().set_row_stretch(0, 7);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child2.make_owned(), &Some(0), &None);
         layout.borrow_mut().set_row_stretch(1, 3);
         layout.borrow_mut().set_row_stretch(2, 10);
 
@@ -608,12 +613,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), &Some(0), &None);
         layout.borrow_mut().set_row_max_size(0, 10);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child2.make_owned(), &Some(0), &None);
         layout.borrow_mut().set_row_max_size(2, 20);
 
         let mut painter = MockPainter::new();
@@ -645,12 +650,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), &Some(0), &None);
         layout.borrow_mut().set_row_min_size(0, 50);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_ownerless(), &Some(0), &None);
+            .insert_child_at(child2.make_owned(), &Some(0), &None);
         layout.borrow_mut().set_row_min_size(2, 30);
 
         let mut painter = MockPainter::new();

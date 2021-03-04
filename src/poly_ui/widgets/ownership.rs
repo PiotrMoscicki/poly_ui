@@ -6,6 +6,29 @@ use super::WidgetTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+#[derive(Debug)]
+pub struct OwnedWidget {
+    widget: Rc<RefCell<dyn WidgetTrait>>,
+}
+
+//************************************************************************************************
+impl OwnedWidget {
+    pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
+        &self.widget
+    }
+
+    pub fn borrow(&self) -> Ref<'_, dyn WidgetTrait> {
+        self.widget.borrow()
+    }
+
+    pub fn borrow_mut(&self) -> RefMut<'_, dyn WidgetTrait> {
+        self.widget.borrow_mut()
+    }
+}
+
+//************************************************************************************************
+//************************************************************************************************
+//************************************************************************************************
 /// One of three wrapper structs for managing the Widgets lifetimes. We can obtain Ownerless
 /// Widgets from NewlyCreated and Owned wrappers. The purpose of this wrappers os to prevent from
 /// adding the same Widget to more than one parent.
@@ -82,6 +105,12 @@ impl<T: WidgetTrait + 'static> NewWidget<T> {
 
     pub fn make_ownerless(self) -> Ownerless {
         Ownerless {
+            widget: self.widget,
+        }
+    }
+
+    pub fn make_owned(self) -> OwnedWidget {
+        OwnedWidget {
             widget: self.widget,
         }
     }

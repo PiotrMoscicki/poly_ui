@@ -39,11 +39,11 @@ pub struct Rect {
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// Painter is a wrapper for third party painting logic. It is used by all widgets to paint 
+/// Painter is a wrapper for third party painting logic. It is used by all widgets to paint
 /// themselves on the screen.
 pub trait PainterTrait {
-    /// SubPainters are used when widget has a child that should get its own part of the screen 
-    /// to paint. We don't want to give it the whole window to paint so we provide transform for 
+    /// SubPainters are used when widget has a child that should get its own part of the screen
+    /// to paint. We don't want to give it the whole window to paint so we provide transform for
     /// the new subpainter and the returned painter has new position and new size.
     /// # Arguments
     /// * `transform` - transform for the SubPainter relative to this Painter
@@ -58,7 +58,7 @@ pub trait PainterTrait {
     /// Clears the whole Painter rect with currently set draw Color.
     fn clear(&mut self);
 
-    /// # Returns 
+    /// # Returns
     /// Currently set draw color.
     fn draw_color(&self) -> Color;
 

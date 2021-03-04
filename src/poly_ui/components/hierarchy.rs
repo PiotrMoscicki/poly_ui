@@ -29,9 +29,9 @@ pub struct HierarchyChild {
 /// Transform is stored here not in the child Widget itself because it shouldn't be possible for
 /// any entity other than parent Widget to change Transform of any of its children. The main
 /// drawback is that child Widgets get their size in WidgetTrait::paint() so it might be a bit
-/// counterintuitive to handle it this way fot the Widget developer. Child widgets are painted 
-/// from first index to the last so the last widget is drawn on top of every other widget in this 
-/// hierarhcy (which might be the case in CanvasLayout). 
+/// counterintuitive to handle it this way fot the Widget developer. Child widgets are painted
+/// from first index to the last so the last widget is drawn on top of every other widget in this
+/// hierarhcy (which might be the case in CanvasLayout).
 #[derive(Debug, Default)]
 pub struct Hierarchy {
     children: Vec<HierarchyChild>,

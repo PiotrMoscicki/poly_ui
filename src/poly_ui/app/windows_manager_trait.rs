@@ -5,7 +5,7 @@ use crate::poly_ui::widgets::WindowTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// WindowsManager contains collection of all created windows. It's responsible for painting and 
+/// WindowsManager contains collection of all created windows. It's responsible for painting and
 /// updating all these windows. With WindowsManager you can also create new Windows.
 pub trait WindowsManagerTrait {
     /// Function for creating new windows with specified title and size.assert_eq!
@@ -13,7 +13,7 @@ pub trait WindowsManagerTrait {
     /// * `title` - title for the new wineow
     /// * `width` - width for the new window
     /// * `height` - height for the new window
-    /// # Returns 
+    /// # Returns
     /// Newly created window.
     fn create_window(
         &mut self,

@@ -30,7 +30,7 @@ impl Window {
     /// # Returns
     /// Instance of the Window with default Layout Widget and WindowProvider as provided.println!
     /// # Arguments
-    /// * `provider` - WindowProvider that should be used by this Window for managing window 
+    /// * `provider` - WindowProvider that should be used by this Window for managing window
     /// position and size and painting child widgets on it
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
         let widget = CanvasLayout::new();

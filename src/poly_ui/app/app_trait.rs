@@ -13,7 +13,7 @@ pub trait AppTrait {
     /// It should be probably changed to error code to keep to the industry standards.
     fn exec(&mut self) -> Result<(), String>;
 
-    /// App not only manages events and windows painting but contains WindowsManager which can be 
+    /// App not only manages events and windows painting but contains WindowsManager which can be
     /// obtained to create windows.
     /// # Returns
     /// Windows Manager owned by this App which allows you to create windows.

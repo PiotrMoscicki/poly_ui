@@ -18,7 +18,7 @@ use super::Layout;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// Layout with rows and columns. They can have min/max sizes and stretch factors. Each cell can 
+/// Layout with rows and columns. They can have min/max sizes and stretch factors. Each cell can
 /// get its own widget or can be empty
 #[derive(Debug)]
 pub struct GridLayout {
@@ -56,7 +56,7 @@ impl GridLayout {
     /// # Arguments
     /// * `child` - child Widget that will be added to this layout
     /// * `col` - column at which Widget should be inserted. If this parameter is None then widget
-    ///         will be added to the column after the current last column (at column == 
+    ///         will be added to the column after the current last column (at column ==
     ///         column_count + 1).
     /// * `row` - row at which Widget should be inserted. If this parameter is None then widget
     ///         will be added to the row after the current last row (at row == row_count + 1).
@@ -70,7 +70,7 @@ impl GridLayout {
             .add_with_transform(child, &Transform::default());
     }
 
-    /// Sets column count to the provided one. All widget which are present in columns with 
+    /// Sets column count to the provided one. All widget which are present in columns with
     /// indices equal or greater than provided size will be removed.
     /// # Arguments
     /// * `size` - requested column count
@@ -83,7 +83,7 @@ impl GridLayout {
         self.is_column_layout_dirty = true;
     }
 
-    /// Checks if there already is a column with provided index. If not then column count is 
+    /// Checks if there already is a column with provided index. If not then column count is
     /// increased to create column with provided index.
     /// # Arguments
     /// * `col` - index of the column that is ensured to exist after this function call.
@@ -96,7 +96,7 @@ impl GridLayout {
     /// Sets stretch for column with provided index.
     /// # Arguments
     /// * `col` - index of the column which stretch should be set. If column with given index does
-    ///         not exist it will be automatically added. 
+    ///         not exist it will be automatically added.
     /// * `stretch` - new stretch value for the column.
     pub fn set_column_stretch(&mut self, col: usize, stretch: u32) {
         self.ensure_column_exists(col);
@@ -107,7 +107,7 @@ impl GridLayout {
     /// Sets max size for column with provided index.
     /// # Arguments
     /// * `col` - index of the column which size should be set. If column with given index does
-    ///         not exist it will be automatically added. 
+    ///         not exist it will be automatically added.
     /// * `size` - new size value for the column.
     pub fn set_column_max_size(&mut self, col: usize, size: u32) {
         self.ensure_column_exists(col);
@@ -117,8 +117,8 @@ impl GridLayout {
 
     /// Sets min size for column with provided index.
     /// # Arguments
-    /// * `col` - index of the column which max size should be set. If column with given index 
-    ///         does not exist it will be automatically added. 
+    /// * `col` - index of the column which max size should be set. If column with given index
+    ///         does not exist it will be automatically added.
     /// * `size` - new min size value for the column.
     pub fn set_column_min_size(&mut self, col: usize, size: u32) {
         self.ensure_column_exists(col);
@@ -126,7 +126,7 @@ impl GridLayout {
         self.is_column_layout_dirty = true;
     }
 
-    /// Sets row count to the provided one. All widgets which are present in rows with indices 
+    /// Sets row count to the provided one. All widgets which are present in rows with indices
     /// equal or greater than provided size will be removed.
     /// # Arguments
     /// * `size` - requested row count.
@@ -140,7 +140,7 @@ impl GridLayout {
         self.is_row_layout_dirty = true;
     }
 
-    /// Checks if there already is a row with provided index. If not then row count is increased 
+    /// Checks if there already is a row with provided index. If not then row count is increased
     /// to create row with provided index.
     /// # Arguments
     /// * `row` - index of the row that is ensured to exist after this function call.
@@ -152,8 +152,8 @@ impl GridLayout {
 
     /// Sets stretch for row with provided index.
     /// # Arguments
-    /// * `row` - index of the row which stretch should be set. If row with given index does not 
-    ///         exist it will be automatically added. 
+    /// * `row` - index of the row which stretch should be set. If row with given index does not
+    ///         exist it will be automatically added.
     /// * `stretch` - new stretch value for the row.
     pub fn set_row_stretch(&mut self, row: usize, stretch: u32) {
         self.ensure_row_exists(row);
@@ -163,8 +163,8 @@ impl GridLayout {
 
     /// Sets max size for row with provided index.
     /// # Arguments
-    /// * `row` - index of the row which size should be set. If row with given index does not 
-    ///         exist it will be automatically added. 
+    /// * `row` - index of the row which size should be set. If row with given index does not
+    ///         exist it will be automatically added.
     /// * `size` - new size value for the row.
     pub fn set_row_max_size(&mut self, row: usize, size: u32) {
         self.ensure_row_exists(row);
@@ -175,7 +175,7 @@ impl GridLayout {
     /// Sets min size for row with provided index.
     /// # Arguments
     /// * `row` - index of the row which max size should be set. If row with given index does not
-    ///         exist it will be automatically added. 
+    ///         exist it will be automatically added.
     /// * `size` - new min size value for the row.
     pub fn set_row_min_size(&mut self, row: usize, size: u32) {
         self.ensure_row_exists(row);
@@ -183,8 +183,8 @@ impl GridLayout {
         self.is_row_layout_dirty = true;
     }
 
-    /// Items sizes might become invalid after new items are added or the layout is resized. This 
-    /// function recalculates all items sizes depending on what has changed. 
+    /// Items sizes might become invalid after new items are added or the layout is resized. This
+    /// function recalculates all items sizes depending on what has changed.
     /// # Arguments
     /// * `size` - size of this layout.
     fn refresh_children_transforms(&mut self, size: &Vector2<u32>) {

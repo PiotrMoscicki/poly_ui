@@ -16,7 +16,7 @@ use crate::poly_ui::widgets::WidgetTrait;
 //************************************************************************************************
 //************************************************************************************************
 /// CanvasLayout allows user for explicitly setting position and size of children widgets. They
-/// will remain unchanged when this layout size will change.
+/// will remain unchanged when this layout size will change. 
 #[derive(Debug)]
 pub struct CanvasLayout {
     id: Uuid,
@@ -24,7 +24,7 @@ pub struct CanvasLayout {
 }
 
 //************************************************************************************************
-impl CanvasLayout {
+impl CanvasLayout { 
     pub fn new_raw() -> Self {
         Self {
             id: Uuid::new_v4(),
@@ -36,18 +36,35 @@ impl CanvasLayout {
         NewWidget::new(Self::new_raw())
     }
 
+    /// Adds child to this layout with defined transform. Child widget is appended to the 
+    /// hierarchy so it gets the last index and so it will be painted and updated as last.
+    /// # Arguments
+    /// * `child` - child widget that will be added to this layout
+    /// * `transform' - initial Transform for newly added child
     pub fn add_child_with_transform(&mut self, child: Ownerless, transform: &Transform) {
         self.hierarchy.add_with_transform(child, transform);
     }
 
+    /// Sets new Transfrom for the child widget with the given id. If there is no child with such
+    /// id the function will panic.
+    /// * `child` - id of thechild that should get new Transform
+    /// * `new_transform` - new Transform for the child 
     pub fn set_child_transform(&mut self, child: &Uuid, new_transform: &Transform) {
         self.hierarchy.set_transform(child, new_transform);
     }
 
+    /// Sets new position for the child widget with the given id. If there is no child with such 
+    /// id the function will panic.
+    /// * `child` - id of thechild that should get new Transform
+    /// * `new_pos` - new position for the child 
     pub fn set_child_pos(&mut self, child: &Uuid, new_pos: &Point2<i32>) {
         self.hierarchy.set_pos(child, new_pos);
     }
 
+    /// Sets new size for the child widget with the given id. If there is no child with such id 
+    /// the function will panic.
+    /// * `child` - id of thechild that should get new Transform
+    /// * `new_size` - new size for the child 
     pub fn set_child_size(&mut self, child: &Uuid, new_size: &Vector2<u32>) {
         self.hierarchy.set_size(child, new_size);
     }

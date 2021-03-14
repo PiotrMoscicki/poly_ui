@@ -1,13 +1,13 @@
 // std
 use std::{boxed::Box, cell::RefCell, ops::FnMut, rc::Rc};
 
-#[allow(dead_code)]
-
 //************************************************************************************************
+#[allow(dead_code)]
 pub struct Slot<Args> {
     fn_slot: Box<dyn FnMut(Args)>,
 }
 
+#[allow(dead_code)]
 impl<Args> Slot<Args> {
     pub fn new(fn_slot: Box<dyn FnMut(Args)>) -> Self {
         Self { fn_slot }
@@ -15,10 +15,12 @@ impl<Args> Slot<Args> {
 }
 
 //************************************************************************************************
+#[allow(dead_code)]
 pub struct Signal<Args> {
     slots: Vec<Rc<RefCell<Slot<Args>>>>,
 }
 
+#[allow(dead_code)]
 impl<Args> Signal<Args> {
     pub fn connect(&mut self, slot: Rc<RefCell<Slot<Args>>>) {
         self.slots.push(slot);
@@ -28,6 +30,8 @@ impl<Args> Signal<Args> {
 //************************************************************************************************
 #[cfg(test)]
 mod tests {
+    #![allow(dead_code)]
+    
     use super::*;
 
     struct WidgetInternal {}

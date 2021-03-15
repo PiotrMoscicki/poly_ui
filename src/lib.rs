@@ -1,3 +1,5 @@
+extern crate signals;
+
 pub mod poly_ui {
     pub mod app;
 

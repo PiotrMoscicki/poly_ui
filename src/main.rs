@@ -1,4 +1,4 @@
-extern crate sdl2;
+extern crate signals;
 
 pub mod poly_ui {
     pub mod app;

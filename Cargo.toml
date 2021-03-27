@@ -11,3 +11,4 @@ build = "build.rs"
 sdl2 = { version = "0.32.1", features = ["ttf"] }
 nalgebra = "0.21.1"
 uuid = { version = "0.8.1", features = ["v4"] }
+signals = "0.0.5"

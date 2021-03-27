@@ -154,7 +154,7 @@ pub enum Key {
     VolumeUp,
     VolumeDown,
     KpComma,
-    KpEqualsAS400,
+    KpEqualsAs400,
     AltErase,
     Sysreq,
     Cancel,
@@ -251,9 +251,9 @@ pub enum Key {
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum MouseButton {
-    LEFT,
-    MIDDLE,
-    RIGHT,
+    Left,
+    Middle,
+    Right,
     X1,
     X2,
 }

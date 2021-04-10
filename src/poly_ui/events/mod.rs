@@ -1,5 +1,6 @@
 mod event;
 mod event_handler;
+mod input_state;
 
 pub use event::Event;
 pub use event::Key;

@@ -1,7 +1,8 @@
 // deps
 use nalgebra::Point2;
+use enum_map::Enum;
 
-#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
+#[derive(Enum, Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum Key {
     Backspace,
     Tab,
@@ -249,7 +250,7 @@ pub enum Key {
     Sleep,
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
+#[derive(Enum, Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum MouseButton {
     Left,
     Middle,

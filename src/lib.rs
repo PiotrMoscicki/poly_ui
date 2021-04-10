@@ -1,4 +1,6 @@
 extern crate signals;
+extern crate sdl2;
+extern crate enum_map;
 
 pub mod poly_ui {
     pub mod app;

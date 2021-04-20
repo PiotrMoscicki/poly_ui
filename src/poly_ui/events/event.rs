@@ -1,9 +1,9 @@
 // deps
-use nalgebra::Point2;
 use enum_map::Enum;
+use nalgebra::Point2;
 
 #[derive(Enum, Copy, Clone, Eq, PartialEq, Hash, Debug)]
-pub enum Key {
+pub enum KeyboardKey {
     Backspace,
     Tab,
     Return,
@@ -259,14 +259,20 @@ pub enum MouseButton {
     X2,
 }
 
+#[derive(Enum, Copy, Clone, Eq, PartialEq, Hash, Debug)]
+pub enum KeyState {
+    Pressed,
+    Released,
+}
+
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct KeyPressEvent {
-    key: Key,
+    key: KeyboardKey,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct KeyReleaseEvent {
-    key: Key,
+    key: KeyboardKey,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]

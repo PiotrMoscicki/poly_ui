@@ -1,46 +1,28 @@
 // std
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::Ref, cell::RefCell, cell::RefMut, rc::Rc};
 // super
 use super::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-pub struct Ownerless {
-    widget: Rc<RefCell<dyn WidgetTrait>>,
-}
-
-//************************************************************************************************
-impl Ownerless {
-    pub fn make_owned(self) -> Owned {
-        Owned {
-            widget: self.widget,
-        }
-    }
-
-    pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
-        &self.widget
-    }
-}
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
 #[derive(Debug)]
-pub struct Owned {
+pub struct OwnedWidget {
     widget: Rc<RefCell<dyn WidgetTrait>>,
 }
 
 //************************************************************************************************
-impl Owned {
-    pub fn make_ownerless(self) -> Ownerless {
-        Ownerless {
-            widget: self.widget,
-        }
-    }
-
+impl OwnedWidget {
     pub fn get(&self) -> &Rc<RefCell<dyn WidgetTrait>> {
         &self.widget
+    }
+
+    pub fn borrow(&self) -> Ref<'_, dyn WidgetTrait> {
+        self.widget.borrow()
+    }
+
+    pub fn borrow_mut(&self) -> RefMut<'_, dyn WidgetTrait> {
+        self.widget.borrow_mut()
     }
 }
 
@@ -60,13 +42,21 @@ impl<T: WidgetTrait + 'static> NewWidget<T> {
         }
     }
 
-    pub fn make_ownerless(self) -> Ownerless {
-        Ownerless {
+    pub fn make_owned(self) -> OwnedWidget {
+        OwnedWidget {
             widget: self.widget,
         }
     }
 
     pub fn get(&self) -> &Rc<RefCell<T>> {
         &self.widget
+    }
+
+    pub fn borrow(&self) -> Ref<'_, T> {
+        self.widget.borrow()
+    }
+
+    pub fn borrow_mut(&self) -> RefMut<'_, T> {
+        self.widget.borrow_mut()
     }
 }

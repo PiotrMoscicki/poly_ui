@@ -79,6 +79,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+    - name: Update apt-get
+      run: sudo apt-get update -y
     - name: Install sdl2
       run: sudo apt-get install -y libsdl2-dev
     - name: Install sdl2-ttf

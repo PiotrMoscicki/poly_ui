@@ -12,6 +12,7 @@ use crate::poly_ui::widgets::WindowProviderTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// An SDL implementation for the WindowProvider trait.
 pub struct WindowProvider {
     window: Option<sdl2::video::Window>,
 }
@@ -24,7 +25,7 @@ impl WindowProvider {
 }
 
 impl WindowProviderTrait for WindowProvider {
-    fn paint_widget(&mut self, widget: &dyn WidgetTrait) {
+    fn paint_widget(&mut self, widget: &mut dyn WidgetTrait) {
         let sdl_canvas = Rc::new(RefCell::new(Some(
             self.window
                 .take()

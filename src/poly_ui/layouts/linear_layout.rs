@@ -5,16 +5,16 @@ use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::components::Hierarchy;
-use crate::poly_ui::widgets::paint_children;
-use crate::poly_ui::widgets::update_children;
+use crate::poly_ui::components::Transform;
 use crate::poly_ui::widgets::NewWidget;
-use crate::poly_ui::widgets::Ownerless;
+use crate::poly_ui::widgets::OwnedWidget;
 use crate::poly_ui::widgets::WidgetTrait;
 
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[derive(Debug)]
+/// Enum controlling layout direction. This describes in which direction layout shoudl grow.
 pub enum LinearLayoutDirection {
     LeftToRight,
     RightToLeft,
@@ -95,34 +95,12 @@ impl WidgetTrait for LinearLayoutWidget {
         &self.id
     }
 
-    fn pos(&self) -> &Point2<i32> {
-        &self.pos
-    }
-
-    fn set_pos(&mut self, value: &Point2<i32>) {
-        self.pos = *value;
-    }
-
-    fn size(&self) -> &Vector2<u32> {
-        &self.size
-    }
-
-    fn set_size(&mut self, value: &Vector2<u32>) {
-        self.size = *value;
-    }
-
-    fn add(&mut self, child: Ownerless) {
-        self.items.push(Item {
-            widget: Some(*child.get().borrow().id()),
-            ..Default::default()
-        });
-        self.hierarchy.add(child);
-
-        get_items_sizes(0, &self.items);
-    }
-
-    fn remove(&mut self, child: &Uuid) -> Ownerless {
+    fn remove_child(&mut self, child: &Uuid) -> OwnedWidget {
         self.hierarchy.remove(child)
+    }
+
+    fn get_hierarchy(&self) -> &Hierarchy {
+        &self.hierarchy
     }
 
     fn update(&mut self, dt: f32) {
@@ -135,12 +113,12 @@ impl WidgetTrait for LinearLayoutWidget {
         }
 
         println!("update widget");
-        update_children(&self.hierarchy, dt);
+        self.hierarchy.update_children(dt);
     }
 
-    fn paint(&self, painter: &mut dyn PainterTrait) {
+    fn paint(&mut self, painter: &mut dyn PainterTrait) {
         println!("paint widget");
-        paint_children(&self.hierarchy, painter);
+        self.hierarchy.paint_children(painter);
     }
 }
 

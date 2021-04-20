@@ -1,14 +1,13 @@
+// std
+use std::{boxed::Box, cell::RefCell, fmt::Debug, rc::Rc};
+// deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
-use std::{
-    boxed::Box,
-    cell::{Ref, RefMut},
-    fmt::Debug,
-};
 use uuid::Uuid;
-
-use super::Owned;
-use super::Widget;
+// crate
+use crate::poly_ui::layouts::CanvasLayout;
+// super
+use super::OwnedWidget;
 use super::WidgetTrait;
 use super::WindowProviderTrait;
 use super::WindowTrait;
@@ -16,18 +15,28 @@ use super::WindowTrait;
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
+/// Default implementation of WindowTrait. It contains Layout Widget and WindowProvider to be able
+/// to paint child widgets and manage window position and size.
 #[derive(Debug)]
 pub struct Window {
-    widget: Owned,
+    widget_ptr: Rc<RefCell<CanvasLayout>>,
+    owned_widget: OwnedWidget,
     id: Uuid,
     window_provider: Box<dyn WindowProviderTrait>,
 }
 
 //************************************************************************************************
 impl Window {
+    /// # Returns
+    /// Instance of the Window with default Layout Widget and WindowProvider as provided.println!
+    /// # Arguments
+    /// * `provider` - WindowProvider that should be used by this Window for managing window
+    /// position and size and painting child widgets on it
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
+        let widget = CanvasLayout::new();
         Self {
-            widget: Widget::new().make_ownerless().make_owned(),
+            widget_ptr: widget.get().clone(),
+            owned_widget: widget.make_owned(),
             id: Uuid::new_v4(),
             window_provider: provider,
         }
@@ -36,12 +45,8 @@ impl Window {
 
 //************************************************************************************************
 impl WindowTrait for Window {
-    fn widget(&self) -> Ref<dyn WidgetTrait> {
-        self.widget.get().borrow()
-    }
-
-    fn widget_mut(&mut self) -> RefMut<dyn WidgetTrait> {
-        self.widget.get().borrow_mut()
+    fn widget(&self) -> &Rc<RefCell<CanvasLayout>> {
+        &self.widget_ptr
     }
 
     fn id(&self) -> &Uuid {
@@ -65,11 +70,11 @@ impl WindowTrait for Window {
     }
 
     fn update(&mut self, dt: f32) {
-        self.widget.get().borrow_mut().update(dt);
+        self.widget_ptr.borrow_mut().update(dt);
     }
 
     fn paint(&mut self) {
         self.window_provider
-            .paint_widget(&*self.widget.get().borrow());
+            .paint_widget(&mut *self.widget_ptr.borrow_mut());
     }
 }

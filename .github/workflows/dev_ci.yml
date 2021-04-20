@@ -72,6 +72,26 @@ jobs:
   #       with:
   #         name: code-coverage-report
   #         path: cobertura.xml
+  
+  #benchmark:
+  #  name: Check performance regeression.
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - uses: actions/setup-node@v1
+  #    - name: Run benchmark
+  #      run: npm install && npm run bench | tee output.txt
+  #    - name: Store benchmark result
+  #      uses: rhysd/github-action-benchmark@v1
+  #      with:
+  #        name: Benchmark.js Benchmark
+  #        tool: 'cargo'
+  #        output-file-path: output.txt
+  #        github-token: ${{ secrets.GITHUB_TOKEN }}
+  #        auto-push: true
+  #        alert-threshold: '130%'
+  #        comment-on-alert: true
+  #        fail-on-alert: true
 
   linux-tests:
     runs-on: ubuntu-latest
@@ -79,6 +99,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+    - name: Update apt-get
+      run: sudo apt-get update -y
     - name: Install sdl2
       run: sudo apt-get install -y libsdl2-dev
     - name: Install sdl2-ttf

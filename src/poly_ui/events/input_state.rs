@@ -1,5 +1,5 @@
 // deps
-use enum_map::EnumMap;
+use enum_map::{enum_map, EnumMap};
 use nalgebra::Point2;
 use nalgebra::Vector2;
 // super
@@ -12,7 +12,7 @@ use super::MouseButton;
 //************************************************************************************************
 pub struct InputState {
     pub mouse_pos: Point2<u32>,
-    pub mouse_diff: Vector2<u32>,
+    pub mouse_diff: Vector2<i32>,
 
     pub current_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
     pub previous_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
@@ -23,6 +23,20 @@ pub struct InputState {
 
 //************************************************************************************************
 impl InputState {
+    // update
+
+    pub fn update(
+        &mut self,
+        new_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
+        new_mouse_button_state: EnumMap<MouseButton, KeyState>,
+    ) {
+        
+        self.previous_keyboard_key_state = self.current_keyboard_key_state;
+        self.current_keyboard_key_state = new_keyboard_key_state;
+        self.previous_mouse_button_state = self.current_mouse_button_state;
+        self.current_mouse_button_state = new_mouse_button_state;
+    }
+
     // keyboard keys
 
     pub fn is_key_pressed(&self, key: KeyboardKey) -> bool {
@@ -63,33 +77,30 @@ impl InputState {
 }
 
 //************************************************************************************************
+impl Default for InputState {
+    fn default() -> Self {
+        Self {
+            mouse_pos: Point2::<u32>::new(0, 0),
+            mouse_diff: Vector2::<i32>::new(0, 0),
+            current_keyboard_key_state: enum_map!(_ => KeyState::Released),
+            previous_keyboard_key_state: enum_map!(_ => KeyState::Released),
+            current_mouse_button_state: enum_map!(_ => KeyState::Released),
+            previous_mouse_button_state: enum_map!(_ => KeyState::Released),
+        }
+    }
+}
+
+//************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
 #[cfg(test)]
 mod tests {
-    // crate
-    use crate::poly_ui::app::MockPainter;
     // super
     use super::*;
 
     //********************************************************************************************
     #[test]
-    fn update() {
-        let mock = MockWidget::new();
-
-        mock.borrow_mut().update(0.0);
-        assert_eq!(mock.borrow().update_call_count, 1);
-    }
-
-    //********************************************************************************************
-    #[test]
-    fn paint() {
-        let mock = MockWidget::new();
-        let mut painter = MockPainter::default();
-
-        mock.borrow_mut().paint(&mut painter);
-        mock.borrow_mut().paint(&mut painter);
-        mock.borrow_mut().paint(&mut painter);
-        assert_eq!(mock.borrow().paint_call_count, 3);
+    fn mouse_diff() {
+        let input_state = InputState::default();
     }
 }

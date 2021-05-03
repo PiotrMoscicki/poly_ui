@@ -11,7 +11,7 @@ use super::MouseButton;
 //************************************************************************************************
 //************************************************************************************************
 pub struct InputState {
-    pub mouse_pos: Point2<u32>,
+    pub mouse_pos: Point2<i32>,
     pub mouse_diff: Vector2<i32>,
 
     pub current_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
@@ -27,12 +27,16 @@ impl InputState {
 
     pub fn update(
         &mut self,
+        new_mouse_pos: Point2<i32>,
         new_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
         new_mouse_button_state: EnumMap<MouseButton, KeyState>,
     ) {
-        
+        self.mouse_diff = new_mouse_pos - self.mouse_pos;
+        self.mouse_pos = new_mouse_pos;
+
         self.previous_keyboard_key_state = self.current_keyboard_key_state;
         self.current_keyboard_key_state = new_keyboard_key_state;
+
         self.previous_mouse_button_state = self.current_mouse_button_state;
         self.current_mouse_button_state = new_mouse_button_state;
     }
@@ -80,7 +84,7 @@ impl InputState {
 impl Default for InputState {
     fn default() -> Self {
         Self {
-            mouse_pos: Point2::<u32>::new(0, 0),
+            mouse_pos: Point2::<i32>::new(0, 0),
             mouse_diff: Vector2::<i32>::new(0, 0),
             current_keyboard_key_state: enum_map!(_ => KeyState::Released),
             previous_keyboard_key_state: enum_map!(_ => KeyState::Released),
@@ -100,7 +104,42 @@ mod tests {
 
     //********************************************************************************************
     #[test]
-    fn mouse_diff() {
-        let input_state = InputState::default();
+    fn mouse_pos_diff() {
+        let mut input_state = InputState::default();
+        input_state.update(
+            Point2::<i32>::new(10, 100),
+            enum_map!(_ => KeyState::Released),
+            enum_map!(_ => KeyState::Released),
+        );
+        input_state.update(
+            Point2::<i32>::new(0, 200),
+            enum_map!(_ => KeyState::Released),
+            enum_map!(_ => KeyState::Released),
+        );
+
+        assert_eq!(input_state.mouse_pos.x, 0);
+        assert_eq!(input_state.mouse_pos.y, 200);
+
+        assert_eq!(input_state.mouse_diff.x, -10);
+        assert_eq!(input_state.mouse_diff.y, 100);
+    }
+
+    //********************************************************************************************
+    #[test]
+    fn was_keu_just_pressed_released() {
+        let mut input_state = InputState::default();
+        input_state.update(
+            Point2::<i32>::new(0, 0),
+            enum_map!(_ => KeyState::Released),
+            enum_map!(_ => KeyState::Released),
+        );
+        input_state.update(
+            Point2::<i32>::new(0, 0),
+            enum_map!(_ => KeyState::Released),
+            enum_map!(_ => KeyState::Released),
+        );
+
+        assert_eq!(input_state.mouse_diff.x, -10);
+        assert_eq!(input_state.mouse_diff.y, 100);
     }
 }

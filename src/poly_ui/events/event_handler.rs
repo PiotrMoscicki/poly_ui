@@ -66,32 +66,3 @@ pub trait EventHandler: Debug {
         EventHandlerResult::NotHandled
     }
 }
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-/// Empty implementation of EventHandler used for testing purposes.
-#[derive(Debug)]
-pub struct MockEventHandler {
-    child_handlers: Vec<Rc<RefCell<dyn EventHandler>>>,
-}
-
-impl EventHandler for MockEventHandler {
-    fn try_handle_by_children(&mut self, _event: &Event) -> EventHandlerResult {
-        EventHandlerResult::NotHandled
-    }
-}
-
-//************************************************************************************************
-//************************************************************************************************
-//************************************************************************************************
-#[cfg(test)]
-mod tests {
-    // super
-    //use super::*;
-
-    //********************************************************************************************
-    #[test]
-    fn handle_event() {
-    }
-}

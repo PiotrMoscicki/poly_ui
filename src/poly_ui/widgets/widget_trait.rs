@@ -1,5 +1,6 @@
 // std
 use std::fmt::Debug;
+// deps
 use uuid::Uuid;
 // crate
 use crate::poly_ui::app::PainterTrait;
@@ -71,7 +72,7 @@ impl std::cmp::Eq for dyn WidgetTrait {}
 //************************************************************************************************
 //************************************************************************************************
 //************************************************************************************************
-/// Empty implementation of WidgetTRait used for testing purposes.
+/// Empty implementation of WidgetTrait used for testing purposes.
 #[derive(Debug)]
 pub struct MockWidget {
     pub update_call_count: u32,

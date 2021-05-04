@@ -319,7 +319,7 @@ pub struct MouseMoveEvent {
 //************************************************************************************************
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum Event {
-    KeyPress(KeyPressEvent),
+    KeyPressEvent(KeyPressEvent),
     KeyReleaseEvent(KeyReleaseEvent),
     MousePressEvent(MousePressEvent),
     MouseReleaseEvent(MouseReleaseEvent),

@@ -11,14 +11,14 @@ use super::MouseButton;
 //************************************************************************************************
 //************************************************************************************************
 pub struct InputState {
-    pub mouse_pos: Point2<i32>,
-    pub mouse_diff: Vector2<i32>,
+    mouse_pos: Point2<i32>,
+    mouse_diff: Vector2<i32>,
 
-    pub current_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
-    pub previous_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
+    current_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
+    previous_keyboard_key_state: EnumMap<KeyboardKey, KeyState>,
 
-    pub current_mouse_button_state: EnumMap<MouseButton, KeyState>,
-    pub previous_mouse_button_state: EnumMap<MouseButton, KeyState>,
+    current_mouse_button_state: EnumMap<MouseButton, KeyState>,
+    previous_mouse_button_state: EnumMap<MouseButton, KeyState>,
 }
 
 //************************************************************************************************
@@ -39,6 +39,16 @@ impl InputState {
 
         self.previous_mouse_button_state = self.current_mouse_button_state;
         self.current_mouse_button_state = new_mouse_button_state;
+    }
+
+    // mouse pos
+
+    pub fn get_mouse_pos(&self) -> &Point2<i32> {
+        &self.mouse_pos
+    }
+
+    pub fn get_mouse_diff(&self) -> &Vector2<i32> {
+        &self.mouse_diff
     }
 
     // keyboard keys

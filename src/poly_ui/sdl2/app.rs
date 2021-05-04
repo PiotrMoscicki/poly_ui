@@ -2,7 +2,7 @@ extern crate sdl2;
 
 use std::{cell::RefCell, rc::Rc};
 
-use sdl2::event::Event;
+// use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 
 use super::WindowsManager;
@@ -39,11 +39,11 @@ impl AppTrait for App {
         'mainloop: loop {
             for event in self.sdl_context.event_pump()?.poll_iter() {
                 match event {
-                    Event::KeyDown {
+                    sdl2::event::Event::KeyDown {
                         keycode: Some(Keycode::Escape),
                         ..
                     }
-                    | Event::Quit { .. } => break 'mainloop,
+                    | sdl2::event::Event::Quit { .. } => break 'mainloop,
                     _ => {}
                 }
             }

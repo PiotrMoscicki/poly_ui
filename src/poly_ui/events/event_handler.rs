@@ -1,16 +1,12 @@
 // std
-use std::{
-    rc::Rc, 
-    cell::RefCell,
-    fmt::Debug,
-};
+use std::fmt::Debug;
 // super
 use super::Event;
 use super::KeyPressEvent;
 use super::KeyReleaseEvent;
+use super::MouseMoveEvent;
 use super::MousePressEvent;
 use super::MouseReleaseEvent;
-use super::MouseMoveEvent;
 
 //************************************************************************************************
 //************************************************************************************************

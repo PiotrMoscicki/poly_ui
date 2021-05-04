@@ -11,7 +11,7 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(stretch: u32, min_size: &Option<u32>, max_size: &Option<u32>) -> Self {
+    pub fn new(stretch: u32, min_size: Option<u32>, max_size: Option<u32>) -> Self {
         Self {
             stretch,
             min_size: min_size.unwrap_or(0),

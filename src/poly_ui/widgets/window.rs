@@ -5,7 +5,7 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use uuid::Uuid;
 // crate
-use crate::poly_ui::layouts::CanvasLayout;
+use crate::poly_ui::layouts::GridLayout;
 // super
 use super::OwnedWidget;
 use super::WidgetTrait;
@@ -19,7 +19,7 @@ use super::WindowTrait;
 /// to paint child widgets and manage window position and size.
 #[derive(Debug)]
 pub struct Window {
-    widget_ptr: Rc<RefCell<CanvasLayout>>,
+    widget_ptr: Rc<RefCell<GridLayout>>,
     owned_widget: OwnedWidget,
     id: Uuid,
     window_provider: Box<dyn WindowProviderTrait>,
@@ -33,7 +33,7 @@ impl Window {
     /// * `provider` - WindowProvider that should be used by this Window for managing window
     /// position and size and painting child widgets on it
     pub fn new(provider: Box<dyn WindowProviderTrait>) -> Self {
-        let widget = CanvasLayout::new();
+        let widget = GridLayout::new();
         Self {
             widget_ptr: widget.get().clone(),
             owned_widget: widget.make_owned(),
@@ -45,7 +45,7 @@ impl Window {
 
 //************************************************************************************************
 impl WindowTrait for Window {
-    fn widget(&self) -> &Rc<RefCell<CanvasLayout>> {
+    fn widget(&self) -> &Rc<RefCell<GridLayout>> {
         &self.widget_ptr
     }
 

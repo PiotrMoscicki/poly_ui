@@ -1,13 +1,14 @@
-extern crate sdl2;
-
+// std
+use std::{cell::RefCell, rc::Rc};
+// deps
 use nalgebra::Point2;
 use nalgebra::Vector2;
 use sdl2::video::WindowPos;
-use std::{cell::RefCell, rc::Rc};
-
-use super::Painter;
+// crate
+use crate::poly_ui::app::PainterTrait;
 use crate::poly_ui::widgets::WidgetTrait;
 use crate::poly_ui::widgets::WindowProviderTrait;
+
 
 //************************************************************************************************
 //************************************************************************************************
@@ -38,6 +39,7 @@ impl WindowProviderTrait for WindowProvider {
 
         {
             let mut painter = Painter::new(sdl_canvas.clone());
+            painter.clear();
             widget.paint(&mut painter);
         }
 

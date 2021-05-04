@@ -63,8 +63,8 @@ impl GridLayout {
     pub fn insert_child_at(
         &mut self,
         child: OwnedWidget,
-        col: &Option<usize>,
-        row: &Option<usize>,
+        col: Option<usize>,
+        row: Option<usize>,
     ) {
         let fixed_col = col.unwrap_or(self.column_layout.items.len());
         let fixed_row = row.unwrap_or(self.row_layout.items.len());
@@ -82,7 +82,7 @@ impl GridLayout {
     pub fn set_column_count(&mut self, size: usize) {
         self.column_layout
             .items
-            .resize(size, Item::new(1, &None, &None));
+            .resize(size, Item::new(1, None, None));
         self.children_columns_rows
             .resize(size, vec![None; self.row_layout.items.len()]);
         self.is_column_layout_dirty = true;
@@ -138,7 +138,7 @@ impl GridLayout {
     pub fn set_row_count(&mut self, size: usize) {
         self.row_layout
             .items
-            .resize(size, Item::new(1, &None, &None));
+            .resize(size, Item::new(1, None, None));
         for column in &mut self.children_columns_rows {
             column.resize(size, None);
         }
@@ -277,7 +277,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &None, &None);
+            .insert_child_at(child1.make_owned(), None, None);
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 1);
         assert_eq!(
@@ -304,7 +304,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &None, &None);
+            .insert_child_at(child2.make_owned(), None, None);
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 2);
         assert_eq!(
@@ -340,7 +340,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child3.make_owned(), &Some(0), &Some(1));
+            .insert_child_at(child3.make_owned(), Some(0), Some(1));
 
         assert_eq!(layout.borrow_mut().get_hierarchy().children().len(), 3);
         assert_eq!(
@@ -390,7 +390,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), None, Some(0));
 
         let mut painter = MockPainter::new();
         painter.size = Vector2::<u32>::new(60, 100);
@@ -426,12 +426,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), None, Some(0));
         layout.borrow_mut().set_column_stretch(0, 7);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &None, &Some(0));
+            .insert_child_at(child2.make_owned(), None, Some(0));
         layout.borrow_mut().set_column_stretch(1, 3);
         layout.borrow_mut().set_column_stretch(2, 10);
 
@@ -464,12 +464,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), None, Some(0));
         layout.borrow_mut().set_column_max_size(0, 10);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &None, &Some(0));
+            .insert_child_at(child2.make_owned(), None, Some(0));
         layout.borrow_mut().set_column_max_size(2, 20);
 
         let mut painter = MockPainter::new();
@@ -501,12 +501,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &None, &Some(0));
+            .insert_child_at(child1.make_owned(), None, Some(0));
         layout.borrow_mut().set_column_min_size(0, 50);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &None, &Some(0));
+            .insert_child_at(child2.make_owned(), None, Some(0));
         layout.borrow_mut().set_column_min_size(2, 30);
 
         let mut painter = MockPainter::new();
@@ -539,7 +539,7 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), Some(0), None);
 
         let mut painter = MockPainter::new();
         painter.size = Vector2::<u32>::new(100, 60);
@@ -575,12 +575,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), Some(0), None);
         layout.borrow_mut().set_row_stretch(0, 7);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &Some(0), &None);
+            .insert_child_at(child2.make_owned(), Some(0), None);
         layout.borrow_mut().set_row_stretch(1, 3);
         layout.borrow_mut().set_row_stretch(2, 10);
 
@@ -613,12 +613,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), Some(0), None);
         layout.borrow_mut().set_row_max_size(0, 10);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &Some(0), &None);
+            .insert_child_at(child2.make_owned(), Some(0), None);
         layout.borrow_mut().set_row_max_size(2, 20);
 
         let mut painter = MockPainter::new();
@@ -650,12 +650,12 @@ mod tests {
 
         layout
             .borrow_mut()
-            .insert_child_at(child1.make_owned(), &Some(0), &None);
+            .insert_child_at(child1.make_owned(), Some(0), None);
         layout.borrow_mut().set_row_min_size(0, 50);
 
         layout
             .borrow_mut()
-            .insert_child_at(child2.make_owned(), &Some(0), &None);
+            .insert_child_at(child2.make_owned(), Some(0), None);
         layout.borrow_mut().set_row_min_size(2, 30);
 
         let mut painter = MockPainter::new();

@@ -123,23 +123,4 @@ mod tests {
         assert_eq!(input_state.mouse_diff.x, -10);
         assert_eq!(input_state.mouse_diff.y, 100);
     }
-
-    //********************************************************************************************
-    #[test]
-    fn was_keu_just_pressed_released() {
-        let mut input_state = InputState::default();
-        input_state.update(
-            Point2::<i32>::new(0, 0),
-            enum_map!(_ => KeyState::Released),
-            enum_map!(_ => KeyState::Released),
-        );
-        input_state.update(
-            Point2::<i32>::new(0, 0),
-            enum_map!(_ => KeyState::Released),
-            enum_map!(_ => KeyState::Released),
-        );
-
-        assert_eq!(input_state.mouse_diff.x, -10);
-        assert_eq!(input_state.mouse_diff.y, 100);
-    }
 }

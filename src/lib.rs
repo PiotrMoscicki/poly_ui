@@ -1,3 +1,5 @@
+extern crate enum_map;
+extern crate sdl2;
 extern crate signals;
 
 pub mod poly_ui {

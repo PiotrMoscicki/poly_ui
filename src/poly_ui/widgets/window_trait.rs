@@ -5,7 +5,7 @@ use nalgebra::Point2;
 use nalgebra::Vector2;
 use uuid::Uuid;
 // crate
-use crate::poly_ui::layouts::CanvasLayout;
+use crate::poly_ui::layouts::GridLayout;
 
 //************************************************************************************************
 //************************************************************************************************
@@ -15,7 +15,7 @@ use crate::poly_ui::layouts::CanvasLayout;
 pub trait WindowTrait {
     /// # Returns
     /// Theonly child Widget this window has; its Layout Widget.
-    fn widget(&self) -> &Rc<RefCell<CanvasLayout>>;
+    fn widget(&self) -> &Rc<RefCell<GridLayout>>;
 
     /// # Returns
     /// This Window id
